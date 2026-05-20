@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import {
-  createDefaultFalProfile,
   createDefaultOpenAIProfile,
   DEFAULT_IMAGES_MODEL,
   DEFAULT_SETTINGS,
@@ -64,12 +63,12 @@ describe('URL settings params', () => {
     expect(next.activeProfileId).toBe(existingProfile.id)
   })
 
-  it('creates an OpenAI profile from legacy params even when fal is active', () => {
-    const falProfile = createDefaultFalProfile({ id: 'fal-active', apiKey: 'fal-key' })
+  it('creates an OpenAI profile from legacy params even when another provider is active', () => {
+    const existingProfile = createDefaultOpenAIProfile({ id: 'existing-active', apiKey: 'existing-key' })
     const current = normalizeSettings({
       ...DEFAULT_SETTINGS,
-      profiles: [falProfile],
-      activeProfileId: falProfile.id,
+      profiles: [existingProfile],
+      activeProfileId: existingProfile.id,
     })
     const next = normalizeSettings({
       ...current,
@@ -127,8 +126,8 @@ describe('URL settings params', () => {
       ...buildSettingsFromUrlParams(DEFAULT_SETTINGS, params),
     })
 
-    expect(next.customProviders).toHaveLength(1)
-    expect(next.customProviders[0]).toMatchObject({ id: 'custom-json', name: 'Custom JSON' })
+    expect(next.customProviders).toHaveLength(2)
+    expect(next.customProviders.find((p: any) => p.id === 'custom-json')).toMatchObject({ id: 'custom-json', name: 'Custom JSON' })
     expect(next.activeProfileId).toBe('custom-profile')
     expect(next.profiles[0]).toMatchObject({
       id: 'custom-profile',
@@ -229,8 +228,8 @@ describe('URL settings params', () => {
       ...buildSettingsFromUrlParams(DEFAULT_SETTINGS, params),
     })
 
-    expect(next.customProviders).toHaveLength(1)
-    expect(next.customProviders[0]).toMatchObject({ id: 'wrapped-custom', name: 'Wrapped Custom' })
+    expect(next.customProviders).toHaveLength(2)
+    expect(next.customProviders.find((p: any) => p.id === 'wrapped-custom')).toMatchObject({ id: 'wrapped-custom', name: 'Wrapped Custom' })
     expect(next.profiles).toHaveLength(1)
     expect(next.profiles[0]).toMatchObject({
       id: 'wrapped-profile',

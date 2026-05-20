@@ -245,9 +245,15 @@ function normalizeImageApiPayload(value: unknown): ImageApiResponse {
 }
 
 function createRequestHeaders(profile: ApiProfile): Record<string, string> {
-  return {
+  const headers: Record<string, string> = {
     Authorization: `Bearer ${profile.apiKey}`,
   }
+  if (profile.customHeaders) {
+    for (const [key, value] of Object.entries(profile.customHeaders)) {
+      if (key.trim() && value) headers[key.trim()] = value
+    }
+  }
+  return headers
 }
 
 function createResponsesImageTool(
@@ -385,13 +391,15 @@ async function parseImagesApiResponse(payload: ImageApiResponse, mime: string, s
 }
 
 export async function callOpenAICompatibleImageApi(opts: CallApiOptions, profile: ApiProfile, customProvider?: CustomProviderDefinition | null): Promise<CallApiResult> {
+  if (profile.apiMode === 'responses') {
+    return callResponsesImageApi(opts, profile)
+  }
+
   if (customProvider) {
     return callCustomHttpImageApi(opts, profile, customProvider)
   }
 
-  return profile.apiMode === 'responses'
-    ? callResponsesImageApi(opts, profile)
-    : callImagesApi(opts, profile)
+  return callImagesApi(opts, profile)
 }
 
 async function callImagesApi(opts: CallApiOptions, profile: ApiProfile, customProvider?: CustomProviderDefinition | null): Promise<CallApiResult> {

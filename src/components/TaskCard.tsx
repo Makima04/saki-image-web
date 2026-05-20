@@ -3,7 +3,7 @@ import type { TaskRecord } from '../types'
 import { useStore, ensureImageThumbnailCached, subscribeImageThumbnail, updateTaskInStore, retryTask } from '../store'
 import { formatImageRatio } from '../lib/size'
 import { getParamDisplay, ActualValueBadge } from '../lib/paramDisplay'
-import { DEFAULT_IMAGES_MODEL, DEFAULT_FAL_MODEL } from '../lib/apiProfiles'
+import { DEFAULT_IMAGES_MODEL } from '../lib/apiProfiles'
 import { CodeIcon } from './icons'
 
 interface Props {
@@ -213,7 +213,7 @@ export default function TaskCard({
   const nDisplay = getParamDisplay(task, 'n')
   const showN = task.params.n > 1 || nDisplay.isMismatch
 
-  const defaultModelForProvider = task.apiProvider === 'fal' ? DEFAULT_FAL_MODEL : DEFAULT_IMAGES_MODEL
+  const defaultModelForProvider = DEFAULT_IMAGES_MODEL
   const showModel = task.apiModel && task.apiModel !== defaultModelForProvider
 
   const getStatusColor = () => {

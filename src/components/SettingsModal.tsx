@@ -5,8 +5,6 @@ import { isApiProxyAvailable, isApiProxyLocked, readClientDevProxyConfig } from 
 import { useStore, exportData, importData, clearData } from '../store'
 import {
   createDefaultOpenAIProfile,
-  DEFAULT_FAL_BASE_URL,
-  DEFAULT_FAL_MODEL,
   DEFAULT_IMAGES_MODEL,
   DEFAULT_OPENAI_PROFILE_ID,
   DEFAULT_RESPONSES_MODEL,
@@ -327,17 +325,16 @@ export default function SettingsModal() {
   const apiProxyAvailable = isApiProxyAvailable(apiProxyConfig)
   const apiProxyLocked = isApiProxyLocked(apiProxyConfig)
   const activeProfile = draft.profiles.find((profile) => profile.id === draft.activeProfileId) ?? draft.profiles[0] ?? getActiveApiProfile(draft)
+  const activeProviderIsOpenAICompatible = isOpenAICompatibleProvider(draft, activeProfile.provider)
   const apiProxyChecked = activeProfile.provider === 'openai' && (apiProxyLocked || activeProfile.apiProxy)
   const apiProxyEnabled = apiProxyAvailable && activeProfile.provider === 'openai' && apiProxyChecked
-  const activeProviderIsOpenAICompatible = isOpenAICompatibleProvider(draft, activeProfile.provider)
-  const activeProviderUsesApiUrl = activeProviderIsOpenAICompatible || activeProfile.provider === 'fal'
+  const activeProviderUsesApiUrl = activeProviderIsOpenAICompatible
   const activeCustomProvider = draft.customProviders.find((provider) => provider.id === activeProfile.provider)
-  const defaultProviderOrder = ['openai', 'fal', ...draft.customProviders.map(p => p.id)]
+  const defaultProviderOrder = ['openai', ...draft.customProviders.map(p => p.id)]
   const providerOrder = draft.providerOrder || defaultProviderOrder
 
   const unorderedProviderOptions = [
     { label: 'OpenAI 兼容接口', value: 'openai', draggable: true },
-    { label: 'fal.ai', value: 'fal', draggable: true },
     ...draft.customProviders.map((provider) => ({
       label: provider.name,
       value: provider.id,
@@ -472,18 +469,16 @@ export default function SettingsModal() {
 
   const commitSettings = (nextDraft: AppSettings) => {
     const normalizedProfiles = nextDraft.profiles.map((profile) => {
-      const normalizedBaseUrl = profile.provider === 'fal'
-        ? profile.baseUrl.trim().replace(/\/+$/, '') || DEFAULT_FAL_BASE_URL
-        : normalizeBaseUrl(profile.baseUrl.trim() || DEFAULT_SETTINGS.baseUrl)
-      const defaultModel = profile.provider === 'fal' ? DEFAULT_FAL_MODEL : getDefaultModelForMode(profile.apiMode)
+      const normalizedBaseUrl = normalizeBaseUrl(profile.baseUrl.trim() || DEFAULT_SETTINGS.baseUrl)
+      const defaultModel = getDefaultModelForMode(profile.apiMode)
       return {
         ...profile,
         name: profile.name.trim() || (profile.id === DEFAULT_OPENAI_PROFILE_ID ? '默认' : '新配置'),
         baseUrl: normalizedBaseUrl,
         model: profile.model.trim() || defaultModel,
         timeout: Number(profile.timeout) || DEFAULT_SETTINGS.timeout,
-        apiProxy: profile.provider === 'openai' && apiProxyAvailable ? (apiProxyLocked || profile.apiProxy) : false,
-        codexCli: profile.provider === 'openai' ? profile.codexCli : false,
+        apiProxy: isOpenAICompatibleProvider(nextDraft, profile.provider) && apiProxyAvailable ? (apiProxyLocked || profile.apiProxy) : false,
+        codexCli: isOpenAICompatibleProvider(nextDraft, profile.provider) ? profile.codexCli : false,
       }
     })
     const fallbackProfile = createDefaultOpenAIProfile({ id: newId('openai') })
@@ -835,7 +830,7 @@ export default function SettingsModal() {
   }
 
   const handleProviderReorder = (sourceValue: string | number, targetValue: string | number, position: 'before' | 'after' | null) => {
-    const currentOrder = draft.providerOrder || ['openai', 'fal', ...draft.customProviders.map(p => p.id)]
+    const currentOrder = draft.providerOrder || ['openai', ...draft.customProviders.map(p => p.id)]
     const sourceIndex = currentOrder.indexOf(String(sourceValue))
     const targetIndex = currentOrder.indexOf(String(targetValue))
     if (sourceIndex < 0 || targetIndex < 0) return
@@ -1393,14 +1388,12 @@ export default function SettingsModal() {
                     onBlur={(e) => commitActiveProfilePatch({ baseUrl: e.target.value })}
                     type="text"
                     disabled={apiProxyEnabled}
-                    placeholder={activeProfile.provider === 'fal' ? DEFAULT_FAL_BASE_URL : DEFAULT_SETTINGS.baseUrl}
+                    placeholder={DEFAULT_SETTINGS.baseUrl}
                     className={`w-full rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2.5 text-sm text-[#725d42] outline-none transition focus:border-[#3dd4c6]  ${apiProxyEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                   />
                   <div data-selectable-text className="mt-1.5 min-h-[22px] flex items-center text-xs text-[#8a7b66]">
                     {apiProxyEnabled ? (
                       <span className="text-[#d4a80e] ">已开启代理，实际请求目标由部署端决定，此处设置被忽略。</span>
-                    ) : activeProfile.provider === 'fal' ? (
-                      <span>默认使用 <code className="bg-[#ede8d5] px-1 py-0.5 rounded">{DEFAULT_FAL_BASE_URL}</code>；填写自定义地址时将作为 fal.ai 代理 URL。</span>
                     ) : (
                       <span>支持通过查询参数覆盖：<code className="bg-[#ede8d5] px-1 py-0.5 rounded">?apiUrl=</code></span>
                     )}
@@ -1408,7 +1401,7 @@ export default function SettingsModal() {
                 </label>
               )}
 
-              {activeProfile.provider === 'openai' && (
+              {activeProviderIsOpenAICompatible && (
                 <div className="block">
                   <div className="mb-1.5 flex items-center justify-between">
                     <span className="block text-sm text-[#725d42]">Codex CLI 兼容模式</span>
@@ -1429,7 +1422,7 @@ export default function SettingsModal() {
                 </div>
               )}
 
-              {apiProxyAvailable && activeProfile.provider === 'openai' && (
+              {apiProxyAvailable && activeProviderIsOpenAICompatible && (
                 <div className="block">
                   <div className="mb-1.5 flex items-center justify-between">
                     <span className="block text-sm text-[#725d42]">API 代理</span>
@@ -1461,7 +1454,7 @@ export default function SettingsModal() {
                     onChange={(e) => updateActiveProfile({ apiKey: e.target.value })}
                     onBlur={(e) => commitActiveProfilePatch({ apiKey: e.target.value })}
                     type={showApiKey ? 'text' : 'password'}
-                    placeholder={activeProfile.provider === 'fal' ? 'FAL_KEY' : 'sk-...'}
+                    placeholder={'sk-...'}
                     className="w-full rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2.5 pr-10 text-sm text-[#725d42] outline-none transition focus:border-[#3dd4c6] "
                   />
                   <button
@@ -1490,7 +1483,7 @@ export default function SettingsModal() {
                 </div>
               </div>
 
-              {activeProfile.provider === 'openai' && (
+              {activeProviderIsOpenAICompatible && (
                 <div className="block">
                   <span className="mb-1.5 block text-sm text-[#725d42]">API 接口</span>
                   <Select
@@ -1524,20 +1517,18 @@ export default function SettingsModal() {
                   onChange={(e) => updateActiveProfile({ model: e.target.value })}
                   onBlur={(e) => commitActiveProfilePatch({ model: e.target.value })}
                   type="text"
-                  placeholder={activeProfile.provider === 'fal' ? DEFAULT_FAL_MODEL : getDefaultModelForMode(activeProfile.apiMode ?? DEFAULT_SETTINGS.apiMode)}
+                  placeholder={getDefaultModelForMode(activeProfile.apiMode ?? DEFAULT_SETTINGS.apiMode)}
                   className="w-full rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2.5 text-sm text-[#725d42] outline-none transition focus:border-[#3dd4c6] "
                 />
                 <div data-selectable-text className="mt-1.5 text-xs text-[#8a7b66]">
-                  {activeProfile.provider === 'fal' ? (
-                    <>当前适配 <code className="rounded bg-[#ede8d5] px-1 py-0.5">{DEFAULT_FAL_MODEL}</code>。</>
-                  ) : activeCustomProvider ? (
+                  {activeCustomProvider ? (
                     <>当前使用 <code className="rounded bg-[#ede8d5] px-1 py-0.5">{activeCustomProvider.name}</code>。</>
                   ) : (activeProfile.apiMode ?? DEFAULT_SETTINGS.apiMode) === 'responses' ? (
                     <>Responses API 需要使用支持 <code className="rounded bg-[#ede8d5] px-1 py-0.5">image_generation</code> 工具的文本模型，例如 <code className="rounded bg-[#ede8d5] px-1 py-0.5">{DEFAULT_RESPONSES_MODEL}</code>。</>
                   ) : (
                     <>Images API 需要使用 GPT Image 模型，例如 <code className="rounded bg-[#ede8d5] px-1 py-0.5">{DEFAULT_IMAGES_MODEL}</code>。</>
                   )}
-                  {activeProfile.provider === 'openai' && (
+                  {activeProviderIsOpenAICompatible && (
                     <>支持通过查询参数覆盖：<code className="rounded bg-[#ede8d5] px-1 py-0.5">?model=</code>。</>
                   )}
                 </div>
@@ -1578,6 +1569,73 @@ export default function SettingsModal() {
                   />
                 </label>
               )}
+
+              <div className="block">
+                <div className="mb-1.5 flex items-center gap-2">
+                  <span className="text-sm text-[#725d42]">自定义请求头</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const next = { ...(activeProfile.customHeaders ?? {}), '': '' }
+                      updateActiveProfile({ customHeaders: next })
+                    }}
+                    className="text-xs text-[#19c8b9] hover:text-[#15b5a7] transition-colors"
+                    title="添加请求头"
+                  >
+                    + 添加
+                  </button>
+                </div>
+                {activeProfile.customHeaders && Object.keys(activeProfile.customHeaders).length > 0 && (
+                  <div className="space-y-1.5">
+                    {Object.entries(activeProfile.customHeaders).map(([key, value], index) => (
+                      <div key={index} className="flex gap-1.5">
+                        <input
+                          value={key}
+                          onChange={(e) => {
+                            const next = { ...activeProfile.customHeaders }
+                            delete next[key]
+                            const newKey = e.target.value
+                            next[newKey] = value
+                            updateActiveProfile({ customHeaders: next })
+                          }}
+                          onBlur={() => commitActiveProfilePatch({ customHeaders: activeProfile.customHeaders })}
+                          type="text"
+                          placeholder="Header 名称"
+                          className="flex-1 rounded-lg border border-[#c4b89e] bg-[rgb(247,243,223)] px-2.5 py-2 text-xs text-[#725d42] outline-none transition focus:border-[#3dd4c6]"
+                        />
+                        <input
+                          value={value}
+                          onChange={(e) => {
+                            const next = { ...activeProfile.customHeaders, [key]: e.target.value }
+                            updateActiveProfile({ customHeaders: next })
+                          }}
+                          onBlur={() => commitActiveProfilePatch({ customHeaders: activeProfile.customHeaders })}
+                          type="text"
+                          placeholder="值"
+                          className="flex-1 rounded-lg border border-[#c4b89e] bg-[rgb(247,243,223)] px-2.5 py-2 text-xs text-[#725d42] outline-none transition focus:border-[#3dd4c6]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const next = { ...activeProfile.customHeaders }
+                            delete next[key]
+                            updateActiveProfile({ customHeaders: Object.keys(next).length ? next : undefined }, true)
+                          }}
+                          className="shrink-0 px-1.5 py-2 text-xs text-[#b8a88a] hover:text-red-500 transition-colors"
+                          title="删除"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" viewBox="0 0 24 24">
+                            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="mt-1.5 text-xs text-[#8a7b66]">
+                  自定义请求头将覆盖同名浏览器默认头，可用于伪装 User-Agent 等。
+                </div>
+              </div>
             </div>
             )}
             

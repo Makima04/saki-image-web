@@ -16,7 +16,6 @@ export interface CallApiOptions {
   /** 输入图片的 data URL 列表 */
   inputImageDataUrls: string[]
   maskDataUrl?: string
-  onFalRequestEnqueued?: (request: { requestId: string; endpoint: string }) => void
   onCustomTaskEnqueued?: (task: { taskId: string }) => void
   /** 流式进度回调：type 为 SSE 事件类型，progress 为 0-100，previewUrl 为已完成的图片 */
   onStreamProgress?: (info: { type: string; progress: number; previewUrl?: string; imageFormat?: 'base64' | 'url' }) => void
