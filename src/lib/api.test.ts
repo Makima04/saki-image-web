@@ -13,14 +13,13 @@ describe('callImageApi', () => {
   it.each([false, true])(
     'adds the prompt rewrite guard on Responses API when Codex CLI mode is %s',
     async (codexCli) => {
-      const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(JSON.stringify({
-        output: [{
-          type: 'image_generation_call',
-          result: 'aW1hZ2U=',
-        }],
-      }), {
+      const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response([
+        'data: {"type":"response.completed","response":{"output":[{"type":"image_generation_call","result":"aW1hZ2U="}]}}',
+        '',
+        '',
+      ].join('\n'), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/event-stream' },
       }))
 
       await callImageApi({
@@ -99,61 +98,6 @@ describe('callImageApi', () => {
     }])
   })
 
-  it('uses the same-origin API proxy path when API proxy is enabled', async () => {
-    vi.stubEnv('VITE_API_PROXY_AVAILABLE', 'true')
-    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(JSON.stringify({
-      data: [{ b64_json: 'aW1hZ2U=' }],
-    }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    }))
-
-    await callImageApi({
-      settings: {
-        ...DEFAULT_SETTINGS,
-        apiKey: 'test-key',
-        apiProxy: true,
-        baseUrl: 'http://api.example.com/v1',
-      },
-      prompt: 'prompt',
-      params: { ...DEFAULT_PARAMS },
-      inputImageDataUrls: [],
-    })
-
-    expect(fetchMock).toHaveBeenCalledWith(
-      '/api-proxy/images/generations',
-      expect.objectContaining({ method: 'POST' }),
-    )
-  })
-
-  it('uses the same-origin API proxy path when API proxy is locked', async () => {
-    vi.stubEnv('VITE_API_PROXY_AVAILABLE', 'true')
-    vi.stubEnv('VITE_API_PROXY_LOCKED', 'true')
-    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(JSON.stringify({
-      data: [{ b64_json: 'aW1hZ2U=' }],
-    }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    }))
-
-    await callImageApi({
-      settings: {
-        ...DEFAULT_SETTINGS,
-        apiKey: 'test-key',
-        apiProxy: false,
-        baseUrl: 'http://api.example.com/v1',
-      },
-      prompt: 'prompt',
-      params: { ...DEFAULT_PARAMS },
-      inputImageDataUrls: [],
-    })
-
-    expect(fetchMock).toHaveBeenCalledWith(
-      '/api-proxy/images/generations',
-      expect.objectContaining({ method: 'POST' }),
-    )
-  })
-
   it('does not add cache request headers that require extra CORS allow-list entries', async () => {
     const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(JSON.stringify({
       data: [{ b64_json: 'aW1hZ2U=' }],
@@ -176,8 +120,7 @@ describe('callImageApi', () => {
     expect((init as RequestInit).cache).toBe('no-store')
   })
 
-  it('ignores stored API proxy settings when the current deployment has no proxy', async () => {
-    vi.stubEnv('VITE_API_PROXY_AVAILABLE', 'false')
+  it('uses the configured API URL directly', async () => {
     const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(JSON.stringify({
       data: [{ b64_json: 'aW1hZ2U=' }],
     }), {
@@ -189,7 +132,6 @@ describe('callImageApi', () => {
       settings: {
         ...DEFAULT_SETTINGS,
         apiKey: 'test-key',
-        apiProxy: true,
         baseUrl: 'http://api.example.com/v1',
       },
       prompt: 'prompt',

@@ -21,7 +21,6 @@ describe('mergeImportedSettings', () => {
       timeout: 120,
       apiMode: 'responses',
       codexCli: true,
-      apiProxy: true,
     })
 
     expect(merged.profiles).toHaveLength(1)
@@ -35,7 +34,6 @@ describe('mergeImportedSettings', () => {
       timeout: 120,
       apiMode: 'responses',
       codexCli: true,
-      apiProxy: true,
     })
   })
 
@@ -52,7 +50,6 @@ describe('mergeImportedSettings', () => {
           timeout: 300,
           apiMode: 'images',
           codexCli: false,
-          apiProxy: false,
         },
         {
           id: 'imported-custom',
@@ -64,7 +61,6 @@ describe('mergeImportedSettings', () => {
           timeout: 300,
           apiMode: 'images',
           codexCli: false,
-          apiProxy: false,
         },
       ],
       activeProfileId: 'imported-custom',
@@ -87,7 +83,6 @@ describe('mergeImportedSettings', () => {
           timeout: 300,
           apiMode: 'images',
           codexCli: false,
-          apiProxy: false,
         },
         {
           id: 'imported-openai-b',
@@ -99,7 +94,6 @@ describe('mergeImportedSettings', () => {
           timeout: 600,
           apiMode: 'images',
           codexCli: true,
-          apiProxy: true,
         },
       ],
       activeProfileId: 'imported-openai-b',
@@ -152,7 +146,6 @@ describe('mergeImportedSettings', () => {
           timeout: 300,
           apiMode: 'images',
           codexCli: false,
-          apiProxy: false,
         },
         {
           id: 'imported-custom',
@@ -164,7 +157,6 @@ describe('mergeImportedSettings', () => {
           timeout: 300,
           apiMode: 'images',
           codexCli: false,
-          apiProxy: false,
         },
       ],
       activeProfileId: 'imported-custom',
@@ -196,7 +188,6 @@ describe('mergeImportedSettings', () => {
           timeout: 600,
           apiMode: 'images',
           codexCli: true,
-          apiProxy: true,
         },
         {
           id: 'new-custom',
@@ -208,7 +199,6 @@ describe('mergeImportedSettings', () => {
           timeout: 300,
           apiMode: 'images',
           codexCli: false,
-          apiProxy: false,
         },
       ],
     })
@@ -241,7 +231,6 @@ describe('mergeImportedSettings', () => {
         timeout: 300,
         apiMode: 'images',
         codexCli: false,
-        apiProxy: false,
       }],
       activeProfileId: 'existing-custom',
     })
@@ -267,7 +256,6 @@ describe('mergeImportedSettings', () => {
         timeout: 300,
         apiMode: 'images',
         codexCli: false,
-        apiProxy: false,
       }],
     })
     const merged = mergeImportedSettings(current, imported)
@@ -302,7 +290,6 @@ describe('mergeImportedSettings', () => {
         timeout: 300,
         apiMode: 'images',
         codexCli: false,
-        apiProxy: false,
       }],
     })
 
@@ -338,7 +325,6 @@ describe('mergeImportedSettings', () => {
         timeout: 300,
         apiMode: 'images',
         codexCli: false,
-        apiProxy: false,
       }],
     })
 
@@ -375,7 +361,6 @@ describe('custom providers', () => {
         timeout: 60,
         apiMode: 'images',
         codexCli: false,
-        apiProxy: false,
       }],
       activeProfileId: 'profile-custom',
     })

@@ -63,10 +63,9 @@ export interface ApiProfile {
   timeout: number
   apiMode: ApiMode
   codexCli: boolean
-  apiProxy: boolean
   responseFormatB64Json?: boolean
   customHeaders?: Record<string, string>
-  providerDrafts?: Partial<Record<ApiProvider, Partial<Pick<ApiProfile, 'baseUrl' | 'model' | 'apiMode' | 'codexCli' | 'apiProxy' | 'responseFormatB64Json'>>>>
+  providerDrafts?: Partial<Record<ApiProvider, Partial<Pick<ApiProfile, 'baseUrl' | 'model' | 'apiMode' | 'codexCli' | 'responseFormatB64Json'>>>>
 }
 
 export interface AppSettings {
@@ -77,7 +76,6 @@ export interface AppSettings {
   timeout: number
   apiMode: ApiMode
   codexCli: boolean
-  apiProxy: boolean
   customProviders: CustomProviderDefinition[]
   providerOrder?: string[]
   clearInputAfterSubmit: boolean

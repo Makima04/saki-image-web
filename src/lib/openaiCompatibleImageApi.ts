@@ -1,6 +1,6 @@
 import type { ApiProfile, CustomProviderDefinition, CustomProviderPollMapping, CustomProviderResultMapping, CustomProviderSubmitMapping, ImageApiResponse, ResponsesApiResponse, TaskParams } from '../types'
 import { dataUrlToBlob, imageDataUrlToPngBlob, maskDataUrlToPngBlob } from './canvasImage'
-import { buildApiUrl, readClientDevProxyConfig, shouldUseApiProxy } from './devProxy'
+import { buildApiUrl } from './apiUrl'
 import {
   assertImageInputPayloadSize,
   assertMaskEditFileSize,
@@ -450,8 +450,6 @@ async function callImagesApiSingle(opts: CallApiOptions, profile: ApiProfile, cu
     : originalPrompt
   const isEdit = inputImageDataUrls.length > 0
   const mime = MIME_MAP[params.output_format] || 'image/png'
-  const proxyConfig = readClientDevProxyConfig()
-  const useApiProxy = shouldUseApiProxy(profile.apiProxy, proxyConfig)
   const requestHeaders = createRequestHeaders(profile)
   const paths = createOpenAICompatiblePaths(customProvider)
 
@@ -511,7 +509,7 @@ async function callImagesApiSingle(opts: CallApiOptions, profile: ApiProfile, cu
         formData.append('mask', maskBlob, 'mask.png')
       }
 
-      response = await fetch(buildApiUrl(profile.baseUrl, paths.editPath, proxyConfig, useApiProxy), {
+      response = await fetch(buildApiUrl(profile.baseUrl, paths.editPath), {
         method: 'POST',
         headers: requestHeaders,
         cache: 'no-store',
@@ -541,7 +539,7 @@ async function callImagesApiSingle(opts: CallApiOptions, profile: ApiProfile, cu
         body.response_format = 'b64_json'
       }
 
-      response = await fetch(buildApiUrl(profile.baseUrl, paths.generationPath, proxyConfig, useApiProxy), {
+      response = await fetch(buildApiUrl(profile.baseUrl, paths.generationPath), {
         method: 'POST',
         headers: {
           ...requestHeaders,
@@ -718,7 +716,6 @@ async function extractCustomImages(payload: unknown, result: CustomProviderResul
 }
 
 async function submitCustomRequest(mapping: CustomProviderSubmitMapping, opts: CallApiOptions, profile: ApiProfile, controller: AbortController): Promise<unknown> {
-  const proxyConfig = readClientDevProxyConfig()
   const requestHeaders = createRequestHeaders(profile)
   const context = createCustomProviderContext(opts, profile)
   const method = mapping.method ?? 'POST'
@@ -748,7 +745,7 @@ async function submitCustomRequest(mapping: CustomProviderSubmitMapping, opts: C
     }
   }
 
-  const response = await fetch(buildApiUrl(profile.baseUrl, path, proxyConfig, false), {
+  const response = await fetch(buildApiUrl(profile.baseUrl, path), {
     method,
     headers,
     cache: 'no-store',
@@ -767,7 +764,6 @@ async function pollCustomTaskResult(
   mime: string,
   signal?: AbortSignal,
 ): Promise<CallApiResult> {
-  const proxyConfig = readClientDevProxyConfig()
   const requestHeaders = createRequestHeaders(profile)
   let isFirstPoll = true
 
@@ -783,7 +779,7 @@ async function pollCustomTaskResult(
     const taskPath = appendQuery(buildTaskPath(poll.path, taskId), poll.query)
     let taskPayload: unknown
     try {
-      const taskResponse = await fetch(buildApiUrl(profile.baseUrl, taskPath, proxyConfig, false), {
+      const taskResponse = await fetch(buildApiUrl(profile.baseUrl, taskPath), {
         method: poll.method ?? 'GET',
         headers: requestHeaders,
         cache: 'no-store',
@@ -896,8 +892,6 @@ async function callResponsesImageApi(opts: CallApiOptions, profile: ApiProfile):
 async function callResponsesImageApiSingle(opts: CallApiOptions, profile: ApiProfile): Promise<CallApiResult> {
   const { prompt, params, inputImageDataUrls } = opts
   const mime = MIME_MAP[params.output_format] || 'image/png'
-  const proxyConfig = readClientDevProxyConfig()
-  const useApiProxy = shouldUseApiProxy(profile.apiProxy, proxyConfig)
   const requestHeaders = createRequestHeaders(profile)
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), profile.timeout * 1000)
@@ -920,7 +914,7 @@ async function callResponsesImageApiSingle(opts: CallApiOptions, profile: ApiPro
       stream: true,
     }
 
-    const response = await fetch(buildApiUrl(profile.baseUrl, 'responses', proxyConfig, useApiProxy), {
+    const response = await fetch(buildApiUrl(profile.baseUrl, 'responses'), {
       method: 'POST',
       headers: {
         ...requestHeaders,

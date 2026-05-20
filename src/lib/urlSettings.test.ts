@@ -115,7 +115,6 @@ describe('URL settings params', () => {
         timeout: 300,
         apiMode: 'images',
         codexCli: false,
-        apiProxy: false,
       }],
     }
     const params = new URLSearchParams()
@@ -171,7 +170,6 @@ describe('URL settings params', () => {
         timeout: 300,
         apiMode: 'images',
         codexCli: false,
-        apiProxy: false,
       }],
     }
     const params = new URLSearchParams()
@@ -218,7 +216,6 @@ describe('URL settings params', () => {
           timeout: 300,
           apiMode: 'images',
           codexCli: false,
-          apiProxy: false,
         }],
       },
     }))

@@ -382,8 +382,7 @@ export const useStore = create<AppState>()(
           incoming.model !== undefined ||
           incoming.timeout !== undefined ||
           incoming.apiMode !== undefined ||
-          incoming.codexCli !== undefined ||
-          incoming.apiProxy !== undefined
+          incoming.codexCli !== undefined
         const merged = normalizeSettings({ ...previous, ...incoming })
         if (hasLegacyOverrides && incoming.profiles === undefined) {
           merged.profiles = merged.profiles.map((profile) =>
@@ -396,7 +395,6 @@ export const useStore = create<AppState>()(
                   timeout: incoming.timeout ?? profile.timeout,
                   apiMode: incoming.apiMode === 'images' || incoming.apiMode === 'responses' ? incoming.apiMode : profile.apiMode,
                   codexCli: incoming.codexCli ?? profile.codexCli,
-                  apiProxy: incoming.apiProxy ?? profile.apiProxy,
                 }
               : profile,
           )
@@ -723,7 +721,6 @@ function createSettingsForApiProfile(settings: AppSettings, profile: ApiProfile)
     timeout: profile.timeout,
     apiMode: profile.apiMode,
     codexCli: profile.codexCli,
-    apiProxy: profile.apiProxy,
     profiles: normalized.profiles.map((item) => item.id === profile.id ? profile : item),
     activeProfileId: profile.id,
   })
@@ -757,13 +754,9 @@ function getApiRequestNetworkErrorHint(err: unknown, task: TaskRecord, settings:
 
   const profile = getTaskApiProfile(settings, task)
   const elapsedSeconds = Math.max(0, (Date.now() - task.createdAt) / 1000)
-  const usesApiProxy = profile?.apiProxy ?? settings.apiProxy
 
   if (elapsedSeconds <= 15) {
-    if (usesApiProxy) {
-      return '提示：请求立即失败，请检查 API 代理服务是否正常运行。'
-    }
-    return '提示：接口可能不支持浏览器跨域请求，可开启 API 代理解决。'
+    return '提示：接口可能不支持浏览器跨域请求，请检查 API 服务的 CORS 配置或改用支持浏览器调用的接口。'
   }
 
   if (elapsedSeconds >= 55 && elapsedSeconds <= 75) {

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { normalizeBaseUrl } from '../lib/api'
-import { isApiProxyAvailable, isApiProxyLocked, readClientDevProxyConfig } from '../lib/devProxy'
 import { useStore, exportData, importData, clearData } from '../store'
 import {
   createDefaultOpenAIProfile,
@@ -161,8 +160,7 @@ function isPristineNewOpenAIProfile(profile: ApiProfile) {
     profile.model === DEFAULT_IMAGES_MODEL &&
     profile.timeout === DEFAULT_SETTINGS.timeout &&
     profile.apiMode === 'images' &&
-    profile.codexCli === false &&
-    profile.apiProxy === defaultProfile.apiProxy
+    profile.codexCli === false
 }
 
 function getImportedProfileFromMergedSettings(
@@ -321,13 +319,8 @@ export default function SettingsModal() {
   const [copyImportUrlProfile, setCopyImportUrlProfile] = useState<ApiProfile | null>(null)
   const [copyImportUrlOptions, setCopyImportUrlOptions] = useState<CopyImportUrlOptions>(readCopyImportUrlOptions)
 
-  const apiProxyConfig = readClientDevProxyConfig()
-  const apiProxyAvailable = isApiProxyAvailable(apiProxyConfig)
-  const apiProxyLocked = isApiProxyLocked(apiProxyConfig)
   const activeProfile = draft.profiles.find((profile) => profile.id === draft.activeProfileId) ?? draft.profiles[0] ?? getActiveApiProfile(draft)
   const activeProviderIsOpenAICompatible = isOpenAICompatibleProvider(draft, activeProfile.provider)
-  const apiProxyChecked = activeProviderIsOpenAICompatible && (apiProxyLocked || activeProfile.apiProxy)
-  const apiProxyEnabled = apiProxyAvailable && activeProviderIsOpenAICompatible && apiProxyChecked
   const activeProviderUsesApiUrl = activeProviderIsOpenAICompatible
   const activeCustomProvider = draft.customProviders.find((provider) => provider.id === activeProfile.provider)
   const defaultProviderOrder = ['openai', ...draft.customProviders.map(p => p.id)]
@@ -378,18 +371,10 @@ export default function SettingsModal() {
     const displaySettings = normalizedSettings.reuseTaskApiProfileTemporarily && reusedTaskApiProfileId && normalizedSettings.profiles.some((profile) => profile.id === reusedTaskApiProfileId)
       ? normalizeSettings({ ...normalizedSettings, activeProfileId: reusedTaskApiProfileId })
       : normalizedSettings
-    const nextDraft = normalizeSettings({
-      ...displaySettings,
-      profiles: displaySettings.profiles.map((profile) => ({
-        ...profile,
-        apiProxy: isOpenAICompatibleProvider(displaySettings, profile.provider) && apiProxyAvailable
-          ? (apiProxyLocked || profile.apiProxy)
-          : false,
-      })),
-    })
+    const nextDraft = normalizeSettings(displaySettings)
     setDraft(nextDraft)
     setTimeoutInput(String(getActiveApiProfile(nextDraft).timeout))
-  }, [apiProxyAvailable, apiProxyLocked, showSettings, settings, reusedTaskApiProfileId])
+  }, [showSettings, settings, reusedTaskApiProfileId])
 
   useEffect(() => {
     setTimeoutInput(String(activeProfile.timeout))
@@ -477,7 +462,6 @@ export default function SettingsModal() {
         baseUrl: normalizedBaseUrl,
         model: profile.model.trim() || defaultModel,
         timeout: Number(profile.timeout) || DEFAULT_SETTINGS.timeout,
-        apiProxy: isOpenAICompatibleProvider(nextDraft, profile.provider) && apiProxyAvailable ? (apiProxyLocked || profile.apiProxy) : false,
         codexCli: isOpenAICompatibleProvider(nextDraft, profile.provider) ? profile.codexCli : false,
       }
     })
@@ -1387,16 +1371,11 @@ export default function SettingsModal() {
                     onChange={(e) => updateActiveProfile({ baseUrl: e.target.value })}
                     onBlur={(e) => commitActiveProfilePatch({ baseUrl: e.target.value })}
                     type="text"
-                    disabled={apiProxyEnabled}
                     placeholder={DEFAULT_SETTINGS.baseUrl}
-                    className={`w-full rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2.5 text-sm text-[#725d42] outline-none transition focus:border-[#3dd4c6]  ${apiProxyEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className="w-full rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2.5 text-sm text-[#725d42] outline-none transition focus:border-[#3dd4c6] "
                   />
                   <div data-selectable-text className="mt-1.5 min-h-[22px] flex items-center text-xs text-[#8a7b66]">
-                    {apiProxyEnabled ? (
-                      <span className="text-[#d4a80e] ">已开启代理，实际请求目标由部署端决定，此处设置被忽略。</span>
-                    ) : (
-                      <span>支持通过查询参数覆盖：<code className="bg-[#ede8d5] px-1 py-0.5 rounded">?apiUrl=</code></span>
-                    )}
+                    <span>支持通过查询参数覆盖：<code className="bg-[#ede8d5] px-1 py-0.5 rounded">?apiUrl=</code></span>
                   </div>
                 </label>
               )}
@@ -1418,30 +1397,6 @@ export default function SettingsModal() {
                   </div>
                   <div data-selectable-text className="text-xs text-[#8a7b66]">
                     开启后应用 Codex CLI 实际支持的参数。支持查询参数覆盖：<code className="bg-[#ede8d5] px-1 py-0.5 rounded">codexCli=true</code>。
-                  </div>
-                </div>
-              )}
-
-              {apiProxyAvailable && activeProviderIsOpenAICompatible && (
-                <div className="block">
-                  <div className="mb-1.5 flex items-center justify-between">
-                    <span className="block text-sm text-[#725d42]">API 代理</span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (!apiProxyLocked) updateActiveProfile({ apiProxy: !activeProfile.apiProxy }, true)
-                      }}
-                      disabled={apiProxyLocked}
-                      className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${apiProxyChecked ? 'bg-[#e6f9f6]0' : 'bg-[#c4b89e] bg-[#d4c9b4]'} ${apiProxyLocked ? 'cursor-not-allowed opacity-70' : ''}`}
-                      role="switch"
-                      aria-checked={apiProxyChecked}
-                      aria-label="API 代理"
-                    >
-                      <span className={`inline-block h-3 w-3 transform rounded-full bg-white shadow transition-transform ${apiProxyChecked ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
-                    </button>
-                  </div>
-                  <div data-selectable-text className="text-xs text-[#8a7b66]">
-                    {apiProxyLocked ? '当前部署已锁定 API 代理为开启，API URL 设置会被忽略。' : '当前部署提供同源代理时默认开启，可手动关闭。开启后用于解决浏览器跨域限制，API URL 设置会被忽略。'}
                   </div>
                 </div>
               )}
