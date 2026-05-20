@@ -226,6 +226,7 @@ export function normalizeCustomProviderDefinition(input: unknown, usedIds = new 
     id,
     name: rawName,
     template,
+    defaultBaseUrl: typeof record.defaultBaseUrl === 'string' && record.defaultBaseUrl.trim() ? record.defaultBaseUrl.trim() : undefined,
     submit: normalizeSubmitMapping(record.submit, {
       path: DEFAULT_CUSTOM_PROVIDER_PATHS.generationPath,
       method: 'POST',
