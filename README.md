@@ -14,13 +14,38 @@
 - **历史管理** — 本地存储，瀑布流浏览，批量操作，ZIP 导出
 - **参数追踪** — 请求参数与 API 实际生效参数对比展示
 
-## 🐳 Docker 一键部署
+## 🐳 Docker 部署
+
+### 1. 克隆项目
 
 ```bash
+git clone https://github.com/Makima04/saki-image-web.git
+cd saki-image-web
+```
+
+### 2. 构建镜像并启动
+
+```bash
+docker compose build
 docker compose up -d
 ```
 
-访问 `http://localhost:8080`
+### 3. 访问应用
+
+打开浏览器访问 `http://localhost:12324`
+
+### 常用命令
+
+```bash
+# 查看运行状态
+docker compose ps
+
+# 查看日志
+docker compose logs -f
+
+# 停止服务
+docker compose down
+```
 
 ## 💻 本地开发
 
@@ -38,4 +63,3 @@ React 19 · TypeScript · Vite · Tailwind CSS · Zustand · IndexedDB
 ## 📄 许可证
 
 [MIT License](LICENSE)
-# saki-image-web
