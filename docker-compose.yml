@@ -2,5 +2,5 @@ services:
   app:
     build: .
     ports:
-      - "8080:80"
+      - "12324:80"
     restart: unless-stopped
