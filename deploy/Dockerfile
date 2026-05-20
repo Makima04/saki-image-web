@@ -24,6 +24,7 @@ ENV DEFAULT_API_URL=
 ENV API_PROXY_URL=
 ENV ENABLE_API_PROXY=false
 ENV LOCK_API_PROXY=false
+ENV API_PROXY_USER_AGENT=saki-image-web/1.0
 
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY deploy/nginx.conf /etc/nginx/templates/default.conf.template
