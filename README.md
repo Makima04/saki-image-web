@@ -16,23 +16,28 @@
 
 ## 🐳 Docker 部署
 
-### 1. 克隆项目
+### 1. 拉取镜像并启动
 
 ```bash
-git clone https://github.com/Makima04/saki-image-web.git
-cd saki-image-web
-```
-
-### 2. 构建镜像并启动
-
-```bash
-docker compose build
+docker compose pull
 docker compose up -d
 ```
 
-### 3. 访问应用
+无需克隆项目，只需 `docker-compose.yml` 文件即可。
+
+### 2. 访问应用
 
 打开浏览器访问 `http://localhost:12324`
+
+### 本地构建（可选）
+
+如需从源码构建镜像：
+
+```bash
+# 编辑 docker-compose.yml，注释 image 行，取消注释 build 行
+docker compose build
+docker compose up -d
+```
 
 ### 常用命令
 

@@ -1,6 +1,8 @@
 services:
   app:
-    build: .
+    image: ghcr.io/makima04/saki-image-web:latest
+    # 如需本地构建，注释掉 image 行，取消注释 build 行
+    # build: .
     ports:
       - "12324:80"
     restart: unless-stopped
