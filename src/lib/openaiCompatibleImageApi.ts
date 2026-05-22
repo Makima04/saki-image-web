@@ -168,6 +168,25 @@ async function consumeStreamedResponses(
     throw err
   }
 
+  if (outputItems.length > 0) {
+    finalPayload = {
+      ...finalPayload,
+      output: finalPayload.output.map((item, index) => {
+        const streamedItem = outputItems[index]
+        if (
+          item?.type === 'image_generation_call' &&
+          !item.result &&
+          streamedItem?.type === 'image_generation_call' &&
+          typeof streamedItem.result === 'string' &&
+          streamedItem.result.trim()
+        ) {
+          return { ...item, result: streamedItem.result }
+        }
+        return item
+      }),
+    }
+  }
+
   try {
     const imageResults = parseResponsesImageResults(finalPayload, mime)
     const actualParams = mergeActualParams(imageResults[0]?.actualParams ?? {})

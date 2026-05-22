@@ -744,13 +744,43 @@ function isConnectionRecoverableError(err: unknown) {
 function isApiRequestNetworkError(err: unknown): boolean {
   if (err instanceof TypeError) {
     const message = err.message.toLowerCase()
-    return /failed to fetch|fetch failed|load failed|networkerror|network request failed/i.test(message)
+    return /failed to fetch|fetch failed|load failed|network\s*error|network request failed/i.test(message)
   }
   return false
 }
 
+function getApiModeForTask(settings: AppSettings, task: TaskRecord): ApiProfile['apiMode'] | undefined {
+  return task.apiMode ?? getTaskApiProfile(settings, task)?.apiMode
+}
+
+function formatApiErrorMessage(err: unknown, task: TaskRecord, settings: AppSettings): string {
+  const rawMessage = err instanceof Error ? err.message : String(err)
+  if (!isApiRequestNetworkError(err)) return rawMessage
+
+  const hasGeneratedImage = task.outputImages.length > 0
+  const apiMode = getApiModeForTask(settings, task)
+  const lines = hasGeneratedImage
+    ? [
+      '图片已生成并保存，但后续响应连接中断。',
+      `浏览器原始错误：${rawMessage}`,
+    ]
+    : [
+      'API 请求连接失败。',
+      `浏览器原始错误：${rawMessage}`,
+    ]
+
+  if (apiMode === 'responses') {
+    lines.push('这通常表示 Responses 流式连接被服务商、中转接口、浏览器或反向代理提前断开；如果图片已经出现，一般不是图片生成失败。')
+  } else {
+    lines.push('这通常表示浏览器无法连接到接口，常见原因包括 CORS 跨域限制、接口地址不可达、代理超时或网络中断。')
+  }
+
+  return lines.join('\n')
+}
+
 function getApiRequestNetworkErrorHint(err: unknown, task: TaskRecord, settings: AppSettings): string | null {
   if (!isApiRequestNetworkError(err)) return null
+  if (task.outputImages.length > 0) return null
 
   const profile = getTaskApiProfile(settings, task)
   const elapsedSeconds = Math.max(0, (Date.now() - task.createdAt) / 1000)
@@ -1005,6 +1035,7 @@ export async function submitTask(options: { allowFullMask?: boolean; useCurrentA
     apiProfileId: activeProfile.id,
     apiProfileName: activeProfile.name,
     apiModel: activeProfile.model,
+    apiMode: activeProfile.apiMode,
     inputImageIds: orderedInputImages.map((i) => i.id),
     maskTargetImageId,
     maskImageId,
@@ -1184,7 +1215,7 @@ async function executeTask(taskId: string) {
       })
       scheduleCustomRecovery(taskId)
     } else {
-      let errorMessage = err instanceof Error ? err.message : String(err)
+      let errorMessage = formatApiErrorMessage(err, latestTask, useStore.getState().settings)
       const networkErrorHint = getApiRequestNetworkErrorHint(err, latestTask, useStore.getState().settings)
       if (networkErrorHint && !errorMessage.includes(IMAGE_FETCH_CORS_HINT)) {
         errorMessage += `\n${networkErrorHint}`
@@ -1231,6 +1262,7 @@ export async function retryTask(task: TaskRecord) {
     apiProfileId: activeProfile.id,
     apiProfileName: activeProfile.name,
     apiModel: activeProfile.model,
+    apiMode: activeProfile.apiMode,
     inputImageIds: [...task.inputImageIds],
     maskTargetImageId: task.maskTargetImageId ?? null,
     maskImageId: task.maskImageId ?? null,

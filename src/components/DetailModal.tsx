@@ -195,6 +195,22 @@ export default function DetailModal() {
   const isFalReconnecting = task.status === 'error' && task.falRecoverable
   const isCustomReconnecting = task.status === 'error' && task.customRecoverable
   const rawImageUrls = task.rawImageUrls ?? []
+  const displayError = (() => {
+    const error = task.error || '生成失败'
+    if (!/^network\s*error$/i.test(error.trim())) return error
+    if (outputLen > 0) {
+      return [
+        '图片已生成并保存，但后续响应连接中断。',
+        `浏览器原始错误：${error}`,
+        '这通常表示 Responses 流式连接被服务商、中转接口、浏览器或反向代理提前断开；如果图片已经出现，一般不是图片生成失败。',
+      ].join('\n')
+    }
+    return [
+      'API 请求连接失败。',
+      `浏览器原始错误：${error}`,
+      '这通常表示浏览器无法连接到接口，常见原因包括 CORS 跨域限制、接口地址不可达、代理超时或网络中断。',
+    ].join('\n')
+  })()
 
   const formatTime = (ts: number | null) => {
     if (!ts) return ''
@@ -246,7 +262,7 @@ export default function DetailModal() {
   }
 
   const handleCopyError = async () => {
-    const errorText = task.error || '生成失败'
+    const errorText = displayError
     try {
       await copyTextToClipboard(errorText)
       showToast('完整报错已复制', 'success')
@@ -316,7 +332,7 @@ export default function DetailModal() {
 
         {/* 左侧：图片 */}
         <div ref={imagePanelRef} className="md:w-1/2 w-full h-64 md:h-auto bg-[#ede8d5] relative flex items-center justify-center flex-shrink-0 min-h-[16rem]">
-          {task.status === 'done' && outputLen > 0 && currentOutputPreviewSrc && (
+          {outputLen > 0 && currentOutputPreviewSrc && (
             <>
               <img
                 ref={mainImageRef}
@@ -424,7 +440,7 @@ export default function DetailModal() {
               <p className="text-sm font-medium text-[#f5c31c]">重连中</p>
             </div>
           )}
-          {task.status === 'error' && !isFalReconnecting && (
+          {task.status === 'error' && !isFalReconnecting && outputLen === 0 && (
             <div className="w-full max-w-md px-4 text-center">
               <svg className="w-10 h-10 text-[#e05a5a] mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -437,7 +453,7 @@ export default function DetailModal() {
                   WebkitLineClamp: 4,
                 }}
               >
-                {task.error || '生成失败'}
+                {displayError}
               </p>
               <div className="mt-3 flex items-center justify-center gap-2">
                 <div className="relative group">
@@ -577,6 +593,60 @@ export default function DetailModal() {
                   value={currentRevisedPrompt}
                   className="max-w-full rounded px-2 py-1 text-left text-xs leading-relaxed whitespace-pre-wrap"
                 />
+              </div>
+            )}
+
+            {task.status === 'error' && !isFalReconnecting && (
+              <div className="mb-4 rounded-lg border border-red-200/80 bg-[#fdf0f0] px-3 py-2">
+                <div className="mb-1.5 flex items-center justify-between gap-2">
+                  <h3 className="text-xs font-medium uppercase tracking-wider text-[#c94444]">
+                    任务报错
+                  </h3>
+                  <div className="flex shrink-0 items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={handleCopyError}
+                      className="rounded p-1 text-[#c94444] transition hover:bg-red-100"
+                      title="复制完整报错"
+                    >
+                      <CopyIcon className="h-4 w-4" />
+                    </button>
+                    {task.rawResponsePayload && (
+                      <button
+                        type="button"
+                        onClick={() => setShowRawResponseModal(true)}
+                        className="rounded p-1 text-[#c94444] transition hover:bg-red-100"
+                        title="查看原始响应"
+                      >
+                        <CodeIcon className="h-4 w-4" />
+                      </button>
+                    )}
+                    {task.rawImageUrls && task.rawImageUrls.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          if (task.rawImageUrls!.length === 1) {
+                            try {
+                              await copyTextToClipboard(task.rawImageUrls![0])
+                              showToast('图片链接已复制', 'success')
+                            } catch (err) {
+                              showToast(getClipboardFailureMessage('复制链接失败', err), 'error')
+                            }
+                          } else {
+                            setShowRawUrlsModal(true)
+                          }
+                        }}
+                        className="rounded p-1 text-[#c94444] transition hover:bg-red-100"
+                        title={task.rawImageUrls.length === 1 ? '复制图片链接' : '查看图片链接'}
+                      >
+                        <LinkIcon className="h-4 w-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <p className="whitespace-pre-wrap break-words text-xs leading-5 text-[#c94444]">
+                  {displayError}
+                </p>
               </div>
             )}
 

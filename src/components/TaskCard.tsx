@@ -300,7 +300,7 @@ export default function TaskCard({
                 <span className="text-xs" style={{ color: '#9f927d' }}>生成中...</span>
               </div>
             )}
-            {task.status === 'error' && isFalReconnecting && (
+            {task.status === 'error' && isFalReconnecting && !thumbSrc && (
               <div className="flex flex-col items-center gap-1 px-2">
                 <svg
                   className="w-7 h-7"
@@ -321,7 +321,7 @@ export default function TaskCard({
                 </span>
               </div>
             )}
-            {task.status === 'error' && !isFalReconnecting && (
+            {task.status === 'error' && !isFalReconnecting && !thumbSrc && (
               <div className="flex flex-col items-center gap-1 px-2">
                 <svg
                   className="w-7 h-7"
@@ -359,6 +359,15 @@ export default function TaskCard({
                 {task.outputImages.length > 1 && (
                   <span className="absolute bottom-1 right-1 text-white text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: 'rgba(121, 79, 39, 0.7)' }}>
                     {task.outputImages.length}
+                  </span>
+                )}
+                {task.status === 'error' && !isFalReconnecting && (
+                  <span
+                    className="absolute left-1.5 bottom-1.5 rounded px-1.5 py-0.5 text-[10px] font-medium text-white"
+                    style={{ backgroundColor: 'rgba(224, 90, 90, 0.9)' }}
+                    title={task.error || '生成失败'}
+                  >
+                    失败
                   </span>
                 )}
               </>

@@ -35,6 +35,28 @@ describe('callImageApi', () => {
     },
   )
 
+  it('uses completed streamed image output when the final Responses payload only reports in_progress', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response([
+      'data: {"type":"response.output_item.done","output_index":0,"item":{"type":"image_generation_call","status":"completed","result":"aW1hZ2U="}}',
+      '',
+      'data: {"type":"response.completed","response":{"output":[{"id":"ig_1","status":"in_progress","type":"image_generation_call"}]}}',
+      '',
+      '',
+    ].join('\n'), {
+      status: 200,
+      headers: { 'Content-Type': 'text/event-stream' },
+    }))
+
+    const result = await callImageApi({
+      settings: { ...DEFAULT_SETTINGS, apiKey: 'test-key', apiMode: 'responses' },
+      prompt: 'prompt',
+      params: { ...DEFAULT_PARAMS },
+      inputImageDataUrls: [],
+    })
+
+    expect(result.images).toEqual(['data:image/png;base64,aW1hZ2U='])
+  })
+
   it('records actual params returned on Images API responses in Codex CLI mode', async () => {
     const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(JSON.stringify({
       output_format: 'png',
