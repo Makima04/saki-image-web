@@ -8,7 +8,7 @@ function renderMessage(message: string) {
   return message.split(/(`[^`]+`|「[^」]+」)/g).map((part, index) => {
     if (part.startsWith('`') && part.endsWith('`')) {
       return (
-        <code key={index} className="rounded bg-[#ede8d5] px-1 py-0.5 text-[0.85em] text-[#725d42]">
+        <code key={index} className="rounded bg-[var(--ai-surface)] px-1 py-0.5 text-[0.85em] text-[var(--ai-text)]">
           {part.slice(1, -1)}
         </code>
       )
@@ -16,7 +16,7 @@ function renderMessage(message: string) {
 
     if (part.startsWith('「') && part.endsWith('」')) {
       return (
-        <strong key={index} className="font-semibold text-[#725d42]">
+        <strong key={index} className="font-semibold text-[var(--ai-text)]">
           {part}
         </strong>
       )
@@ -63,8 +63,8 @@ export default function ConfirmDialog() {
     confirmTone === 'warning'
       ? 'bg-orange-500 hover:bg-orange-600'
       : confirmTone === 'danger'
-      ? 'bg-[#fdf0f0]0 hover:bg-[#c94444]'
-      : 'bg-[#e6f9f6]0 hover:bg-[#11a89b]'
+      ? 'bg-[var(--ai-error)] hover:bg-[#ff2a6d]'
+      : 'bg-[var(--ai-accent-dim)]0 hover:bg-[var(--ai-accent-active)]'
   const confirmText = confirmDialog.confirmText ?? (isDestructive ? '确认删除' : '确认')
   const cancelText = confirmDialog.cancelText ?? '取消'
 
@@ -74,32 +74,33 @@ export default function ConfirmDialog() {
       className="fixed inset-0 z-[110] flex items-center justify-center p-4"
       onClick={handleClose}
     >
-      <div className="absolute inset-0 bg-[rgba(121,79,39,0.15)] animate-overlay-in" />
+      <div className="absolute inset-0 bg-[var(--ai-overlay)] animate-overlay-in" />
       <div
-        className="relative bg-[rgb(247,243,223)] border-2 border-[#c4b89e] rounded-[20px] shadow-[0_4px_16px_rgba(107,92,67,0.15)] max-w-sm w-full p-6 z-10  animate-confirm-in"
+        className="relative ai-card bg-[var(--ai-card-bg)] border-2 border-[var(--ai-border)] rounded-[20px] shadow-[0_4px_16px_rgba(107,92,67,0.15)] max-w-sm w-full p-6 z-10  animate-confirm-in"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="mb-2 flex items-center gap-2 text-base font-bold text-[#794f27]">
+        {confirmTone === 'danger' && <div className="cp-caution-stripe-pink h-[5px] absolute top-0 left-0 right-0 rounded-t-[20px]" />}
+        <h3 className="mb-2 flex items-center gap-2 text-base font-bold text-[var(--ai-text-header)]">
           {confirmDialog.icon === 'info' && (
-            <svg className="h-5 w-5 shrink-0 text-[#19c8b9]" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+            <svg className="h-5 w-5 shrink-0 text-[var(--ai-accent)]" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10" />
               <path d="M12 16v-4" />
               <path d="M12 8h.01" />
             </svg>
           )}
           {confirmDialog.icon === 'copy' && (
-            <CopyIcon className="h-5 w-5 shrink-0 text-[#19c8b9]" />
+            <CopyIcon className="h-5 w-5 shrink-0 text-[var(--ai-accent)]" />
           )}
           {confirmDialog.title}
         </h3>
-        <p className={`text-sm text-[#8a7b66] mb-6 leading-relaxed whitespace-pre-line ${confirmDialog.messageAlign === 'center' ? 'text-center' : ''}`}>
+        <p className={`text-sm text-[var(--ai-text-muted)] mb-6 leading-relaxed whitespace-pre-line ${confirmDialog.messageAlign === 'center' ? 'text-center' : ''}`}>
           {renderMessage(confirmDialog.message)}
         </p>
         <div className="flex gap-2">
           {confirmDialog.showCancel !== false && (
             <button
               onClick={handleCancel}
-              className="flex-1 py-2 rounded-full border-2 border-[#c4b89e] text-sm text-[#725d42] hover:bg-[#ede8d5]  transition"
+              className="flex-1 py-2 rounded-full border-2 border-[var(--ai-border)] text-sm text-[var(--ai-text)] hover:bg-[var(--ai-surface)]  transition"
             >
               {cancelText}
             </button>

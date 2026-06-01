@@ -156,16 +156,16 @@ export default function Select({ value, onChange, onReorder, options, disabled, 
         ref={triggerRef}
         onClick={handleToggle}
         className={`flex items-center justify-between gap-1 w-full cursor-pointer select-none ${className ?? ''} ${
-          disabled ? '!opacity-50 !cursor-not-allowed !bg-[#ede8d5]/50 ' : ''
+          disabled ? '!opacity-50 !cursor-not-allowed !bg-[var(--ai-surface)]/50 ' : ''
         }`}
       >
         <span className="truncate">{selectedOption?.label ?? value}</span>
-        <ChevronDownIcon className={`w-3.5 h-3.5 flex-shrink-0 text-[#9f927d] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDownIcon className={`w-3.5 h-3.5 flex-shrink-0 text-[var(--ai-text-secondary)] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </div>
 
       {isOpen && (
         <div
-          className={`absolute z-50 w-full overflow-hidden overflow-y-auto rounded-xl border border-[#c4b89e]/60 bg-[rgb(247,243,223)] py-1 shadow-[0_4px_10px_rgba(107,92,67,0.15)]  backdrop-blur-xl custom-scrollbar ${
+          className={`absolute z-50 w-full overflow-hidden overflow-y-auto rounded-xl border border-[var(--ai-border)]/60 bg-[var(--ai-card-bg)] py-1 shadow-[0_4px_10px_var(--ai-card-shadow)]  backdrop-blur-xl custom-scrollbar ${
             placement === 'top' ? 'bottom-full mb-1.5 animate-dropdown-up' : 'top-full mt-1.5 animate-dropdown-down'
           }`}
           style={{ maxHeight: menuMaxHeight }}
@@ -330,27 +330,27 @@ export default function Select({ value, onChange, onReorder, options, disabled, 
               }}
               className={`relative flex cursor-pointer items-center justify-between gap-2 px-3 py-2 text-xs transition-colors ${
                 draggedValue === option.value
-                  ? 'opacity-40 bg-[#ede8d5]'
+                  ? 'opacity-40 bg-[var(--ai-surface)]'
                   : option.variant === 'action'
-                  ? 'font-semibold text-[#19c8b9] hover:bg-[#e6f9f6] '
+                  ? 'font-semibold text-[var(--ai-accent)] hover:bg-[var(--ai-accent-dim)] '
                   : option.variant === 'danger'
-                  ? 'font-semibold text-[#e05a5a] hover:bg-[#fdf0f0] '
+                  ? 'font-semibold text-[var(--ai-error)] hover:bg-[var(--ai-danger-bg)] '
                   : option.value === value
-                  ? 'bg-[#e6f9f6] text-[#19c8b9] font-medium'
-                  : 'text-[#725d42] hover:bg-[#ede8d5] '
+                  ? 'bg-[var(--ai-accent-dim)] text-[var(--ai-accent)] font-medium'
+                  : 'text-[var(--ai-text)] hover:bg-[var(--ai-surface)] '
               }`}
             >
               {dragOverValue === option.value && dragDropPosition === 'before' && draggedValue !== option.value && (
-                <div className="absolute -top-[1px] left-0 right-0 h-[2px] bg-[#e6f9f6]0 rounded-full z-40  pointer-events-none" />
+                <div className="absolute -top-[1px] left-0 right-0 h-[2px] bg-[var(--ai-accent-dim)]0 rounded-full z-40  pointer-events-none" />
               )}
               {dragOverValue === option.value && dragDropPosition === 'after' && draggedValue !== option.value && (
-                <div className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-[#e6f9f6]0 rounded-full z-40  pointer-events-none" />
+                <div className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-[var(--ai-accent-dim)]0 rounded-full z-40  pointer-events-none" />
               )}
               <div className="flex min-w-0 flex-1 items-center gap-2 pr-2">
                 {option.draggable && (
                   <div
                     data-drag-handle
-                    className="flex cursor-grab active:cursor-grabbing items-center justify-center text-[#9f927d] opacity-60 transition-opacity hover:opacity-100"
+                    className="flex cursor-grab active:cursor-grabbing items-center justify-center text-[var(--ai-text-secondary)] opacity-60 transition-opacity hover:opacity-100"
                     style={{ touchAction: 'none' }}
                     title="拖拽排序"
                   >
@@ -376,8 +376,8 @@ export default function Select({ value, onChange, onReorder, options, disabled, 
                         setIsOpen(false)
                       }}
                       className={`rounded-md p-1.5 transition flex items-center justify-center ${action.variant === 'danger'
-                        ? 'text-[#e05a5a] hover:bg-[#fdf0f0] '
-                        : 'text-[#9f927d] hover:bg-[#ede8d5] hover:text-[#725d42] '}`}
+                        ? 'text-[var(--ai-error)] hover:bg-[var(--ai-danger-bg)] '
+                        : 'text-[var(--ai-text-secondary)] hover:bg-[var(--ai-surface)] hover:text-[var(--ai-text)] '}`}
                     >
                       {action.label === '编辑' ? (
                         <EditIcon className="w-3.5 h-3.5" />
@@ -403,7 +403,7 @@ export default function Select({ value, onChange, onReorder, options, disabled, 
       {touchDragPreview && createPortal(
         <div
           id="touch-drag-preview"
-          className="fixed pointer-events-none z-[110] flex items-center justify-between gap-2 rounded-xl bg-[rgb(247,243,223)] px-3 py-2 text-xs text-[#725d42]   backdrop-blur-xl"
+          className="fixed pointer-events-none z-[110] flex items-center justify-between gap-2 rounded-xl bg-[var(--ai-card-bg)] px-3 py-2 text-xs text-[var(--ai-text)]   backdrop-blur-xl"
           style={{
             left: touchDragPreview.x - touchDragPreview.offsetX,
             top: touchDragPreview.y - touchDragPreview.offsetY,
@@ -412,7 +412,7 @@ export default function Select({ value, onChange, onReorder, options, disabled, 
           }}
         >
           <div className="flex min-w-0 flex-1 items-center gap-2 pr-2">
-            <DragHandleIcon className="h-3.5 w-3.5 shrink-0 text-[#9f927d]" />
+            <DragHandleIcon className="h-3.5 w-3.5 shrink-0 text-[var(--ai-text-secondary)]" />
             <span className="min-w-0 truncate">{touchDragPreview.label}</span>
           </div>
         </div>,

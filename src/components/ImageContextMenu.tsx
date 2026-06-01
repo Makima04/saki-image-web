@@ -152,27 +152,27 @@ export default function ImageContextMenu() {
   return (
     <div
       ref={menuRef}
-      className="fixed z-[9999] bg-[rgb(247,243,223)] rounded-lg border-2 border-[#c4b89e] py-1 w-[120px] overflow-hidden animate-fade-in"
+      className="fixed z-[9999] bg-[var(--ai-card-bg)] rounded-lg border-2 border-[var(--ai-border)] py-1 w-[120px] overflow-hidden animate-fade-in"
       style={{ left, top }}
       onContextMenu={(e) => e.preventDefault()}
     >
       <button
         onClick={handleCopy}
-        className="w-full px-4 py-2 text-left text-sm text-[#725d42] hover:bg-[#ede8d5]  flex items-center gap-2 transition-colors"
+        className="w-full px-4 py-2 text-left text-sm text-[var(--ai-text)] hover:bg-[var(--ai-surface)]  flex items-center gap-2 transition-colors"
       >
         <CopyIcon className="w-4 h-4 flex-shrink-0" />
         复制
       </button>
       <button
         onClick={handleDownload}
-        className="w-full px-4 py-2 text-left text-sm text-[#725d42] hover:bg-[#ede8d5]  flex items-center gap-2 transition-colors"
+        className="w-full px-4 py-2 text-left text-sm text-[var(--ai-text)] hover:bg-[var(--ai-surface)]  flex items-center gap-2 transition-colors"
       >
         <DownloadIcon className="w-4 h-4 flex-shrink-0" />
         下载
       </button>
       <button
         onClick={handleEdit}
-        className="w-full px-4 py-2 text-left text-sm text-[#725d42] hover:bg-[#ede8d5]  flex items-center gap-2 transition-colors"
+        className="w-full px-4 py-2 text-left text-sm text-[var(--ai-text)] hover:bg-[var(--ai-surface)]  flex items-center gap-2 transition-colors"
       >
         <EditIcon className="w-4 h-4 flex-shrink-0" />
         编辑

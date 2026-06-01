@@ -314,16 +314,17 @@ export default function DetailModal() {
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       onClick={() => setDetailTaskId(null)}
     >
-      <div className="absolute inset-0 bg-[rgba(121,79,39,0.15)] animate-overlay-in" />
+      <div className="absolute inset-0 bg-[var(--ai-overlay)] animate-overlay-in" />
       <div
         ref={modalRef}
-        className="relative bg-[rgb(247,243,223)] border-2 border-[#c4b89e] rounded-[20px] shadow-[0_4px_16px_rgba(107,92,67,0.15)] max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row z-10  animate-modal-in"
+        className="relative ai-card bg-[var(--ai-card-bg)] border-2 border-[var(--ai-border)] rounded-[20px] shadow-[0_4px_16px_rgba(107,92,67,0.15)] max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row z-10  animate-modal-in"
         onClick={(e) => e.stopPropagation()}
       >
+        <div className="cp-hud-bl"></div><div className="cp-hud-br"></div>
         <div className="flex h-14 items-center justify-end px-4 md:hidden">
           <button
             onClick={() => setDetailTaskId(null)}
-            className="p-1 rounded-full hover:bg-[#ede8d5]  transition text-[#9f927d]"
+            className="p-1 rounded-full hover:bg-[var(--ai-surface)]  transition text-[var(--ai-text-secondary)]"
             aria-label="关闭"
           >
             <CloseIcon className="w-6 h-6" />
@@ -331,7 +332,7 @@ export default function DetailModal() {
         </div>
 
         {/* 左侧：图片 */}
-        <div ref={imagePanelRef} className="md:w-1/2 w-full h-64 md:h-auto bg-[#ede8d5] relative flex items-center justify-center flex-shrink-0 min-h-[16rem]">
+        <div ref={imagePanelRef} className="md:w-1/2 w-full h-64 md:h-auto bg-[var(--ai-surface)] relative flex items-center justify-center flex-shrink-0 min-h-[16rem]">
           {outputLen > 0 && currentOutputPreviewSrc && (
             <>
               <img
@@ -367,16 +368,16 @@ export default function DetailModal() {
               <div data-selectable-text className="absolute top-[15px] flex items-center gap-1.5" style={{ left: imageLabelLeft }}>
                 {currentImageRatio && currentImageSize ? (
                   <>
-                    <span className="bg-[rgba(121,79,39,0.7)] text-white text-xs px-2 py-0.5 rounded backdrop-blur-sm font-mono">
+                    <span className="bg-[rgba(10, 10, 18, 0.7)] text-white text-xs px-2 py-0.5 rounded backdrop-blur-sm font-mono">
                       {currentImageRatio}
                     </span>
-                    <span className="bg-[rgba(121,79,39,0.7)] text-white/90 text-xs px-2 py-0.5 rounded backdrop-blur-sm font-medium">
+                    <span className="bg-[rgba(10, 10, 18, 0.7)] text-white/90 text-xs px-2 py-0.5 rounded backdrop-blur-sm font-medium">
                       {currentImageSize}
                     </span>
                   </>
                 ) : (
                   formatDuration() && (
-                    <span className="flex items-center gap-1 bg-[rgba(121,79,39,0.7)] text-white text-xs px-2 py-0.5 rounded backdrop-blur-sm font-mono">
+                    <span className="flex items-center gap-1 bg-[rgba(10, 10, 18, 0.7)] text-white text-xs px-2 py-0.5 rounded backdrop-blur-sm font-mono">
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
@@ -393,7 +394,7 @@ export default function DetailModal() {
                         (imageIndex - 1 + outputLen) % outputLen,
                       )
                     }
-                    className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-[rgba(121,79,39,0.5)] text-white hover:bg-[rgba(121,79,39,0.7)] transition"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-[rgba(10, 10, 18, 0.5)] text-white hover:bg-[rgba(10, 10, 18, 0.7)] transition"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -403,13 +404,13 @@ export default function DetailModal() {
                     onClick={() =>
                       setImageIndex((imageIndex + 1) % outputLen)
                     }
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-[rgba(121,79,39,0.5)] text-white hover:bg-[rgba(121,79,39,0.7)] transition"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-[rgba(10, 10, 18, 0.5)] text-white hover:bg-[rgba(10, 10, 18, 0.7)] transition"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </button>
-                  <span className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-[rgba(121,79,39,0.7)] text-white text-xs px-2 py-0.5 rounded-full">
+                  <span className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-[rgba(10, 10, 18, 0.7)] text-white text-xs px-2 py-0.5 rounded-full">
                     {imageIndex + 1} / {outputLen}
                   </span>
                 </>
@@ -418,14 +419,14 @@ export default function DetailModal() {
           )}
           {(task.status === 'running' || isFalReconnecting) && (
             <>
-              <div className="absolute left-4 top-4 flex items-center gap-1 bg-[rgba(121,79,39,0.7)] text-white text-xs px-2 py-0.5 rounded backdrop-blur-sm font-mono">
+              <div className="absolute left-4 top-4 flex items-center gap-1 bg-[rgba(10, 10, 18, 0.7)] text-white text-xs px-2 py-0.5 rounded backdrop-blur-sm font-mono">
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 {formatDuration()}
               </div>
               {task.status === 'running' && (
-                <svg className="w-10 h-10 text-[#19c8b9] animate-spin" fill="none" viewBox="0 0 24 24">
+                <svg className="w-10 h-10 text-[var(--ai-accent)] animate-spin" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>
@@ -434,19 +435,19 @@ export default function DetailModal() {
           )}
           {task.status === 'error' && isFalReconnecting && (
             <div className="w-full max-w-md px-4 text-center">
-              <svg className="w-10 h-10 text-[#f5c31c] mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-10 h-10 text-[var(--ai-warning)] mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
-              <p className="text-sm font-medium text-[#f5c31c]">重连中</p>
+              <p className="text-sm font-medium text-[var(--ai-warning)]">重连中</p>
             </div>
           )}
           {task.status === 'error' && !isFalReconnecting && outputLen === 0 && (
             <div className="w-full max-w-md px-4 text-center">
-              <svg className="w-10 h-10 text-[#e05a5a] mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-10 h-10 text-[var(--ai-error)] mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <p
-                className="overflow-hidden whitespace-pre-line text-sm leading-6 text-[#e05a5a] break-words"
+                className="overflow-hidden whitespace-pre-line text-sm leading-6 text-[var(--ai-error)] break-words"
                 style={{
                   display: '-webkit-box',
                   WebkitBoxOrient: 'vertical',
@@ -464,7 +465,7 @@ export default function DetailModal() {
                       copyErrorTooltip.handlers.onClick()
                       handleCopyError()
                     }}
-                    className="inline-flex items-center justify-center rounded-full border border-red-200/80 bg-[rgb(247,243,223)] px-3 py-1.5 text-[#e05a5a] transition hover:bg-[#fdf0f0] "
+                    className="inline-flex items-center justify-center rounded-full border border-red-200/80 bg-[var(--ai-card-bg)] px-3 py-1.5 text-[var(--ai-error)] transition hover:bg-[var(--ai-danger-bg)] "
                     aria-label="复制完整报错"
                   >
                     <CopyIcon className="h-4 w-4" />
@@ -511,7 +512,7 @@ export default function DetailModal() {
                           setShowRawUrlsModal(true)
                         }
                       }}
-                      className="inline-flex items-center justify-center rounded-full border border-green-200/80 bg-[#f0f8e6] px-3 py-1.5 text-[#5a9e1e] transition hover:bg-[#e4f0d0] "
+                      className="inline-flex items-center justify-center rounded-full border border-green-200/80 bg-[var(--ai-info-bg)] px-3 py-1.5 text-[var(--ai-accent-active)] transition hover:bg-[rgba(0, 230, 118, 0.1)] "
                       aria-label="复制图片链接"
                     >
                       <LinkIcon className="h-4 w-4" />
@@ -529,7 +530,7 @@ export default function DetailModal() {
                       retryTooltip.handlers.onClick()
                       handleRetry()
                     }}
-                    className="inline-flex items-center justify-center rounded-full border border-[#19c8b9]/80 bg-[rgb(247,243,223)] px-3 py-1.5 text-[#19c8b9] transition hover:bg-[#e6f9f6] "
+                    className="inline-flex items-center justify-center rounded-full border border-[var(--ai-accent)]/80 bg-[var(--ai-card-bg)] px-3 py-1.5 text-[var(--ai-accent)] transition hover:bg-[var(--ai-accent-dim)] "
                     aria-label="重试任务"
                   >
                     <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
@@ -549,7 +550,7 @@ export default function DetailModal() {
         <div className="md:w-1/2 w-full p-5 overflow-y-auto overscroll-contain flex flex-col">
           <button
             onClick={() => setDetailTaskId(null)}
-            className="absolute top-3 right-3 hidden p-1 rounded-full hover:bg-[#ede8d5]  transition text-[#9f927d] z-10 md:block"
+            className="absolute top-3 right-3 hidden p-1 rounded-full hover:bg-[var(--ai-surface)]  transition text-[var(--ai-text-secondary)] z-10 md:block"
             aria-label="关闭"
           >
             <CloseIcon className="w-5 h-5" />
@@ -557,13 +558,13 @@ export default function DetailModal() {
 
           <div data-selectable-text className="flex-1">
             <div className="flex items-center gap-1.5 mb-2">
-              <h3 className="text-xs font-medium text-[#9f927d] uppercase tracking-wider">
+              <h3 className="text-xs font-medium text-[var(--ai-text-secondary)] uppercase tracking-wider">
                 输入内容
               </h3>
               {task.prompt && (
                 <button
                   onClick={handleCopyPrompt}
-                  className="p-1 rounded text-[#9f927d] hover:bg-[#ede8d5]  transition"
+                  className="p-1 rounded text-[var(--ai-text-secondary)] hover:bg-[var(--ai-surface)]  transition"
                   title="复制提示词"
                 >
                   <CopyIcon className="h-4 w-4" />
@@ -584,7 +585,7 @@ export default function DetailModal() {
                 </span>
               )}
             </div>
-            <p className="text-sm text-[#725d42] leading-relaxed whitespace-pre-wrap mb-4">
+            <p className="text-sm text-[var(--ai-text)] leading-relaxed whitespace-pre-wrap mb-4">
               {task.prompt || '(无提示词)'}
             </p>
             {showRevisedPrompt && currentRevisedPrompt && (
@@ -597,16 +598,16 @@ export default function DetailModal() {
             )}
 
             {task.status === 'error' && !isFalReconnecting && (
-              <div className="mb-4 rounded-lg border border-red-200/80 bg-[#fdf0f0] px-3 py-2">
+              <div className="mb-4 rounded-lg border border-red-200/80 bg-[var(--ai-danger-bg)] px-3 py-2">
                 <div className="mb-1.5 flex items-center justify-between gap-2">
-                  <h3 className="text-xs font-medium uppercase tracking-wider text-[#c94444]">
+                  <h3 className="text-xs font-medium uppercase tracking-wider text-[#ff2a6d]">
                     任务报错
                   </h3>
                   <div className="flex shrink-0 items-center gap-1">
                     <button
                       type="button"
                       onClick={handleCopyError}
-                      className="rounded p-1 text-[#c94444] transition hover:bg-red-100"
+                      className="rounded p-1 text-[#ff2a6d] transition hover:bg-red-100"
                       title="复制完整报错"
                     >
                       <CopyIcon className="h-4 w-4" />
@@ -615,7 +616,7 @@ export default function DetailModal() {
                       <button
                         type="button"
                         onClick={() => setShowRawResponseModal(true)}
-                        className="rounded p-1 text-[#c94444] transition hover:bg-red-100"
+                        className="rounded p-1 text-[#ff2a6d] transition hover:bg-red-100"
                         title="查看原始响应"
                       >
                         <CodeIcon className="h-4 w-4" />
@@ -636,7 +637,7 @@ export default function DetailModal() {
                             setShowRawUrlsModal(true)
                           }
                         }}
-                        className="rounded p-1 text-[#c94444] transition hover:bg-red-100"
+                        className="rounded p-1 text-[#ff2a6d] transition hover:bg-red-100"
                         title={task.rawImageUrls.length === 1 ? '复制图片链接' : '查看图片链接'}
                       >
                         <LinkIcon className="h-4 w-4" />
@@ -644,7 +645,7 @@ export default function DetailModal() {
                     )}
                   </div>
                 </div>
-                <p className="whitespace-pre-wrap break-words text-xs leading-5 text-[#c94444]">
+                <p className="whitespace-pre-wrap break-words text-xs leading-5 text-[#ff2a6d]">
                   {displayError}
                 </p>
               </div>
@@ -654,12 +655,12 @@ export default function DetailModal() {
             {allInputImageIds.length > 0 && (
               <div className="mb-4">
                 <div className="flex items-center gap-1.5 mb-2">
-                  <h3 className="text-xs font-medium text-[#9f927d] uppercase tracking-wider">
+                  <h3 className="text-xs font-medium text-[var(--ai-text-secondary)] uppercase tracking-wider">
                     参考图
                   </h3>
                   <button
                     onClick={handleCopyInputImage}
-                    className="p-1 rounded text-[#9f927d] hover:bg-[#ede8d5]  transition"
+                    className="p-1 rounded text-[var(--ai-text-secondary)] hover:bg-[var(--ai-surface)]  transition"
                     title="复制参考图"
                   >
                     <CopyIcon className="h-4 w-4" />
@@ -673,7 +674,7 @@ export default function DetailModal() {
                       <div key={imgId} className="relative group inline-block">
                         <div
                           className={`relative w-16 h-16 rounded-lg overflow-hidden border cursor-pointer hover:opacity-80 transition ${
-                            isMaskTarget ? 'border-[#19c8b9] border-2 ' : 'border-[#c4b89e]'
+                            isMaskTarget ? 'border-[var(--ai-accent)] border-2 ' : 'border-[var(--ai-border)]'
                           }`}
                           onClick={() => setLightboxImageId(imgId, allInputImageIds)}
                         >
@@ -686,7 +687,7 @@ export default function DetailModal() {
                             />
                           )}
                           {isMaskTarget && (
-                            <span className="absolute left-1 top-1 rounded bg-[#e6f9f6]0/90 px-1.5 py-0.5 text-[8px] leading-none text-white font-bold tracking-wider backdrop-blur-sm z-10 pointer-events-none">
+                            <span className="absolute left-1 top-1 rounded bg-[var(--ai-accent-dim)]0/90 px-1.5 py-0.5 text-[8px] leading-none text-white font-bold tracking-wider backdrop-blur-sm z-10 pointer-events-none">
                               MASK
                             </span>
                           )}
@@ -699,46 +700,46 @@ export default function DetailModal() {
             )}
 
             {/* 参数 */}
-            <h3 className="text-xs font-medium text-[#9f927d] uppercase tracking-wider mb-2">
+            <h3 className="text-xs font-medium text-[var(--ai-text-secondary)] uppercase tracking-wider mb-2">
               参数配置
             </h3>
             {showSourceInfo && (
-              <div className="mb-2 rounded-lg bg-[rgb(247,243,223)] px-3 py-2 text-xs">
-                <span className="text-[#9f927d]">来源</span>
+              <div className="mb-2 rounded-lg bg-[var(--ai-card-bg)] px-3 py-2 text-xs">
+                <span className="text-[var(--ai-text-secondary)]">来源</span>
                 <br />
-                <span className="font-medium text-[#725d42]">{taskProviderName}</span>
-                <span className="text-[#9f927d]"> · {taskProfileName} · {taskModel}</span>
+                <span className="font-medium text-[var(--ai-text)]">{taskProviderName}</span>
+                <span className="text-[var(--ai-text-secondary)]"> · {taskProfileName} · {taskModel}</span>
               </div>
             )}
             <div className="grid grid-cols-2 gap-2 text-xs mb-4">
-              <div className="bg-[rgb(247,243,223)] rounded-lg px-3 py-2">
-                <span className="text-[#9f927d]">尺寸</span>
+              <div className="bg-[var(--ai-card-bg)] rounded-lg px-3 py-2">
+                <span className="text-[var(--ai-text-secondary)]">尺寸</span>
                 <br />
                 <DetailParamValue task={task} paramKey="size" className="font-medium" actualParams={currentActualParams} />
               </div>
-              <div className="bg-[rgb(247,243,223)] rounded-lg px-3 py-2">
-                <span className="text-[#9f927d]">质量</span>
+              <div className="bg-[var(--ai-card-bg)] rounded-lg px-3 py-2">
+                <span className="text-[var(--ai-text-secondary)]">质量</span>
                 <br />
                 <DetailParamValue task={task} paramKey="quality" className="font-medium" actualParams={currentActualParams} />
               </div>
-              <div className="bg-[rgb(247,243,223)] rounded-lg px-3 py-2">
-                <span className="text-[#9f927d]">格式</span>
+              <div className="bg-[var(--ai-card-bg)] rounded-lg px-3 py-2">
+                <span className="text-[var(--ai-text-secondary)]">格式</span>
                 <br />
                 <DetailParamValue task={task} paramKey="output_format" className="font-medium" actualParams={currentActualParams} />
               </div>
-              <div className="bg-[rgb(247,243,223)] rounded-lg px-3 py-2">
-                <span className="text-[#9f927d]">审核</span>
+              <div className="bg-[var(--ai-card-bg)] rounded-lg px-3 py-2">
+                <span className="text-[var(--ai-text-secondary)]">审核</span>
                 <br />
                 <DetailParamValue task={task} paramKey="moderation" className="font-medium" actualParams={currentActualParams} />
               </div>
-              <div className="bg-[rgb(247,243,223)] rounded-lg px-3 py-2">
-                <span className="text-[#9f927d]">数量</span>
+              <div className="bg-[var(--ai-card-bg)] rounded-lg px-3 py-2">
+                <span className="text-[var(--ai-text-secondary)]">数量</span>
                 <br />
                 <DetailParamValue task={task} paramKey="n" className="font-medium" />
               </div>
               {task.params.output_compression != null && (
-                <div className="bg-[rgb(247,243,223)] rounded-lg px-3 py-2">
-                  <span className="text-[#9f927d]">压缩率</span>
+                <div className="bg-[var(--ai-card-bg)] rounded-lg px-3 py-2">
+                  <span className="text-[var(--ai-text-secondary)]">压缩率</span>
                   <br />
                   <DetailParamValue task={task} paramKey="output_compression" className="font-medium" actualParams={currentActualParams} />
                 </div>
@@ -746,17 +747,17 @@ export default function DetailModal() {
             </div>
 
             {/* 时间 */}
-            <div className="text-xs text-[#9f927d] mb-4">
+            <div className="text-xs text-[var(--ai-text-secondary)] mb-4">
               <span>创建于 {formatTime(task.createdAt)}</span>
               {formatDuration() && <span> · 耗时 {formatDuration()}</span>}
             </div>
           </div>
 
           {/* 操作按钮 */}
-          <div className="grid grid-cols-4 sm:flex gap-2 pt-4 border-t border-[#d4c9b4]">
+          <div className="grid grid-cols-4 sm:flex gap-2 pt-4 border-t border-[var(--ai-shadow-input)]">
             <button
               onClick={handleReuse}
-              className="col-span-2 sm:flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[#e6f9f6] text-[#19c8b9] hover:bg-[#c8f0eb]  transition text-sm font-medium whitespace-nowrap"
+              className="col-span-2 sm:flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--ai-accent-dim)] text-[var(--ai-accent)] hover:bg-[#c8f0eb]  transition text-sm font-medium whitespace-nowrap"
             >
               <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
@@ -766,14 +767,14 @@ export default function DetailModal() {
             <button
               onClick={handleEdit}
               disabled={!outputLen}
-              className="col-span-2 sm:flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[#f0f8e6]  text-[#5a9e1e] hover:bg-[#e4f0d0]  disabled:opacity-40 disabled:cursor-not-allowed transition text-sm font-medium whitespace-nowrap"
+              className="col-span-2 sm:flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--ai-info-bg)]  text-[var(--ai-accent-active)] hover:bg-[rgba(0, 230, 118, 0.1)]  disabled:opacity-40 disabled:cursor-not-allowed transition text-sm font-medium whitespace-nowrap"
             >
               <EditIcon className="w-4 h-4 flex-shrink-0" />
               编辑输出
             </button>
             <button
               onClick={handleDelete}
-              className="col-span-3 sm:flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[#fdf0f0]  text-[#c94444] hover:bg-[#f8e0e0]  transition text-sm font-medium whitespace-nowrap"
+              className="col-span-3 sm:flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--ai-danger-bg)]  text-[#ff2a6d] hover:bg-[rgba(255, 42, 109, 0.12)]  transition text-sm font-medium whitespace-nowrap"
             >
               <TrashIcon className="w-4 h-4 flex-shrink-0" />
               删除记录
@@ -782,8 +783,8 @@ export default function DetailModal() {
               onClick={handleToggleFavorite}
               className={`col-span-1 sm:flex-none sm:w-11 w-full flex items-center justify-center rounded-xl transition ${
                 task.isFavorite
-                  ? 'bg-[#fef9e6] text-[#f5c31c] hover:bg-[#fcf3cc] '
-                  : 'bg-[rgb(247,243,223)] text-[#9f927d] hover:bg-[#fef9e6] hover:text-[#f5c31c] '
+                  ? 'bg-[rgba(255, 229, 0, 0.08)] text-[var(--ai-warning)] hover:bg-[rgba(255, 229, 0, 0.15)] '
+                  : 'bg-[var(--ai-card-bg)] text-[var(--ai-text-secondary)] hover:bg-[rgba(255, 229, 0, 0.08)] hover:text-[var(--ai-warning)] '
               }`}
               title={task.isFavorite ? '取消收藏' : '收藏记录'}
             >
@@ -807,9 +808,9 @@ export default function DetailModal() {
             rawUrlsBackdropPointerDownRef.current = false
           }}
         >
-          <div ref={rawUrlsModalRef} className="flex w-full max-w-2xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-white  " onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between border-b border-[#d4c9b4] px-5 py-4 shrink-0">
-              <h3 className="text-base font-semibold text-[#794f27]">原始图片链接 ({rawImageUrls.length})</h3>
+          <div ref={rawUrlsModalRef} className="flex w-full max-w-2xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-[var(--ai-card-bg)]  " onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between border-b border-[var(--ai-shadow-input)] px-5 py-4 shrink-0">
+              <h3 className="text-base font-semibold text-[var(--ai-text-header)]">原始图片链接 ({rawImageUrls.length})</h3>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -821,7 +822,7 @@ export default function DetailModal() {
                       showToast(getClipboardFailureMessage('复制失败', err), 'error')
                     }
                   }}
-                  className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-[rgb(247,243,223)] text-[#725d42] hover:bg-[#ede8d5] transition-colors text-xs font-medium"
+                  className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--ai-card-bg)] text-[var(--ai-text)] hover:bg-[var(--ai-surface)] transition-colors text-xs font-medium"
                 >
                   <CopyIcon className="w-3.5 h-3.5" />
                   全部复制
@@ -829,21 +830,21 @@ export default function DetailModal() {
                 <button
                   type="button"
                   onClick={() => setShowRawUrlsModal(false)}
-                  className="rounded-full p-1 text-[#9f927d] hover:bg-[#ede8d5] hover:text-[#8a7b66] transition-colors"
+                  className="rounded-full p-1 text-[var(--ai-text-secondary)] hover:bg-[var(--ai-surface)] hover:text-[var(--ai-text-muted)] transition-colors"
                 >
                   <CloseIcon className="w-5 h-5" />
                 </button>
               </div>
             </div>
-            <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-5 bg-[rgb(247,243,223)]/50 overscroll-contain">
+            <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-5 bg-[var(--ai-card-bg)]/50 overscroll-contain">
               <div className="space-y-2.5">
                 {rawImageUrls.map((url, i) => (
-                  <div key={i} className="group flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-[rgb(247,243,223)] bg-[#1c1c1e] border border-[#d4c9b4]  hover: transition-all">
+                  <div key={i} className="group flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-[var(--ai-card-bg)] bg-[var(--ai-card-bg)] border border-[var(--ai-shadow-input)]  hover: transition-all">
                     <div className="flex-1 min-w-0 flex flex-col gap-1">
-                      <div className="text-xs font-medium text-[#9f927d]">
+                      <div className="text-xs font-medium text-[var(--ai-text-secondary)]">
                         图片 {i + 1}
                       </div>
-                      <div className="text-sm text-[#725d42] truncate select-text" title={url}>
+                      <div className="text-sm text-[var(--ai-text)] truncate select-text" title={url}>
                         {url}
                       </div>
                     </div>
@@ -857,7 +858,7 @@ export default function DetailModal() {
                           showToast(getClipboardFailureMessage('复制失败', err), 'error')
                         }
                       }}
-                      className="flex-shrink-0 p-2 sm:px-3 sm:py-1.5 flex items-center justify-center gap-1.5 rounded-lg bg-[rgb(247,243,223)] text-[#725d42] hover:bg-[#ede8d5] transition-colors text-xs font-medium border border-transparent "
+                      className="flex-shrink-0 p-2 sm:px-3 sm:py-1.5 flex items-center justify-center gap-1.5 rounded-lg bg-[var(--ai-card-bg)] text-[var(--ai-text)] hover:bg-[var(--ai-surface)] transition-colors text-xs font-medium border border-transparent "
                       title="复制链接"
                     >
                       <CopyIcon className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
@@ -885,14 +886,14 @@ export default function DetailModal() {
         >
           <div
             ref={rawResponseModalRef}
-            className="flex w-full max-w-3xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-white  "
+            className="flex w-full max-w-3xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-[var(--ai-card-bg)]  "
             onPointerDown={(e) => {
               if (!(e.target as Element).closest('[data-selectable-text]')) clearTextSelection()
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between border-b border-[#d4c9b4] px-5 py-4 shrink-0">
-              <h3 className="text-base font-semibold text-[#794f27]">原始响应数据</h3>
+            <div className="flex items-center justify-between border-b border-[var(--ai-shadow-input)] px-5 py-4 shrink-0">
+              <h3 className="text-base font-semibold text-[var(--ai-text-header)]">原始响应数据</h3>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -904,7 +905,7 @@ export default function DetailModal() {
                       showToast(getClipboardFailureMessage('复制失败', err), 'error')
                     }
                   }}
-                  className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-[rgb(247,243,223)] text-[#725d42] hover:bg-[#ede8d5] transition-colors text-xs font-medium"
+                  className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--ai-card-bg)] text-[var(--ai-text)] hover:bg-[var(--ai-surface)] transition-colors text-xs font-medium"
                 >
                   <CopyIcon className="w-3.5 h-3.5" />
                   全部复制
@@ -912,14 +913,14 @@ export default function DetailModal() {
                 <button
                   type="button"
                   onClick={() => setShowRawResponseModal(false)}
-                  className="rounded-full p-1 text-[#9f927d] hover:bg-[#ede8d5] hover:text-[#8a7b66] transition-colors"
+                  className="rounded-full p-1 text-[var(--ai-text-secondary)] hover:bg-[var(--ai-surface)] hover:text-[var(--ai-text-muted)] transition-colors"
                 >
                   <CloseIcon className="w-5 h-5" />
                 </button>
               </div>
             </div>
-            <div className="flex-1 min-h-0 overflow-y-auto p-5 bg-[rgb(247,243,223)]/50 overscroll-contain">
-              <pre data-selectable-text className="text-[11px] sm:text-xs text-[#725d42] font-mono whitespace-pre-wrap break-all select-text">
+            <div className="flex-1 min-h-0 overflow-y-auto p-5 bg-[var(--ai-card-bg)]/50 overscroll-contain">
+              <pre data-selectable-text className="text-[11px] sm:text-xs text-[var(--ai-text)] font-mono whitespace-pre-wrap break-all select-text">
                 {task.rawResponsePayload.replace(/"(b64_json|base64|data)":\s*"[^"]+"/g, '"$1": "<base64_data>"')}
               </pre>
             </div>

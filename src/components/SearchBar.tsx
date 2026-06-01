@@ -16,10 +16,10 @@ export default function SearchBar() {
           onClick={() => setFilterFavorite(!filterFavorite)}
           className={`p-2.5 rounded-xl border-2 transition-all ${
             filterFavorite
-              ? 'border-[#f5c31c] bg-[#f5c31c]/10 text-[#d4a80e]'
-              : 'border-[#c4b89e] bg-[rgb(247,243,223)] text-[#9f927d] hover:text-[#794f27]'
+              ? 'border-[var(--ai-warning)] bg-[var(--ai-warning)]/10 text-[var(--ai-focus-dark)] cp-neon-yellow'
+              : 'border-[var(--ai-border)] bg-[var(--ai-card-bg)] text-[var(--ai-text-secondary)] hover:text-[var(--ai-text-header)]'
           }`}
-          style={{ boxShadow: filterFavorite ? '0 3px 0 0 #d4a80e' : '0 3px 0 0 #bdaea0' }}
+          style={{ boxShadow: filterFavorite ? '0 3px 0 0 var(--ai-focus-dark)' : '0 3px 0 0 var(--ai-shadow-btn)' }}
           title={filterFavorite ? '取消只看收藏' : '只看收藏'}
         >
           <svg className="w-5 h-5" fill={filterFavorite ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
@@ -36,14 +36,14 @@ export default function SearchBar() {
               { label: '生成中', value: 'running' },
               { label: '失败', value: 'error' },
             ]}
-            className="px-3 py-2.5 rounded-xl border-2 border-[#c4b89e] bg-[rgb(247,243,223)] text-sm focus:outline-none transition hover:border-[#a89878]"
+            className="px-3 py-2.5 rounded-xl border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] text-sm focus:outline-none transition hover:border-[var(--ai-border-hover)]"
           />
         </div>
       </div>
       <div className="relative flex-1 z-10">
         <svg
           className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4"
-          style={{ color: '#9f927d' }}
+          style={{ color: 'var(--ai-text-secondary)' }}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

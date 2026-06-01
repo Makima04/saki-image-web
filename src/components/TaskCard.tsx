@@ -197,9 +197,9 @@ export default function TaskCard({
   const showRunningTimer = task.status === 'running' || isFalReconnecting || isCustomReconnecting
   const swipeBgClass = showSwipeAction
     ? swipeStartedSelected
-      ? 'bg-[#9f927d]'
-      : 'bg-[#19c8b9]'
-    : 'bg-[#c4b89e]'
+      ? 'bg-[var(--ai-text-secondary)]'
+      : 'bg-[var(--ai-accent)]'
+    : 'bg-[var(--ai-border)]'
 
   const qualityDisplay = getParamDisplay(task, 'quality')
   const showQuality = task.params.quality !== 'auto' || qualityDisplay.isMismatch
@@ -217,8 +217,8 @@ export default function TaskCard({
   const showModel = task.apiModel && task.apiModel !== defaultModelForProvider
 
   const getStatusColor = () => {
-    if (task.status === 'running') return '#19c8b9'
-    if (task.status === 'error') return isFalReconnecting ? '#f5c31c' : '#e05a5a'
+    if (task.status === 'running') return 'var(--ai-accent)'
+    if (task.status === 'error') return isFalReconnecting ? 'var(--ai-warning)' : 'var(--ai-error)'
     return '#6fba2c'
   }
 
@@ -242,12 +242,12 @@ export default function TaskCard({
       </div>
 
       <div
-        className="relative overflow-hidden cursor-pointer duration-200"
+        className="ai-card relative overflow-hidden cursor-pointer duration-200"
         style={{
           borderRadius: '20px',
-          backgroundColor: 'rgb(247, 243, 223)',
-          border: `2px solid ${task.status === 'running' ? '#19c8b9' : isSelected ? '#19c8b9' : '#c4b89e'}`,
-          boxShadow: isSelected ? '0 0 0 3px rgba(25, 200, 185, 0.25)' : '0 4px 10px rgba(107, 92, 67, 0.15)',
+          backgroundColor: 'var(--ai-card-bg)',
+          border: `2px solid ${task.status === 'running' ? 'var(--ai-accent)' : isSelected ? 'var(--ai-accent)' : 'var(--ai-border)'}`,
+          boxShadow: isSelected ? '0 0 0 3px rgba(0, 229, 195, 0.25)' : '0 4px 10px rgba(0, 0, 0, 0.3)',
           transform: swipeOffset ? `translateX(${swipeOffset}px)` : undefined,
           transition: !isSwiping ? 'box-shadow 0.2s, border-color 0.2s, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)' : 'box-shadow 0.2s, border-color 0.2s',
         }}
@@ -264,9 +264,13 @@ export default function TaskCard({
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchCancel}
       >
+        <div className="cp-hud-bl"></div><div className="cp-hud-br"></div>
+        {task.status === 'error' && !isFalReconnecting && !isCustomReconnecting && (
+          <div className="cp-caution-stripe-pink" />
+        )}
         {/* 选中时的角标 */}
         {isSelected && (
-          <div className="absolute top-2 right-2 z-10 w-5 h-5 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#19c8b9' }}>
+          <div className="absolute top-2 right-2 z-10 w-5 h-5 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: 'var(--ai-accent)' }}>
             <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
             </svg>
@@ -274,12 +278,12 @@ export default function TaskCard({
         )}
         <div className="flex h-40">
           {/* 左侧图片区域 */}
-          <div className="w-40 min-w-[10rem] h-full relative flex items-center justify-center overflow-hidden flex-shrink-0" style={{ backgroundColor: '#ede8d5' }}>
+          <div className="w-40 min-w-[10rem] h-full relative flex items-center justify-center overflow-hidden flex-shrink-0" style={{ backgroundColor: 'var(--ai-surface)' }}>
             {task.status === 'running' && (
               <div className="flex flex-col items-center gap-2">
                 <svg
                   className="w-8 h-8 animate-spin"
-                  style={{ color: '#19c8b9' }}
+                  style={{ color: 'var(--ai-accent)' }}
                   fill="none"
                   viewBox="0 0 24 24"
                 >
@@ -297,14 +301,14 @@ export default function TaskCard({
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                   />
                 </svg>
-                <span className="text-xs" style={{ color: '#9f927d' }}>生成中...</span>
+                <span className="text-xs" style={{ color: 'var(--ai-text-secondary)' }}>生成中...</span>
               </div>
             )}
             {task.status === 'error' && isFalReconnecting && !thumbSrc && (
               <div className="flex flex-col items-center gap-1 px-2">
                 <svg
                   className="w-7 h-7"
-                  style={{ color: '#f5c31c' }}
+                  style={{ color: 'var(--ai-warning)' }}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -316,7 +320,7 @@ export default function TaskCard({
                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                   />
                 </svg>
-                <span className="text-xs text-center leading-tight" style={{ color: '#d4a80e' }}>
+                <span className="text-xs text-center leading-tight" style={{ color: 'var(--ai-focus-dark)' }}>
                   重连中
                 </span>
               </div>
@@ -325,7 +329,7 @@ export default function TaskCard({
               <div className="flex flex-col items-center gap-1 px-2">
                 <svg
                   className="w-7 h-7"
-                  style={{ color: '#e05a5a' }}
+                  style={{ color: 'var(--ai-error)' }}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -337,7 +341,7 @@ export default function TaskCard({
                     d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span className="text-xs text-center leading-tight" style={{ color: '#e05a5a' }}>
+                <span className="text-xs text-center leading-tight" style={{ color: 'var(--ai-error)' }}>
                   失败
                 </span>
               </div>
@@ -357,7 +361,7 @@ export default function TaskCard({
                   }}
                 />
                 {task.outputImages.length > 1 && (
-                  <span className="absolute bottom-1 right-1 text-white text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: 'rgba(121, 79, 39, 0.7)' }}>
+                  <span className="absolute bottom-1 right-1 text-white text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: 'rgba(10, 10, 18, 0.7)' }}>
                     {task.outputImages.length}
                   </span>
                 )}
@@ -375,7 +379,7 @@ export default function TaskCard({
             {!thumbSrc && (
               <svg
                 className="w-8 h-8"
-                style={{ color: '#c4b89e' }}
+                style={{ color: 'var(--ai-border)' }}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -391,7 +395,8 @@ export default function TaskCard({
             {/* 运行中显示耗时，完成后显示封面图比例与分辨率标签 */}
             <div className="absolute top-1.5 left-1.5 flex items-center gap-1">
               {showRunningTimer || task.status !== 'done' || !coverRatio || !coverSize ? (
-                <span className="flex items-center gap-1 text-white text-[10px] sm:text-xs px-1.5 py-0.5 rounded font-mono" style={{ backgroundColor: 'rgba(121, 79, 39, 0.6)' }}>
+                <span className="flex items-center gap-1 text-white text-[10px] sm:text-xs px-1.5 py-0.5 rounded font-mono" style={{ backgroundColor: 'rgba(10, 10, 18, 0.7)' }}>
+                  <div className={`cp-status-dot ${task.status === 'running' ? 'cp-status-dot-active' : isFalReconnecting ? 'cp-status-dot-warning' : isCustomReconnecting ? 'cp-status-dot-warning' : task.status === 'error' ? 'cp-status-dot-error' : 'cp-status-dot-idle'}`} />
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -399,10 +404,10 @@ export default function TaskCard({
                 </span>
               ) : (
                 <>
-                  <span className="text-white text-[10px] sm:text-xs px-1.5 py-0.5 rounded font-mono" style={{ backgroundColor: 'rgba(121, 79, 39, 0.6)' }}>
+                  <span className="text-white text-[10px] sm:text-xs px-1.5 py-0.5 rounded font-mono" style={{ backgroundColor: 'rgba(10, 10, 18, 0.7)' }}>
                     {coverRatio}
                   </span>
-                  <span className="text-white/90 text-[10px] sm:text-xs px-1.5 py-0.5 rounded font-medium" style={{ backgroundColor: 'rgba(121, 79, 39, 0.6)' }}>
+                  <span className="text-white/90 text-[10px] sm:text-xs px-1.5 py-0.5 rounded font-medium" style={{ backgroundColor: 'rgba(10, 10, 18, 0.7)' }}>
                     {coverSize}
                   </span>
                 </>
@@ -413,7 +418,7 @@ export default function TaskCard({
           {/* 右侧信息区域 */}
           <div className="flex-1 p-3 flex flex-col min-w-0">
             <div className="flex-1 min-h-0 mb-2 overflow-hidden">
-              <p className="text-sm leading-relaxed line-clamp-3" style={{ color: '#725d42' }}>
+              <p className="text-sm leading-relaxed line-clamp-3" style={{ color: 'var(--ai-text)' }}>
                 {task.prompt || '(无提示词)'}
               </p>
             </div>
@@ -431,10 +436,10 @@ export default function TaskCard({
                 {(task.apiProfileName || task.apiProvider) && (
                   <span
                     className="flex items-center gap-1 px-1.5 py-0.5 rounded text-xs flex-shrink-0"
-                    style={{ backgroundColor: '#ede8d5', color: '#725d42' }}
+                    style={{ backgroundColor: 'var(--ai-surface)', color: 'var(--ai-text)' }}
                     title={task.apiProfileName || task.apiProvider}
                   >
-                    <CodeIcon className="w-3 h-3 flex-shrink-0" style={{ color: '#9f927d' }} />
+                    <CodeIcon className="w-3 h-3 flex-shrink-0" style={{ color: 'var(--ai-text-secondary)' }} />
                     <span className="truncate max-w-[8rem]">
                       {task.apiProfileName || task.apiProvider}
                     </span>
@@ -444,10 +449,10 @@ export default function TaskCard({
                 {showModel && (
                   <span
                     className="flex items-center gap-1 px-1.5 py-0.5 rounded text-xs flex-shrink-0"
-                    style={{ backgroundColor: '#ede8d5', color: '#725d42' }}
+                    style={{ backgroundColor: 'var(--ai-surface)', color: 'var(--ai-text)' }}
                     title={task.apiModel}
                   >
-                    <svg className="w-3 h-3 flex-shrink-0" style={{ color: '#9f927d' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 flex-shrink-0" style={{ color: 'var(--ai-text-secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                     </svg>
                     <span className="truncate max-w-[8rem]">
@@ -457,7 +462,7 @@ export default function TaskCard({
                 )}
                 {/* Mask */}
                 {task.maskImageId && (
-                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-xs flex-shrink-0" style={{ backgroundColor: '#e6f9f6', color: '#19c8b9' }}>
+                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-xs flex-shrink-0" style={{ backgroundColor: 'var(--ai-accent-dim)', color: 'var(--ai-accent)' }}>
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                     </svg>
@@ -466,40 +471,40 @@ export default function TaskCard({
                 )}
                 {/* Params */}
                 {showQuality && (
-                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-xs flex-shrink-0" style={{ backgroundColor: '#ede8d5' }}>
-                    <span style={{ color: '#9f927d' }}>质量</span>
-                    {qualityDisplay.isMismatch ? <ActualValueBadge value={qualityDisplay.displayValue} className="px-1 rounded-sm" /> : <span style={{ color: '#725d42' }}>{qualityDisplay.displayValue}</span>}
+                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-xs flex-shrink-0" style={{ backgroundColor: 'var(--ai-surface)' }}>
+                    <span style={{ color: 'var(--ai-text-secondary)' }}>质量</span>
+                    {qualityDisplay.isMismatch ? <ActualValueBadge value={qualityDisplay.displayValue} className="px-1 rounded-sm" /> : <span style={{ color: 'var(--ai-text)' }}>{qualityDisplay.displayValue}</span>}
                   </span>
                 )}
                 {showSize && (
-                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-xs flex-shrink-0" style={{ backgroundColor: '#ede8d5' }}>
-                    <span style={{ color: '#9f927d' }}>尺寸</span>
-                    {sizeDisplay.isMismatch ? <ActualValueBadge value={sizeDisplay.displayValue} className="px-1 rounded-sm" /> : <span style={{ color: '#725d42' }}>{sizeDisplay.displayValue}</span>}
+                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-xs flex-shrink-0" style={{ backgroundColor: 'var(--ai-surface)' }}>
+                    <span style={{ color: 'var(--ai-text-secondary)' }}>尺寸</span>
+                    {sizeDisplay.isMismatch ? <ActualValueBadge value={sizeDisplay.displayValue} className="px-1 rounded-sm" /> : <span style={{ color: 'var(--ai-text)' }}>{sizeDisplay.displayValue}</span>}
                   </span>
                 )}
                 {showFormat && (
-                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-xs flex-shrink-0" style={{ backgroundColor: '#ede8d5' }}>
-                    <span style={{ color: '#9f927d' }}>格式</span>
-                    {formatDisplay.isMismatch ? <ActualValueBadge value={formatDisplay.displayValue} className="px-1 rounded-sm" /> : <span style={{ color: '#725d42' }}>{formatDisplay.displayValue}</span>}
+                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-xs flex-shrink-0" style={{ backgroundColor: 'var(--ai-surface)' }}>
+                    <span style={{ color: 'var(--ai-text-secondary)' }}>格式</span>
+                    {formatDisplay.isMismatch ? <ActualValueBadge value={formatDisplay.displayValue} className="px-1 rounded-sm" /> : <span style={{ color: 'var(--ai-text)' }}>{formatDisplay.displayValue}</span>}
                   </span>
                 )}
                 {showN && (
-                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-xs flex-shrink-0" style={{ backgroundColor: '#ede8d5' }}>
-                    <span style={{ color: '#9f927d' }}>数量</span>
-                    {nDisplay.isMismatch ? <ActualValueBadge value={nDisplay.displayValue} className="px-1 rounded-sm" /> : <span style={{ color: '#725d42' }}>{nDisplay.displayValue}</span>}
+                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-xs flex-shrink-0" style={{ backgroundColor: 'var(--ai-surface)' }}>
+                    <span style={{ color: 'var(--ai-text-secondary)' }}>数量</span>
+                    {nDisplay.isMismatch ? <ActualValueBadge value={nDisplay.displayValue} className="px-1 rounded-sm" /> : <span style={{ color: 'var(--ai-text)' }}>{nDisplay.displayValue}</span>}
                   </span>
                 )}
               </div>
               {/* 流式进度条 */}
               {task.streamProgress != null && task.streamProgress > 0 && task.streamProgress < 100 && (
                 <div className="flex items-center gap-2 px-1">
-                  <div className="flex-1 h-[3px] rounded-full overflow-hidden" style={{ backgroundColor: '#ede8d5' }}>
+                  <div className="flex-1 h-[3px] rounded-full overflow-hidden" style={{ backgroundColor: 'var(--ai-surface)' }}>
                     <div
-                      className="ai-progress-bar"
+                      className="cp-energy-bar"
                       style={{ width: `${task.streamProgress}%`, height: '100%' }}
                     />
                   </div>
-                  <span className="text-[10px] font-semibold text-[#19c8b9] tabular-nums min-w-[28px]">
+                  <span className="text-[10px] font-semibold text-[var(--ai-accent)] tabular-nums min-w-[28px]">
                     {task.streamProgress}%
                   </span>
                 </div>
@@ -510,8 +515,8 @@ export default function TaskCard({
                   <span
                     className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold ${
                       task.imageSourceFormat === 'base64'
-                        ? 'bg-[#e6f9f6] text-[#19c8b9]'
-                        : 'bg-[#fef9e6] text-[#d4a80e]'
+                        ? 'bg-[var(--ai-accent-dim)] text-[var(--ai-accent)]'
+                        : 'bg-[var(--ai-accent-dim)] text-[var(--ai-focus-dark)]'
                     }`}
                   >
                     {task.imageSourceFormat === 'base64' ? 'base64' : 'URL'}
@@ -527,9 +532,9 @@ export default function TaskCard({
                   <button
                     onClick={() => retryTask(task)}
                     className="p-1.5 rounded-md transition"
-                    style={{ color: '#9f927d' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = '#19c8b9'; e.currentTarget.style.backgroundColor = '#e6f9f6' }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = '#9f927d'; e.currentTarget.style.backgroundColor = 'transparent' }}
+                    style={{ color: 'var(--ai-text-secondary)' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--ai-accent)'; e.currentTarget.style.backgroundColor = 'var(--ai-accent-dim)' }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--ai-text-secondary)'; e.currentTarget.style.backgroundColor = 'transparent' }}
                     title="重试任务"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -542,9 +547,9 @@ export default function TaskCard({
                     updateTaskInStore(task.id, { isFavorite: !task.isFavorite })
                   }
                   className="p-1.5 rounded-md transition"
-                  style={{ color: task.isFavorite ? '#f5c31c' : '#9f927d' }}
-                  onMouseEnter={(e) => { if (!task.isFavorite) e.currentTarget.style.color = '#f5c31c' }}
-                  onMouseLeave={(e) => { if (!task.isFavorite) e.currentTarget.style.color = '#9f927d' }}
+                  style={{ color: task.isFavorite ? 'var(--ai-warning)' : 'var(--ai-text-secondary)' }}
+                  onMouseEnter={(e) => { if (!task.isFavorite) e.currentTarget.style.color = 'var(--ai-warning)' }}
+                  onMouseLeave={(e) => { if (!task.isFavorite) e.currentTarget.style.color = 'var(--ai-text-secondary)' }}
                   title={task.isFavorite ? '取消收藏' : '收藏记录'}
                 >
                   <svg
@@ -564,9 +569,9 @@ export default function TaskCard({
                 <button
                   onClick={onReuse}
                   className="p-1.5 rounded-md transition"
-                  style={{ color: '#9f927d' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = '#19c8b9'; e.currentTarget.style.backgroundColor = '#e6f9f6' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = '#9f927d'; e.currentTarget.style.backgroundColor = 'transparent' }}
+                  style={{ color: 'var(--ai-text-secondary)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--ai-accent)'; e.currentTarget.style.backgroundColor = 'var(--ai-accent-dim)' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--ai-text-secondary)'; e.currentTarget.style.backgroundColor = 'transparent' }}
                   title="复用配置"
                 >
                   <svg
@@ -586,9 +591,9 @@ export default function TaskCard({
                 <button
                   onClick={onEditOutputs}
                   className="p-1.5 rounded-md transition disabled:opacity-30"
-                  style={{ color: '#9f927d' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = '#6fba2c'; e.currentTarget.style.backgroundColor = '#f0f8e6' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = '#9f927d'; e.currentTarget.style.backgroundColor = 'transparent' }}
+                  style={{ color: 'var(--ai-text-secondary)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = '#6fba2c'; e.currentTarget.style.backgroundColor = 'var(--ai-accent-dim)' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--ai-text-secondary)'; e.currentTarget.style.backgroundColor = 'transparent' }}
                   title="编辑输出"
                   disabled={!task.outputImages?.length}
                 >
@@ -609,9 +614,9 @@ export default function TaskCard({
                 <button
                   onClick={onDelete}
                   className="p-1.5 rounded-md transition"
-                  style={{ color: '#9f927d' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = '#e05a5a'; e.currentTarget.style.backgroundColor = '#fdf0f0' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = '#9f927d'; e.currentTarget.style.backgroundColor = 'transparent' }}
+                  style={{ color: 'var(--ai-text-secondary)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--ai-error)'; e.currentTarget.style.backgroundColor = 'var(--ai-danger-bg)' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--ai-text-secondary)'; e.currentTarget.style.backgroundColor = 'transparent' }}
                   title="删除记录"
                 >
                   <svg

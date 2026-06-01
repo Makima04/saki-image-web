@@ -1110,7 +1110,7 @@ export default function InputBar() {
     }
   }, [])
 
-  const selectClass = 'px-3 py-1.5 rounded-xl border-2 border-[#c4b89e] bg-[rgb(247,243,223)] text-xs transition-all duration-200'
+  const selectClass = 'px-3 py-1.5 rounded-xl border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] text-xs transition-all duration-200'
 
   const getTouchDropIndex = (touch: React.Touch) => {
     const target = document
@@ -1329,16 +1329,16 @@ export default function InputBar() {
           text={imageHintText}
         />
         {showDropBefore && (
-          <div className="absolute -left-[5px] top-0 bottom-0 w-[2px] bg-[#19c8b9] rounded-full z-40 shadow-sm pointer-events-none" />
+          <div className="absolute -left-[5px] top-0 bottom-0 w-[2px] bg-[var(--ai-accent)] rounded-full z-40 shadow-sm pointer-events-none" />
         )}
         {showDropAfter && (
-          <div className="absolute -right-[5px] top-0 bottom-0 w-[2px] bg-[#19c8b9] rounded-full z-40 shadow-sm pointer-events-none" />
+          <div className="absolute -right-[5px] top-0 bottom-0 w-[2px] bg-[var(--ai-accent)] rounded-full z-40 shadow-sm pointer-events-none" />
         )}
         <div
           className={`relative w-[52px] h-[52px] rounded-xl overflow-hidden shadow-sm cursor-grab active:cursor-grabbing select-none ${
             isMaskTarget
-              ? 'border-2 border-[#19c8b9]'
-              : 'border-2 border-[#c4b89e]'
+              ? 'border-2 border-[var(--ai-accent)]'
+              : 'border-2 border-[var(--ai-border)]'
           }`}
           onClick={() => {
             if (suppressImageClickRef.current) return
@@ -1363,16 +1363,16 @@ export default function InputBar() {
             </div>
           )}
           {isMaskTarget && (
-            <span className="absolute left-1 top-1 rounded bg-[#19c8b9] px-1.5 py-0.5 text-[8px] leading-none text-white font-bold tracking-wider z-10 pointer-events-none">
+            <span className="absolute left-1 top-1 rounded bg-[var(--ai-accent)] px-1.5 py-0.5 text-[8px] leading-none text-white font-bold tracking-wider z-10 pointer-events-none">
               MASK
             </span>
           )}
-          <span className="absolute bottom-1 left-1 flex h-4 w-4 items-center justify-center rounded-full bg-[rgba(121,79,39,0.7)] text-[9px] font-semibold text-white z-10 pointer-events-none">
+          <span className="absolute bottom-1 left-1 flex h-4 w-4 items-center justify-center rounded-full bg-[rgba(10, 10, 18, 0.7)] text-[9px] font-semibold text-white z-10 pointer-events-none">
             {idx + 1}
           </span>
           {canEdit && (
             <button 
-              className="absolute inset-0 w-full h-full bg-[rgba(121,79,39,0.4)] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer z-20 focus:outline-none border-none"
+              className="absolute inset-0 w-full h-full bg-[rgba(10, 10, 18, 0.4)] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer z-20 focus:outline-none border-none"
               onClick={(e) => {
                 e.stopPropagation()
                 setMaskEditorImageId(img.id)
@@ -1387,7 +1387,7 @@ export default function InputBar() {
         </div>
         {!isMaskTarget && (
           <span
-            className="absolute right-0 top-0 flex h-5 w-5 translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#e05a5a] text-white opacity-0 shadow-md transition-opacity hover:bg-[#c94444] group-hover:opacity-100 z-30"
+            className="absolute right-0 top-0 flex h-5 w-5 translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[var(--ai-error)] text-white opacity-0 shadow-md transition-opacity hover:bg-[#ff2a6d] group-hover:opacity-100 z-30"
             onClick={(e) => {
               e.stopPropagation()
               removeInputImage(idx)
@@ -1413,7 +1413,7 @@ export default function InputBar() {
           action: () => clearInputImages(),
         })
       }
-      className="w-[52px] h-[52px] rounded-xl border-2 border-dashed border-[#c4b89e] flex flex-col items-center justify-center gap-0.5 text-[#9f927d] hover:text-[#e05a5a] hover:border-[#e05a5a] hover:bg-[#fdf0f0] transition-all cursor-pointer flex-shrink-0"
+      className="w-[52px] h-[52px] rounded-xl border-2 border-dashed border-[var(--ai-border)] flex flex-col items-center justify-center gap-0.5 text-[var(--ai-text-secondary)] hover:text-[var(--ai-error)] hover:border-[var(--ai-error)] hover:bg-[var(--ai-danger-bg)] transition-all cursor-pointer flex-shrink-0"
       title={maskTargetImage ? '清空遮罩主图、参考图和遮罩' : '清空全部参考图'}
     >
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1454,11 +1454,11 @@ export default function InputBar() {
         onTouchCancel={hideSizeHint}
         onClick={showSizeHint}
       >
-        <span className="text-[#9f927d] ml-1">尺寸</span>
+        <span className="text-[var(--ai-text-secondary)] ml-1">尺寸</span>
         <button
           type="button"
           onClick={() => { dismissAllTooltips(); setShowSizePicker(true) }}
-          className="px-3 py-1.5 rounded-xl border-2 border-[#c4b89e] bg-[rgb(247,243,223)] hover:border-[#a89878] focus:outline-none text-xs text-left transition-all duration-200 font-mono"
+          className="px-3 py-1.5 rounded-xl border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] hover:border-[var(--ai-border-hover)] focus:outline-none text-xs text-left transition-all duration-200 font-mono"
           title="选择尺寸"
         >
           {displaySize}
@@ -1477,7 +1477,7 @@ export default function InputBar() {
         onTouchCancel={hideQualityHint}
         onClick={showQualityHint}
       >
-        <span className="text-[#9f927d] ml-1">质量</span>
+        <span className="text-[var(--ai-text-secondary)] ml-1">质量</span>
         <Select
           value={settings.codexCli ? 'auto' : params.quality}
           onChange={(val) => {
@@ -1486,7 +1486,7 @@ export default function InputBar() {
           options={qualityOptions}
           disabled={settings.codexCli}
           className={settings.codexCli
-            ? 'px-3 py-1.5 rounded-xl border-2 border-[#c4b89e] bg-[#ede8d5] opacity-50 cursor-not-allowed text-xs transition-all duration-200'
+            ? 'px-3 py-1.5 rounded-xl border-2 border-[var(--ai-border)] bg-[var(--ai-surface)] opacity-50 cursor-not-allowed text-xs transition-all duration-200'
             : selectClass}
         />
         <ButtonTooltip
@@ -1495,7 +1495,7 @@ export default function InputBar() {
         />
       </label>
       <label className="flex flex-col gap-0.5">
-        <span className="text-[#9f927d] ml-1">格式</span>
+        <span className="text-[var(--ai-text-secondary)] ml-1">格式</span>
         <Select
           value={params.output_format}
           onChange={(val) => setParams({ output_format: val as any })}
@@ -1516,7 +1516,7 @@ export default function InputBar() {
         onTouchCancel={hideCompressionHint}
         onClick={showCompressionHint}
       >
-        <span className="text-[#9f927d] ml-1">压缩率</span>
+        <span className="text-[var(--ai-text-secondary)] ml-1">压缩率</span>
         <input
           value={outputCompressionInput}
           onChange={(e) => setOutputCompressionInput(e.target.value)}
@@ -1526,10 +1526,10 @@ export default function InputBar() {
           min={0}
           max={100}
           placeholder="0-100"
-          className={`px-3 py-1.5 rounded-xl border-2 border-[#c4b89e] bg-[rgb(247,243,223)] focus:outline-none text-xs transition-all duration-200 ${
+          className={`px-3 py-1.5 rounded-xl border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] focus:outline-none text-xs transition-all duration-200 ${
             compressionDisabled
-              ? 'bg-[#ede8d5] opacity-50 cursor-not-allowed'
-              : 'bg-[rgb(247,243,223)]'
+              ? 'bg-[var(--ai-surface)] opacity-50 cursor-not-allowed'
+              : 'bg-[var(--ai-card-bg)]'
             }`}
         />
         <ButtonTooltip
@@ -1546,7 +1546,7 @@ export default function InputBar() {
         onTouchCancel={hideModerationHint}
         onClick={showModerationHint}
       >
-        <span className="text-[#9f927d] ml-1">审核</span>
+        <span className="text-[var(--ai-text-secondary)] ml-1">审核</span>
         <Select
           value={moderationDisabled ? 'auto' : params.moderation}
           onChange={(val) => {
@@ -1558,7 +1558,7 @@ export default function InputBar() {
           ]}
           disabled={moderationDisabled}
           className={moderationDisabled
-            ? 'px-3 py-1.5 rounded-xl border-2 border-[#c4b89e] bg-[#ede8d5] opacity-50 cursor-not-allowed text-xs transition-all duration-200'
+            ? 'px-3 py-1.5 rounded-xl border-2 border-[var(--ai-border)] bg-[var(--ai-surface)] opacity-50 cursor-not-allowed text-xs transition-all duration-200'
             : selectClass}
         />
         <ButtonTooltip
@@ -1567,7 +1567,7 @@ export default function InputBar() {
         />
       </label>
       <label className="relative flex flex-col gap-0.5">
-        <span className="text-[#9f927d] ml-1">数量</span>
+        <span className="text-[var(--ai-text-secondary)] ml-1">数量</span>
         <input
           value={nInput}
           onChange={(e) => handleNInputChange(e.target.value)}
@@ -1589,7 +1589,7 @@ export default function InputBar() {
           type="number"
           min={1}
           max={outputImageLimit}
-          className="px-3 py-1.5 rounded-xl border-2 border-[#c4b89e] bg-[rgb(247,243,223)] focus:outline-none text-xs transition-all duration-200"
+          className="px-3 py-1.5 rounded-xl border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] focus:outline-none text-xs transition-all duration-200"
         />
         <ButtonTooltip visible={nLimitHintVisible} text={nLimitHintText} />
       </label>
@@ -1600,17 +1600,17 @@ export default function InputBar() {
     <>
       {/* 全屏拖拽遮罩 */}
       {isDragging && (
-        <div className="fixed inset-0 z-[100] bg-[rgba(248,248,240,0.85)] flex flex-col items-center justify-center pointer-events-none">
+        <div className="fixed inset-0 z-[100] bg-[var(--ai-overlay)] flex flex-col items-center justify-center pointer-events-none">
           <div className="flex flex-col items-center gap-4 p-8 rounded-3xl">
             <div className={`w-20 h-20 rounded-full border-2 border-dashed flex items-center justify-center ${
-              atImageLimit ? 'bg-[#fdf0f0] border-[#e05a5a]' : 'bg-[#e6f9f6] border-[#19c8b9]'
+              atImageLimit ? 'bg-[var(--ai-danger-bg)] border-[var(--ai-error)]' : 'bg-[var(--ai-accent-dim)] border-[var(--ai-accent)]'
             }`}>
               {atImageLimit ? (
-                <svg className="w-10 h-10 text-[#e05a5a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-10 h-10 text-[var(--ai-error)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                 </svg>
               ) : (
-                <svg className="w-10 h-10 text-[#19c8b9]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-10 h-10 text-[var(--ai-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               )}
@@ -1618,13 +1618,13 @@ export default function InputBar() {
             <div className="text-center">
               {atImageLimit ? (
                 <>
-                  <p className="text-lg font-semibold text-[#e05a5a]">已达上限 {API_MAX_IMAGES} 张</p>
-                  <p className="text-sm text-[#9f927d] mt-1">请先移除部分参考图后再添加</p>
+                  <p className="text-lg font-semibold text-[var(--ai-error)]">已达上限 {API_MAX_IMAGES} 张</p>
+                  <p className="text-sm text-[var(--ai-text-secondary)] mt-1">请先移除部分参考图后再添加</p>
                 </>
               ) : (
                 <>
-                  <p className="text-lg font-semibold text-[#794f27]">释放以添加参考图</p>
-                  <p className="text-sm text-[#9f927d] mt-1">支持 JPG、PNG、WebP 等格式</p>
+                  <p className="text-lg font-semibold text-[var(--ai-text-header)]">释放以添加参考图</p>
+                  <p className="text-sm text-[var(--ai-text-secondary)] mt-1">支持 JPG、PNG、WebP 等格式</p>
                 </>
               )}
             </div>
@@ -1644,20 +1644,20 @@ export default function InputBar() {
       <div data-input-bar className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-4xl px-3 sm:px-4 transition-all duration-300">
         {selectedTaskIds.length > 0 && (
           <div className="flex justify-center mb-3">
-            <div className="bg-[rgb(247,243,223)] shadow-[0_4px_10px_rgba(107,92,67,0.15)] rounded-full flex items-center p-1 border-2 border-[#c4b89e] pointer-events-auto">
+            <div className="bg-[var(--ai-card-bg)] shadow-[0_4px_10px_var(--ai-card-shadow)] rounded-full flex items-center p-1 border-2 border-[var(--ai-border)] pointer-events-auto cp-neon-border">
               <button
                 onClick={clearSelection}
-                className="p-2 text-[#725d42] hover:text-[#794f27] transition-colors"
+                className="p-2 text-[var(--ai-text)] hover:text-[var(--ai-text-header)] transition-colors"
                 title="取消选择"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              <div className="w-px h-5 bg-[#c4b89e] mx-1"></div>
+              <div className="w-px h-5 bg-[var(--ai-border)] mx-1"></div>
               <button
                 onClick={handleSelectAllToggle}
-                className="p-2 text-[#19c8b9] hover:text-[#19c8b9] transition-colors"
+                className="p-2 text-[var(--ai-accent)] hover:text-[var(--ai-accent)] transition-colors"
                 title={selectedTaskIds.length === filteredTasks.length && filteredTasks.length > 0 ? "取消全选" : "全选当前可见"}
               >
                 {selectedTaskIds.length === filteredTasks.length && filteredTasks.length > 0 ? (
@@ -1671,10 +1671,10 @@ export default function InputBar() {
                   </svg>
                 )}
               </button>
-              <div className="w-px h-5 bg-[#c4b89e] mx-1"></div>
+              <div className="w-px h-5 bg-[var(--ai-border)] mx-1"></div>
               <button
                 onClick={handleToggleFavorite}
-                className="p-2 text-[#f5c31c] hover:text-[#d4a80e] transition-colors"
+                className="p-2 text-[var(--ai-warning)] hover:text-[var(--ai-focus-dark)] transition-colors"
                 title="收藏/取消收藏"
               >
                 {selectedTaskIds.length > 0 && selectedTaskIds.every((id) => tasks.find((t) => t.id === id)?.isFavorite) ? (
@@ -1687,20 +1687,20 @@ export default function InputBar() {
                   </svg>
                 )}
               </button>
-              <div className="w-px h-5 bg-[#c4b89e] mx-1"></div>
+              <div className="w-px h-5 bg-[var(--ai-border)] mx-1"></div>
               <button
                 onClick={handleDownloadSelected}
-                className="p-2 text-[#6fba2c] hover:text-[#5a9e1e] transition-colors"
+                className="p-2 text-[var(--ai-success)] hover:text-[#5a9e1e] transition-colors"
                 title="批量下载"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
               </button>
-              <div className="w-px h-5 bg-[#c4b89e] mx-1"></div>
+              <div className="w-px h-5 bg-[var(--ai-border)] mx-1"></div>
               <button
                 onClick={handleDeleteSelected}
-                className="p-2 text-[#e05a5a] hover:text-[#c94444] transition-colors"
+                className="p-2 text-[var(--ai-error)] hover:text-[#ff2a6d] transition-colors"
                 title="删除选中"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1710,14 +1710,15 @@ export default function InputBar() {
             </div>
           </div>
         )}
-        <div ref={cardRef} className="bg-[rgb(247,243,223)] border-2 border-[#c4b89e] shadow-[0_4px_10px_rgba(107,92,67,0.15)] rounded-[20px] p-3 sm:p-4">
+        <div ref={cardRef} className="ai-card bg-[var(--ai-card-bg)] border-2 border-[var(--ai-border)] shadow-[0_4px_10px_var(--ai-card-shadow)] rounded-[20px] p-3 sm:p-4">
+          <div className="cp-hud-bl"></div><div className="cp-hud-br"></div>
           {/* 移动端拖动条 */}
           <div
             ref={handleRef}
             className="sm:hidden flex justify-center pt-0.5 pb-2 -mt-1 cursor-pointer touch-none"
             onClick={() => setMobileCollapsed((v) => !v)}
           >
-            <div className={`w-10 h-1 rounded-full bg-[#c4b89e] transition-transform duration-200 ${mobileCollapsed ? 'scale-x-75' : ''}`} />
+            <div className={`w-10 h-1 rounded-full bg-[var(--ai-border)] transition-transform duration-200 ${mobileCollapsed ? 'scale-x-75' : ''}`} />
           </div>
 
           {/* 输入图片行（移动端可折叠） */}
@@ -1730,7 +1731,7 @@ export default function InputBar() {
                   </div>
                 </div>
                 {mobileCollapsed && (
-                  <div className="text-xs text-[#9f927d] mb-2 ml-1">
+                  <div className="text-xs text-[var(--ai-text-secondary)] mb-2 ml-1">
                     {maskDraft ? `1 张遮罩主图 · ${referenceImages.length} 张参考图` : `${inputImages.length} 张参考图`}
                   </div>
                 )}
@@ -1743,8 +1744,8 @@ export default function InputBar() {
           {/* 输入框 */}
           <div className="relative">
             {showAtImageMenu && (
-              <div style={{ left: `${menuLeft}px` }} className="absolute bottom-full z-50 mb-2 w-64 overflow-hidden rounded-[20px] border-2 border-[#c4b89e] bg-[rgb(247,243,223)] p-1.5 shadow-[0_4px_10px_rgba(107,92,67,0.15)]">
-                <div className="px-2 pb-1 pt-0.5 text-[11px] text-[#9f927d]">选择当前参考图</div>
+              <div style={{ left: `${menuLeft}px` }} className="absolute bottom-full z-50 mb-2 w-64 overflow-hidden rounded-[20px] border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] p-1.5 shadow-[0_4px_10px_var(--ai-card-shadow)]">
+                <div className="px-2 pb-1 pt-0.5 text-[11px] text-[var(--ai-text-secondary)]">选择当前参考图</div>
                 <div className="max-h-56 overflow-y-auto custom-scrollbar">
                   {atImageOptions.map(({ img, index }, optionIndex) => (
                     <button
@@ -1757,11 +1758,11 @@ export default function InputBar() {
                       onMouseEnter={() => setAtImageMenuIndex(optionIndex)}
                       className={`flex w-full items-center gap-2 rounded-xl px-2 py-1.5 text-left text-xs transition-colors ${
                         optionIndex === atImageMenuIndex
-                          ? 'bg-[#e6f9f6] text-[#19c8b9]'
-                          : 'text-[#725d42] hover:bg-[#ede8d5]'
+                          ? 'bg-[var(--ai-accent-dim)] text-[var(--ai-accent)]'
+                          : 'text-[var(--ai-text)] hover:bg-[var(--ai-surface)]'
                       }`}
                     >
-                      <span className="h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-[#c4b89e]">
+                      <span className="h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-[var(--ai-border)]">
                         <img src={img.dataUrl} className="h-full w-full object-cover" alt="" />
                       </span>
                       <span className="min-w-0 flex-1 truncate font-medium">{getImageMentionLabel(index)}</span>
@@ -1815,7 +1816,7 @@ export default function InputBar() {
                 syncMentionTagSelection(el)
               }}
               data-placeholder="描述你想生成的图片，可输入 @ 指定当前参考图..."
-              className="min-h-[42px] w-full whitespace-pre-wrap break-words rounded-2xl border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-4 py-3 text-sm leading-relaxed outline-none transition-[border-color,box-shadow] duration-200 focus:border-[#ffcc00] focus:shadow-[0_3px_0_0_#e0b800,0_0_0_3px_rgba(255,204,0,0.15)] empty:before:pointer-events-none empty:before:text-[#c4b89e] empty:before:content-[attr(data-placeholder)]"
+              className="min-h-[42px] w-full whitespace-pre-wrap break-words rounded-2xl border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-4 py-3 text-sm leading-relaxed outline-none transition-[border-color,box-shadow] duration-200 focus:border-[var(--ai-focus)] focus:shadow-[0_3px_0_0_var(--ai-focus-dark),0_0_0_3px_rgba(255,204,0,0.15)] empty:before:pointer-events-none empty:before:text-[var(--ai-border)] empty:before:content-[attr(data-placeholder)]"
             />
           </div>
 
@@ -1836,8 +1837,8 @@ export default function InputBar() {
                     onClick={() => !atImageLimit && fileInputRef.current?.click()}
                     className={`p-2.5 rounded-xl transition-all shadow-sm ${
                       atImageLimit
-                        ? 'bg-[#ede8d5] border-2 border-[#c4b89e] text-[#c4b89e] cursor-not-allowed flex-shrink-0'
-                        : 'bg-[rgb(247,243,223)] border-2 border-[#c4b89e] text-[#725d42] hover:border-[#a89878] hover:bg-[#ede8d5]'
+                        ? 'bg-[var(--ai-surface)] border-2 border-[var(--ai-border)] text-[var(--ai-border)] cursor-not-allowed flex-shrink-0'
+                        : 'bg-[var(--ai-card-bg)] border-2 border-[var(--ai-border)] text-[var(--ai-text)] hover:border-[var(--ai-border-hover)] hover:bg-[var(--ai-surface)]'
                     }`}
                     title={atImageLimit ? `已达上限 ${API_MAX_IMAGES} 张` : '添加参考图'}
                   >
@@ -1855,10 +1856,10 @@ export default function InputBar() {
                   <button
                     onClick={() => hasSubmitApiConfig ? submitTask() : setShowSettings(true)}
                     disabled={hasSubmitApiConfig ? !canSubmit : false}
-                    className={`p-2.5 rounded-xl transition-all shadow-sm hover:shadow ${
+                    className={`p-2.5 rounded-xl cp-clip-btn transition-all shadow-sm hover:shadow ${
                       !hasSubmitApiConfig
-                        ? 'bg-[#ede8d5] border-2 border-[#c4b89e] text-[#725d42] cursor-pointer'
-                        : 'bg-[#19c8b9] border-2 border-[#19c8b9] text-white hover:bg-[#3dd4c6] disabled:bg-[#ede8d5] disabled:border-[#c4b89e] disabled:opacity-50 disabled:cursor-not-allowed'
+                        ? 'bg-[var(--ai-surface)] border-2 border-[var(--ai-border)] text-[var(--ai-text)] cursor-pointer'
+                        : 'bg-[var(--ai-accent)] border-2 border-[var(--ai-accent)] text-white hover:bg-[var(--ai-accent-hover)] disabled:bg-[var(--ai-surface)] disabled:border-[var(--ai-border)] disabled:opacity-50 disabled:cursor-not-allowed'
                     }`}
                     title={hasSubmitApiConfig ? (maskDraft ? '遮罩编辑 (Ctrl+Enter)' : '生成 (Ctrl+Enter)') : '请先配置 API'}
                   >
@@ -1890,8 +1891,8 @@ export default function InputBar() {
                     onClick={() => !atImageLimit && fileInputRef.current?.click()}
                     className={`p-2.5 rounded-xl transition-all shadow-sm flex-shrink-0 ${
                       atImageLimit
-                        ? 'bg-[#ede8d5] border-2 border-[#c4b89e] text-[#c4b89e] cursor-not-allowed flex-shrink-0'
-                        : 'bg-[rgb(247,243,223)] border-2 border-[#c4b89e] text-[#725d42] hover:border-[#a89878] flex-shrink-0'
+                        ? 'bg-[var(--ai-surface)] border-2 border-[var(--ai-border)] text-[var(--ai-border)] cursor-not-allowed flex-shrink-0'
+                        : 'bg-[var(--ai-card-bg)] border-2 border-[var(--ai-border)] text-[var(--ai-text)] hover:border-[var(--ai-border-hover)] flex-shrink-0'
                     }`}
                     title={atImageLimit ? `已达上限 ${API_MAX_IMAGES} 张` : '添加参考图'}
                   >
@@ -1909,10 +1910,10 @@ export default function InputBar() {
                   <button
                     onClick={() => hasSubmitApiConfig ? submitTask() : setShowSettings(true)}
                     disabled={hasSubmitApiConfig ? !canSubmit : false}
-                    className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm ${
+                    className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl cp-clip-btn text-sm font-medium transition-all shadow-sm ${
                       !hasSubmitApiConfig
-                        ? 'bg-[#ede8d5] border-2 border-[#c4b89e] text-[#725d42] cursor-pointer'
-                        : 'bg-[#19c8b9] border-2 border-[#19c8b9] text-white hover:bg-[#3dd4c6] disabled:bg-[#ede8d5] disabled:border-[#c4b89e] disabled:opacity-50 disabled:cursor-not-allowed'
+                        ? 'bg-[var(--ai-surface)] border-2 border-[var(--ai-border)] text-[var(--ai-text)] cursor-pointer'
+                        : 'bg-[var(--ai-accent)] border-2 border-[var(--ai-accent)] text-white hover:bg-[var(--ai-accent-hover)] disabled:bg-[var(--ai-surface)] disabled:border-[var(--ai-border)] disabled:opacity-50 disabled:cursor-not-allowed'
                     }`}
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

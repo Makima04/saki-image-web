@@ -21,8 +21,8 @@ export function ActualValueBadge({ value, className = '', variant = 'highlight' 
   const [tooltipVisible, setTooltipVisible] = useState(false)
   const touchTimerRef = useRef<number | null>(null)
   const colorClass = variant === 'normal'
-    ? 'bg-[#ede8d5] text-[#8a7b66]'
-    : 'bg-[#fcf3cc] text-yellow-800 '
+    ? 'bg-[var(--ai-surface)] text-[var(--ai-text-muted)]'
+    : 'bg-[rgba(255, 229, 0, 0.15)] text-yellow-800 '
 
   useEffect(() => () => {
     if (touchTimerRef.current != null) window.clearTimeout(touchTimerRef.current)
@@ -89,7 +89,7 @@ export function ParamValue({ task, paramKey, className = '', actualParams }: Par
   }
 
   return (
-    <span className={`${className} bg-[#ede8d5] text-[#8a7b66]`}>
+    <span className={`${className} bg-[var(--ai-surface)] text-[var(--ai-text-muted)]`}>
       {displayValue}
     </span>
   )
@@ -102,19 +102,19 @@ export function DetailParamValue({ task, paramKey, className = '', actualParams 
     if (isAutoResolved) {
       return (
         <span className={`inline-flex items-center gap-1 ${className}`}>
-          <span className="text-[#725d42]">{requestedValue}</span>
-          <span className="text-[#c4b89e]">|</span>
+          <span className="text-[var(--ai-text)]">{requestedValue}</span>
+          <span className="text-[var(--ai-border)]">|</span>
           <ActualValueBadge value={displayValue} variant="normal" className="rounded px-1 py-0.5" />
         </span>
       )
     }
-    return <span className={`text-[#725d42] ${className}`}>{displayValue}</span>
+    return <span className={`text-[var(--ai-text)] ${className}`}>{displayValue}</span>
   }
 
   return (
     <span className={`inline-flex items-center gap-1 ${className}`}>
-      <span className="text-[#725d42]">{requestedValue}</span>
-      <span className="text-[#c4b89e]">|</span>
+      <span className="text-[var(--ai-text)]">{requestedValue}</span>
+      <span className="text-[var(--ai-border)]">|</span>
       <ActualValueBadge value={displayValue} className="rounded px-1 py-0.5" />
     </span>
   )

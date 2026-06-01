@@ -255,13 +255,13 @@ export default function TaskGrid() {
 
   if (!filteredTasks.length) {
     return (
-      <div className="text-center py-20 text-[#9f927d]">
+      <div className="text-center py-20 text-[var(--ai-text-secondary)]">
         {searchQuery || filterFavorite ? (
           <p className="text-sm">没有找到匹配的记录</p>
         ) : (
           <>
             <svg
-              className="w-16 h-16 mx-auto mb-4 text-[#c4b89e]"
+              className="w-16 h-16 mx-auto mb-4 text-[var(--ai-border)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -317,7 +317,7 @@ export default function TaskGrid() {
       </div>
       {selectionBox && (
         <div
-          className="fixed bg-[#19c8b9]/20 border border-[#19c8b9]/50 pointer-events-none z-[30]"
+          className="fixed bg-[var(--ai-accent)]/20 border border-[var(--ai-accent)]/50 pointer-events-none z-[30]"
           style={{
             left: Math.min(selectionBox.startPageX, selectionBox.currentPageX) - window.scrollX,
             top: Math.min(selectionBox.startPageY, selectionBox.currentPageY) - window.scrollY,

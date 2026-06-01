@@ -461,7 +461,7 @@ function LightboxInner({ src, imageId, maskPreviewSrc, onClose, showNav, current
   const zoomPercent = Math.round(s * 100)
 
   const navBtnClass =
-    'absolute top-1/2 -translate-y-1/2 p-2 rounded-full bg-[rgba(121,79,39,0.6)] text-white hover:bg-[rgba(121,79,39,0.8)] transition-all z-10 backdrop-blur-sm'
+    'absolute top-1/2 -translate-y-1/2 p-2 rounded-full bg-[rgba(10, 10, 18, 0.6)] text-white hover:bg-[rgba(10, 10, 18, 0.8)] transition-all z-10 backdrop-blur-sm'
 
   return (
     <div
@@ -472,7 +472,7 @@ function LightboxInner({ src, imageId, maskPreviewSrc, onClose, showNav, current
       onClick={onClick}
       onDoubleClick={onDoubleClick}
     >
-      <div className="absolute inset-0 bg-[rgba(121,79,39,0.3)] animate-fade-in" />
+      <div className="absolute inset-0 bg-[rgba(10, 10, 18, 0.3)] animate-fade-in" />
       <div className="relative animate-zoom-in">
         <div
           className="relative flex items-center justify-center"
@@ -524,14 +524,14 @@ function LightboxInner({ src, imageId, maskPreviewSrc, onClose, showNav, current
       {/* 底部指示器 */}
       {showZoomBadge && isZoomed && zoomPercent !== 100 && (
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none">
-          <span className="px-3 py-1.5 bg-[rgba(121,79,39,0.7)] text-white text-xs rounded-full backdrop-blur-sm transition-opacity duration-500">
+          <span className="px-3 py-1.5 bg-[rgba(10, 10, 18, 0.7)] text-white text-xs rounded-full backdrop-blur-sm transition-opacity duration-500">
             {zoomPercent}%
           </span>
         </div>
       )}
       {showNav && !isZoomed && (
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none">
-          <span className="px-3 py-1.5 bg-[rgba(121,79,39,0.7)] text-white text-xs rounded-full backdrop-blur-sm">
+          <span className="px-3 py-1.5 bg-[rgba(10, 10, 18, 0.7)] text-white text-xs rounded-full backdrop-blur-sm">
             {currentIndex + 1} / {total}
           </span>
         </div>

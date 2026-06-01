@@ -82,13 +82,13 @@ export default function Header() {
 
   return (
     <>
-      <header data-no-drag-select className="safe-area-top fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: 'rgba(248, 248, 240, 0.92)', backdropFilter: 'blur(12px)', borderBottom: '2px solid #c4b89e' }}>
+      <header data-no-drag-select className="safe-area-top fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: 'var(--ai-header-bg)', backdropFilter: 'blur(16px)', borderBottom: '1.5px solid var(--ai-border)' }}>
         <div className="safe-area-x safe-header-inner max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex-1 min-w-0 pr-2">
             <h1 className="inline-flex items-start relative">
               <span
                 className="text-[17px] sm:text-lg font-bold tracking-tight"
-                style={{ color: '#794f27' }}
+                style={{ color: 'var(--ai-text-header)', fontFamily: 'var(--font-ui-display)', letterSpacing: '0.08em' }}
               >
                 小祥绘图
               </span>
@@ -105,9 +105,9 @@ export default function Header() {
                     dismissAllTooltips()
                     handleInstallClick()
                   }}
-                  className="p-2 rounded-xl transition-colors hover:bg-[#d6dff0]"
+                  className="p-2 rounded-lg transition-colors hover:var(--ai-surface)"
                   aria-label="安装为应用"
-                  style={{ color: '#725d42' }}
+                  style={{ color: 'var(--ai-text-secondary)' }}
                 >
                   <svg
                     className="w-5 h-5"
@@ -134,9 +134,9 @@ export default function Header() {
             >
               <button
                 onClick={() => setShowSettings(true)}
-                className="p-2 rounded-xl transition-colors hover:bg-[#d6dff0]"
+                className="p-2 rounded-lg transition-colors hover:bg-[var(--ai-surface)]"
                 aria-label="设置"
-                style={{ color: '#725d42' }}
+                style={{ color: 'var(--ai-text-secondary)' }}
               >
                 <svg
                   className="w-5 h-5"

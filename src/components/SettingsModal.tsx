@@ -995,27 +995,28 @@ export default function SettingsModal() {
   return (
         <div data-no-drag-select className="fixed inset-0 z-[70] flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-[rgba(121,79,39,0.15)] animate-overlay-in"
+        className="absolute inset-0 bg-[var(--ai-overlay)] animate-overlay-in"
         onClick={handleClose}
       />
       <div
         ref={settingsScrollBoundaryRef}
-        className="relative z-10 w-full max-w-3xl rounded-3xl border border-white/50 bg-[rgb(247,243,223)]   animate-modal-in flex h-[85vh] sm:h-[600px] flex-col overflow-hidden"
+        className="ai-card relative z-10 w-full max-w-3xl rounded-3xl border border-white/50 bg-[var(--ai-card-bg)]   animate-modal-in flex h-[85vh] sm:h-[600px] flex-col overflow-hidden"
       >
+        <div className="cp-hud-bl"></div><div className="cp-hud-br"></div>
         {/* Header */}
-        <div className="flex items-center justify-between shrink-0 p-5 border-b border-[#d4c9b4]">
-          <h3 className="text-lg font-bold text-[#794f27] flex items-center gap-2">
-            <svg className="w-5 h-5 text-[#19c8b9]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="flex items-center justify-between shrink-0 p-5 border-b border-[var(--ai-shadow-input)]">
+          <h3 className="text-lg font-bold text-[var(--ai-text-header)] flex items-center gap-2">
+            <svg className="w-5 h-5 text-[var(--ai-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
             设置
           </h3>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-[#9f927d] font-mono select-none">v{__APP_VERSION__}</span>
+            <span className="text-sm text-[var(--ai-text-secondary)] font-mono select-none">v{__APP_VERSION__}</span>
             <button
               onClick={handleClose}
-              className="rounded-full p-1 text-[#9f927d] transition hover:bg-[#ede8d5] hover:text-[#725d42]  "
+              className="rounded-full p-1 text-[var(--ai-text-secondary)] transition hover:bg-[var(--ai-surface)] hover:text-[var(--ai-text)]  "
               aria-label="关闭"
             >
               <CloseIcon className="h-5 w-5" />
@@ -1025,11 +1026,11 @@ export default function SettingsModal() {
 
         <div className="flex flex-1 min-h-0 flex-col sm:flex-row">
           {/* Sidebar */}
-          <div className="w-full sm:w-48 shrink-0 flex flex-col border-b sm:border-b-0 sm:border-r border-[#d4c9b4] bg-[rgb(247,243,223)]/50 ">
+          <div className="w-full sm:w-48 shrink-0 flex flex-col border-b sm:border-b-0 sm:border-r border-[var(--ai-shadow-input)] bg-[var(--ai-card-bg)]/50 ">
             <nav className="flex-1 overflow-x-auto sm:overflow-y-auto custom-scrollbar p-3 space-x-1 sm:space-x-0 sm:space-y-1 flex sm:flex-col">
               <button
                 onClick={() => setActiveTab('general')}
-                className={`whitespace-nowrap flex-shrink-0 flex items-center gap-2.5 px-3 py-2.5 text-sm rounded-xl transition-colors ${activeTab === 'general' ? 'bg-white  text-[#19c8b9] font-medium' : 'text-[#725d42] hover:bg-[#ede8d5]/80 '}`}
+                className={`whitespace-nowrap flex-shrink-0 flex items-center gap-2.5 px-3 py-2.5 text-sm rounded-xl transition-colors ${activeTab === 'general' ? 'bg-[var(--ai-card-bg)]  text-[var(--ai-accent)] font-medium' : 'text-[var(--ai-text)] hover:bg-[var(--ai-surface)]/80 '}`}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
@@ -1038,7 +1039,7 @@ export default function SettingsModal() {
               </button>
               <button
                 onClick={() => setActiveTab('api')}
-                className={`whitespace-nowrap flex-shrink-0 flex items-center gap-2.5 px-3 py-2.5 text-sm rounded-xl transition-colors ${activeTab === 'api' ? 'bg-white  text-[#19c8b9] font-medium' : 'text-[#725d42] hover:bg-[#ede8d5]/80 '}`}
+                className={`whitespace-nowrap flex-shrink-0 flex items-center gap-2.5 px-3 py-2.5 text-sm rounded-xl transition-colors ${activeTab === 'api' ? 'bg-[var(--ai-card-bg)]  text-[var(--ai-accent)] font-medium' : 'text-[var(--ai-text)] hover:bg-[var(--ai-surface)]/80 '}`}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
@@ -1047,7 +1048,7 @@ export default function SettingsModal() {
               </button>
               <button
                 onClick={() => setActiveTab('data')}
-                className={`whitespace-nowrap flex-shrink-0 flex items-center gap-2.5 px-3 py-2.5 text-sm rounded-xl transition-colors ${activeTab === 'data' ? 'bg-white  text-[#19c8b9] font-medium' : 'text-[#725d42] hover:bg-[#ede8d5]/80 '}`}
+                className={`whitespace-nowrap flex-shrink-0 flex items-center gap-2.5 px-3 py-2.5 text-sm rounded-xl transition-colors ${activeTab === 'data' ? 'bg-[var(--ai-card-bg)]  text-[var(--ai-accent)] font-medium' : 'text-[var(--ai-text)] hover:bg-[var(--ai-surface)]/80 '}`}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
@@ -1064,7 +1065,7 @@ export default function SettingsModal() {
               <div className="space-y-4">
                 <div className="hidden sm:block">
                   <div className="mb-1 flex items-center justify-between">
-                    <span className="block text-sm text-[#725d42]">任务提交方式</span>
+                    <span className="block text-sm text-[var(--ai-text)]">任务提交方式</span>
                     <div className="w-32">
                       <Select
                         value={draft.enterSubmit ? 'enter' : 'ctrl-enter'}
@@ -1073,83 +1074,83 @@ export default function SettingsModal() {
                           { label: 'Enter', value: 'enter' },
                           { label: navigator.userAgent.includes('Mac') ? 'Cmd + Enter' : 'Ctrl + Enter', value: 'ctrl-enter' }
                         ]}
-                        className="w-full px-3 py-1.5 rounded-xl border border-[#c4b89e]/60 bg-[rgb(247,243,223)] hover:bg-white  text-xs transition-all duration-200  text-[#725d42] outline-none"
+                        className="w-full px-3 py-1.5 rounded-xl border border-[var(--ai-border)]/60 bg-[var(--ai-card-bg)] hover:bg-[var(--ai-card-bg)]  text-xs transition-all duration-200  text-[var(--ai-text)] outline-none"
                       />
                     </div>
                   </div>
-                  <div data-selectable-text className="text-xs text-[#8a7b66]">
+                  <div data-selectable-text className="text-xs text-[var(--ai-text-muted)]">
                     选择 Enter 提交时，使用 Shift + Enter 换行；否则直接 Enter 换行。
                   </div>
                 </div>
                 <div className="block">
                   <div className="mb-1 flex items-center justify-between">
-                    <span className="block text-sm text-[#725d42]">提交任务后清空输入框</span>
+                    <span className="block text-sm text-[var(--ai-text)]">提交任务后清空输入框</span>
                     <button
                       type="button"
                       onClick={() => commitSettings({ ...draft, clearInputAfterSubmit: !draft.clearInputAfterSubmit })}
-                      className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${draft.clearInputAfterSubmit ? 'bg-[#e6f9f6]0' : 'bg-[#c4b89e] bg-[#d4c9b4]'}`}
+                      className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${draft.clearInputAfterSubmit ? 'bg-[var(--ai-accent-dim)]0' : 'bg-[var(--ai-border)] bg-[var(--ai-shadow-input)]'}`}
                       role="switch"
                       aria-checked={draft.clearInputAfterSubmit}
                       aria-label="提交任务后清空输入框"
                     >
-                      <span className={`inline-block h-3 w-3 transform rounded-full bg-white shadow transition-transform ${draft.clearInputAfterSubmit ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
+                      <span className={`inline-block h-3 w-3 transform rounded-full bg-[var(--ai-card-bg)] shadow transition-transform ${draft.clearInputAfterSubmit ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
                     </button>
                   </div>
-                  <div data-selectable-text className="text-xs text-[#8a7b66]">
+                  <div data-selectable-text className="text-xs text-[var(--ai-text-muted)]">
                     开启后，提交成功创建任务时会清空提示词和参考图。
                   </div>
                 </div>
                 <div className="block">
                   <div className="mb-1 flex items-center justify-between">
-                    <span className="block text-sm text-[#725d42]">重启后加载上次的输入框</span>
+                    <span className="block text-sm text-[var(--ai-text)]">重启后加载上次的输入框</span>
                     <button
                       type="button"
                       onClick={() => commitSettings({ ...draft, persistInputOnRestart: !draft.persistInputOnRestart })}
-                      className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${draft.persistInputOnRestart ? 'bg-[#e6f9f6]0' : 'bg-[#c4b89e] bg-[#d4c9b4]'}`}
+                      className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${draft.persistInputOnRestart ? 'bg-[var(--ai-accent-dim)]0' : 'bg-[var(--ai-border)] bg-[var(--ai-shadow-input)]'}`}
                       role="switch"
                       aria-checked={draft.persistInputOnRestart}
                       aria-label="重启后加载上次的输入框"
                     >
-                      <span className={`inline-block h-3 w-3 transform rounded-full bg-white shadow transition-transform ${draft.persistInputOnRestart ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
+                      <span className={`inline-block h-3 w-3 transform rounded-full bg-[var(--ai-card-bg)] shadow transition-transform ${draft.persistInputOnRestart ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
                     </button>
                   </div>
-                  <div data-selectable-text className="text-xs text-[#8a7b66]">
+                  <div data-selectable-text className="text-xs text-[var(--ai-text-muted)]">
                     关闭后，不再持久化提示词和参考图，下次启动会使用空输入框。
                   </div>
                 </div>
                 <div className="block">
                   <div className="mb-1 flex items-center justify-between">
-                    <span className="block text-sm text-[#725d42]">复用配置时临时复用该任务的 API 配置</span>
+                    <span className="block text-sm text-[var(--ai-text)]">复用配置时临时复用该任务的 API 配置</span>
                     <button
                       type="button"
                       onClick={() => commitSettings({ ...draft, reuseTaskApiProfileTemporarily: !draft.reuseTaskApiProfileTemporarily })}
-                      className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${draft.reuseTaskApiProfileTemporarily ? 'bg-[#e6f9f6]0' : 'bg-[#c4b89e] bg-[#d4c9b4]'}`}
+                      className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${draft.reuseTaskApiProfileTemporarily ? 'bg-[var(--ai-accent-dim)]0' : 'bg-[var(--ai-border)] bg-[var(--ai-shadow-input)]'}`}
                       role="switch"
                       aria-checked={draft.reuseTaskApiProfileTemporarily}
                       aria-label="复用配置时临时复用该任务的 API 配置"
                     >
-                      <span className={`inline-block h-3 w-3 transform rounded-full bg-white shadow transition-transform ${draft.reuseTaskApiProfileTemporarily ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
+                      <span className={`inline-block h-3 w-3 transform rounded-full bg-[var(--ai-card-bg)] shadow transition-transform ${draft.reuseTaskApiProfileTemporarily ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
                     </button>
                   </div>
-                  <div data-selectable-text className="text-xs text-[#8a7b66]">
+                  <div data-selectable-text className="text-xs text-[var(--ai-text-muted)]">
                     开启后，复用历史任务时会临时使用该任务的 API 配置，找不到该配置时提交会提示；关闭后，会继续使用当前的 API 配置。
                   </div>
                 </div>
                 <div className="block">
                   <div className="mb-1 flex items-center justify-between">
-                    <span className="block text-sm text-[#725d42]">成功任务仍然展示重试按钮</span>
+                    <span className="block text-sm text-[var(--ai-text)]">成功任务仍然展示重试按钮</span>
                     <button
                       type="button"
                       onClick={() => commitSettings({ ...draft, alwaysShowRetryButton: !draft.alwaysShowRetryButton })}
-                      className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${draft.alwaysShowRetryButton ? 'bg-[#e6f9f6]0' : 'bg-[#c4b89e] bg-[#d4c9b4]'}`}
+                      className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${draft.alwaysShowRetryButton ? 'bg-[var(--ai-accent-dim)]0' : 'bg-[var(--ai-border)] bg-[var(--ai-shadow-input)]'}`}
                       role="switch"
                       aria-checked={draft.alwaysShowRetryButton}
                       aria-label="成功任务仍然展示重试按钮"
                     >
-                      <span className={`inline-block h-3 w-3 transform rounded-full bg-white shadow transition-transform ${draft.alwaysShowRetryButton ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
+                      <span className={`inline-block h-3 w-3 transform rounded-full bg-[var(--ai-card-bg)] shadow transition-transform ${draft.alwaysShowRetryButton ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
                     </button>
                   </div>
-                  <div data-selectable-text className="text-xs text-[#8a7b66]">
+                  <div data-selectable-text className="text-xs text-[var(--ai-text-muted)]">
                     开启后，即使任务成功生成，也会在任务卡片和详情页显示重试按钮。
                   </div>
                 </div>
@@ -1160,7 +1161,7 @@ export default function SettingsModal() {
               <div className="space-y-4">
                 <div>
                   <div className="mb-1.5 flex items-center gap-1.5">
-                    <span className="block text-sm text-[#725d42]">当前配置</span>
+                    <span className="block text-sm text-[var(--ai-text)]">当前配置</span>
                     <span className="relative inline-flex">
                       <button
                         type="button"
@@ -1178,7 +1179,7 @@ export default function SettingsModal() {
                         }}
                         onTouchEnd={clearProfileImportUrlTooltipTimer}
                         onTouchCancel={clearProfileImportUrlTooltipTimer}
-                        className="flex h-5 w-5 items-center justify-center rounded-md text-[#9f927d] transition hover:bg-[#ede8d5] hover:text-[#725d42] "
+                        className="flex h-5 w-5 items-center justify-center rounded-md text-[var(--ai-text-secondary)] transition hover:bg-[var(--ai-surface)] hover:text-[var(--ai-text)] "
                         aria-label={`复制导入配置「${activeProfile.name}」的 URL`}
                       >
                         <LinkIcon className="h-3.5 w-3.5" />
@@ -1204,7 +1205,7 @@ export default function SettingsModal() {
                         }}
                         onTouchEnd={clearDuplicateProfileTooltipTimer}
                         onTouchCancel={clearDuplicateProfileTooltipTimer}
-                        className="flex h-5 w-5 items-center justify-center rounded-md text-[#9f927d] transition hover:bg-[#ede8d5] hover:text-[#725d42] "
+                        className="flex h-5 w-5 items-center justify-center rounded-md text-[var(--ai-text-secondary)] transition hover:bg-[var(--ai-surface)] hover:text-[var(--ai-text)] "
                         aria-label={`复制一份配置「${activeProfile.name}」`}
                       >
                         <CopyIcon className="h-3.5 w-3.5" />
@@ -1222,22 +1223,22 @@ export default function SettingsModal() {
                         if (!showProfileMenu) updateProfileMenuMaxHeight()
                         setShowProfileMenu(!showProfileMenu)
                       }}
-                      className="flex w-full min-w-0 items-center justify-between gap-2 rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2 text-sm text-[#725d42] outline-none transition hover:bg-[#ede8d5] "
+                      className="flex w-full min-w-0 items-center justify-between gap-2 rounded-xl border border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-3 py-2 text-sm text-[var(--ai-text)] outline-none transition hover:bg-[var(--ai-surface)] "
                       title={activeProfile.name}
                     >
                       <span className="flex min-w-0 items-center gap-2">
                         <span className="min-w-0 truncate">{activeProfile.name}</span>
-                        <span className="shrink-0 rounded bg-[#e6f9f6] px-1.5 py-0.5 text-[10px] font-medium text-[#11a89b]">
+                        <span className="shrink-0 rounded bg-[var(--ai-accent-dim)] px-1.5 py-0.5 text-[10px] font-medium text-[var(--ai-accent-active)]">
                           {getApiProviderLabel(draft, activeProfile.provider)}
                         </span>
                       </span>
-                      <ChevronDownIcon className={`w-3.5 h-3.5 flex-shrink-0 text-[#9f927d] transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : ''}`} />
+                      <ChevronDownIcon className={`w-3.5 h-3.5 flex-shrink-0 text-[var(--ai-text-secondary)] transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : ''}`} />
                     </button>
                     
                     {showProfileMenu && (
                       <>
                         <div
-                          className="absolute right-0 top-full z-50 mt-1.5 w-full overflow-hidden overflow-y-auto rounded-xl border border-[#c4b89e]/60 bg-[rgb(247,243,223)] py-1 shadow-[0_4px_10px_rgba(107,92,67,0.15)]  backdrop-blur-xl animate-dropdown-down custom-scrollbar"
+                          className="absolute right-0 top-full z-50 mt-1.5 w-full overflow-hidden overflow-y-auto rounded-xl border border-[var(--ai-border)]/60 bg-[var(--ai-card-bg)] py-1 shadow-[0_4px_10px_var(--ai-card-shadow)]  backdrop-blur-xl animate-dropdown-down custom-scrollbar"
                           style={{ maxHeight: profileMenuMaxHeight }}
                         >
                           <button
@@ -1246,7 +1247,7 @@ export default function SettingsModal() {
                               e.preventDefault()
                               createNewProfile()
                             }}
-                            className="flex w-full cursor-pointer items-center justify-between gap-2 px-3 py-2 text-left text-xs font-medium text-[#19c8b9] transition-colors hover:bg-[#e6f9f6] "
+                            className="flex w-full cursor-pointer items-center justify-between gap-2 px-3 py-2 text-left text-xs font-medium text-[var(--ai-accent)] transition-colors hover:bg-[var(--ai-accent-dim)] "
                           >
                             <span className="truncate font-semibold">创建新配置</span>
                             <span className="flex h-5 w-5 shrink-0 items-center justify-center">
@@ -1274,25 +1275,25 @@ export default function SettingsModal() {
                                   e.preventDefault()
                                   switchProfile(profile.id)
                                 }}
-                                className={`relative group flex w-full cursor-pointer items-center justify-between px-3 py-2 text-left text-xs transition-colors ${draggedProfileId === profile.id ? 'opacity-40 bg-[#ede8d5]' : profile.id === activeProfile.id ? 'bg-[#e6f9f6] font-medium text-[#11a89b]' : 'text-[#725d42] hover:bg-[#ede8d5] '}`}
+                                className={`relative group flex w-full cursor-pointer items-center justify-between px-3 py-2 text-left text-xs transition-colors ${draggedProfileId === profile.id ? 'opacity-40 bg-[var(--ai-surface)]' : profile.id === activeProfile.id ? 'bg-[var(--ai-accent-dim)] font-medium text-[var(--ai-accent-active)]' : 'text-[var(--ai-text)] hover:bg-[var(--ai-surface)] '}`}
                               >
                                 {dragOverProfileId === profile.id && dragDropPosition === 'before' && draggedProfileId !== profile.id && (
-                                  <div className="absolute -top-[1px] left-0 right-0 h-[2px] bg-[#e6f9f6]0 rounded-full z-40  pointer-events-none" />
+                                  <div className="absolute -top-[1px] left-0 right-0 h-[2px] bg-[var(--ai-accent-dim)]0 rounded-full z-40  pointer-events-none" />
                                 )}
                                 {dragOverProfileId === profile.id && dragDropPosition === 'after' && draggedProfileId !== profile.id && (
-                                  <div className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-[#e6f9f6]0 rounded-full z-40  pointer-events-none" />
+                                  <div className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-[var(--ai-accent-dim)]0 rounded-full z-40  pointer-events-none" />
                                 )}
                                 <div className="flex min-w-0 flex-1 items-center gap-2 pr-2">
                                   <div
                                     data-drag-handle
-                                    className="flex cursor-grab active:cursor-grabbing items-center justify-center text-[#9f927d] opacity-60 transition-opacity hover:opacity-100"
+                                    className="flex cursor-grab active:cursor-grabbing items-center justify-center text-[var(--ai-text-secondary)] opacity-60 transition-opacity hover:opacity-100"
                                     style={{ touchAction: 'none' }}
                                     title="拖拽排序"
                                   >
                                     <DragHandleIcon className="h-3.5 w-3.5" />
                                   </div>
                                   <span className="min-w-0 truncate">{profile.name}</span>
-                                  <span className={`rounded px-1.5 py-0.5 text-[10px] shrink-0 ${profile.id === activeProfile.id ? 'bg-[#c8f0eb] text-[#0d8f84] ' : 'bg-[#ede8d5] text-[#8a7b66]'}`}>
+                                  <span className={`rounded px-1.5 py-0.5 text-[10px] shrink-0 ${profile.id === activeProfile.id ? 'bg-[var(--ai-accent-dim)] text-[var(--ai-accent-active)] ' : 'bg-[var(--ai-surface)] text-[var(--ai-text-muted)]'}`}>
                                     {getApiProviderLabel(draft, profile.provider)}
                                   </span>
                                 </div>
@@ -1305,7 +1306,7 @@ export default function SettingsModal() {
                                       e.stopPropagation()
                                       confirmCopyProfileImportUrl(profile)
                                     }}
-                                    className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-[#9f927d] opacity-60 transition-all hover:bg-[#ede8d5] hover:text-[#725d42] hover:opacity-100 "
+                                    className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-[var(--ai-text-secondary)] opacity-60 transition-all hover:bg-[var(--ai-surface)] hover:text-[var(--ai-text)] hover:opacity-100 "
                                     aria-label={`复制导入配置「${profile.name}」的 URL`}
                                     title="复制导入 URL"
                                   >
@@ -1323,7 +1324,7 @@ export default function SettingsModal() {
                                           action: () => deleteProfile(profile.id)
                                         })
                                       }}
-                                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-[#9f927d] opacity-60 transition-all hover:bg-[#fdf0f0] hover:text-[#e05a5a] hover:opacity-100 "
+                                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-[var(--ai-text-secondary)] opacity-60 transition-all hover:bg-[var(--ai-danger-bg)] hover:text-[var(--ai-error)] hover:opacity-100 "
                                       aria-label="删除配置"
                                     >
                                       <TrashIcon className="h-3.5 w-3.5" />
@@ -1340,31 +1341,31 @@ export default function SettingsModal() {
                 </div>
 
               <label className="block">
-                <span className="mb-1.5 block text-sm text-[#725d42]">配置名称</span>
+                <span className="mb-1.5 block text-sm text-[var(--ai-text)]">配置名称</span>
                 <input
                   value={activeProfile.name}
                   onChange={(e) => updateActiveProfile({ name: e.target.value })}
                   onBlur={(e) => commitActiveProfilePatch({ name: e.target.value })}
                   type="text"
-                  className="w-full rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2.5 text-sm text-[#725d42] outline-none transition focus:border-[#3dd4c6] "
+                  className="w-full rounded-xl border border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-3 py-2.5 text-sm text-[var(--ai-text)] outline-none transition focus:border-[var(--ai-accent-hover)] "
                 />
               </label>
 
               <div className="block">
-                <span className="mb-1.5 block text-sm text-[#725d42]">服务商类型</span>
+                <span className="mb-1.5 block text-sm text-[var(--ai-text)]">服务商类型</span>
                 <Select
                   value={activeProfile.provider}
                   onChange={handleProviderTypeChange}
                   onReorder={handleProviderReorder}
                   options={providerOptions}
-                  className="w-full rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2.5 text-sm text-[#725d42] outline-none transition focus:border-[#3dd4c6] "
+                  className="w-full rounded-xl border border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-3 py-2.5 text-sm text-[var(--ai-text)] outline-none transition focus:border-[var(--ai-accent-hover)] "
                 />
               </div>
 
               {activeProviderUsesApiUrl && (
                 <label className="block">
                   <div className="mb-1.5 flex items-center justify-between">
-                    <span className="block text-sm text-[#725d42]">API URL</span>
+                    <span className="block text-sm text-[var(--ai-text)]">API URL</span>
                   </div>
                   <input
                     value={activeProfile.baseUrl}
@@ -1372,10 +1373,10 @@ export default function SettingsModal() {
                     onBlur={(e) => commitActiveProfilePatch({ baseUrl: e.target.value })}
                     type="text"
                     placeholder={DEFAULT_SETTINGS.baseUrl}
-                    className="w-full rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2.5 text-sm text-[#725d42] outline-none transition focus:border-[#3dd4c6] "
+                    className="w-full rounded-xl border border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-3 py-2.5 text-sm text-[var(--ai-text)] outline-none transition focus:border-[var(--ai-accent-hover)] "
                   />
-                  <div data-selectable-text className="mt-1.5 min-h-[22px] flex items-center text-xs text-[#8a7b66]">
-                    <span>支持通过查询参数覆盖：<code className="bg-[#ede8d5] px-1 py-0.5 rounded">?apiUrl=</code></span>
+                  <div data-selectable-text className="mt-1.5 min-h-[22px] flex items-center text-xs text-[var(--ai-text-muted)]">
+                    <span>支持通过查询参数覆盖：<code className="bg-[var(--ai-surface)] px-1 py-0.5 rounded">?apiUrl=</code></span>
                   </div>
                 </label>
               )}
@@ -1383,26 +1384,26 @@ export default function SettingsModal() {
               {activeProviderIsOpenAICompatible && (
                 <div className="block">
                   <div className="mb-1.5 flex items-center justify-between">
-                    <span className="block text-sm text-[#725d42]">Codex CLI 兼容模式</span>
+                    <span className="block text-sm text-[var(--ai-text)]">Codex CLI 兼容模式</span>
                     <button
                       type="button"
                       onClick={() => updateActiveProfile({ codexCli: !activeProfile.codexCli }, true)}
-                      className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${activeProfile.codexCli ? 'bg-[#e6f9f6]0' : 'bg-[#c4b89e] bg-[#d4c9b4]'}`}
+                      className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${activeProfile.codexCli ? 'bg-[var(--ai-accent-dim)]0' : 'bg-[var(--ai-border)] bg-[var(--ai-shadow-input)]'}`}
                       role="switch"
                       aria-checked={activeProfile.codexCli}
                       aria-label="Codex CLI 兼容模式"
                     >
-                      <span className={`inline-block h-3 w-3 transform rounded-full bg-white shadow transition-transform ${activeProfile.codexCli ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
+                      <span className={`inline-block h-3 w-3 transform rounded-full bg-[var(--ai-card-bg)] shadow transition-transform ${activeProfile.codexCli ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
                     </button>
                   </div>
-                  <div data-selectable-text className="text-xs text-[#8a7b66]">
-                    开启后应用 Codex CLI 实际支持的参数。支持查询参数覆盖：<code className="bg-[#ede8d5] px-1 py-0.5 rounded">codexCli=true</code>。
+                  <div data-selectable-text className="text-xs text-[var(--ai-text-muted)]">
+                    开启后应用 Codex CLI 实际支持的参数。支持查询参数覆盖：<code className="bg-[var(--ai-surface)] px-1 py-0.5 rounded">codexCli=true</code>。
                   </div>
                 </div>
               )}
 
               <div className="block">
-                <span className="mb-1.5 block text-sm text-[#725d42]">API Key</span>
+                <span className="mb-1.5 block text-sm text-[var(--ai-text)]">API Key</span>
                 <div className="relative">
                   <input
                     value={activeProfile.apiKey}
@@ -1410,12 +1411,12 @@ export default function SettingsModal() {
                     onBlur={(e) => commitActiveProfilePatch({ apiKey: e.target.value })}
                     type={showApiKey ? 'text' : 'password'}
                     placeholder={'sk-...'}
-                    className="w-full rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2.5 pr-10 text-sm text-[#725d42] outline-none transition focus:border-[#3dd4c6] "
+                    className="w-full rounded-xl border border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-3 py-2.5 pr-10 text-sm text-[var(--ai-text)] outline-none transition focus:border-[var(--ai-accent-hover)] "
                   />
                   <button
                     type="button"
                     onClick={() => setShowApiKey((v) => !v)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[#9f927d] hover:text-[#725d42] transition-colors"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--ai-text-secondary)] hover:text-[var(--ai-text)] transition-colors"
                     tabIndex={-1}
                   >
                     {showApiKey ? (
@@ -1433,14 +1434,14 @@ export default function SettingsModal() {
                     )}
                   </button>
                 </div>
-                <div data-selectable-text className="mt-1.5 text-xs text-[#8a7b66]">
-                  支持通过查询参数覆盖：<code className="bg-[#ede8d5] px-1 py-0.5 rounded">?apiKey=</code>
+                <div data-selectable-text className="mt-1.5 text-xs text-[var(--ai-text-muted)]">
+                  支持通过查询参数覆盖：<code className="bg-[var(--ai-surface)] px-1 py-0.5 rounded">?apiKey=</code>
                 </div>
               </div>
 
               {activeProviderIsOpenAICompatible && (
                 <div className="block">
-                  <span className="mb-1.5 block text-sm text-[#725d42]">API 接口</span>
+                  <span className="mb-1.5 block text-sm text-[var(--ai-text)]">API 接口</span>
                   <Select
                     value={activeProfile.apiMode ?? DEFAULT_SETTINGS.apiMode}
                     onChange={(value) => {
@@ -1455,16 +1456,16 @@ export default function SettingsModal() {
                       { label: 'Images API (/v1/images)', value: 'images' },
                       { label: 'Responses API (/v1/responses)', value: 'responses' },
                     ]}
-                    className="w-full rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2.5 text-sm text-[#725d42] outline-none transition focus:border-[#3dd4c6] "
+                    className="w-full rounded-xl border border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-3 py-2.5 text-sm text-[var(--ai-text)] outline-none transition focus:border-[var(--ai-accent-hover)] "
                   />
-                  <div data-selectable-text className="mt-1.5 text-xs text-[#8a7b66]">
-                    支持通过查询参数覆盖：<code className="rounded bg-[#ede8d5] px-1 py-0.5">apiMode=images</code> 或 <code className="rounded bg-[#ede8d5] px-1 py-0.5">apiMode=responses</code>。
+                  <div data-selectable-text className="mt-1.5 text-xs text-[var(--ai-text-muted)]">
+                    支持通过查询参数覆盖：<code className="rounded bg-[var(--ai-surface)] px-1 py-0.5">apiMode=images</code> 或 <code className="rounded bg-[var(--ai-surface)] px-1 py-0.5">apiMode=responses</code>。
                   </div>
                 </div>
               )}
 
               <label className="block">
-                <span className="mb-1.5 block text-sm text-[#725d42]">
+                <span className="mb-1.5 block text-sm text-[var(--ai-text)]">
                   模型 ID
                 </span>
                 <input
@@ -1473,18 +1474,18 @@ export default function SettingsModal() {
                   onBlur={(e) => commitActiveProfilePatch({ model: e.target.value })}
                   type="text"
                   placeholder={getDefaultModelForMode(activeProfile.apiMode ?? DEFAULT_SETTINGS.apiMode)}
-                  className="w-full rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2.5 text-sm text-[#725d42] outline-none transition focus:border-[#3dd4c6] "
+                  className="w-full rounded-xl border border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-3 py-2.5 text-sm text-[var(--ai-text)] outline-none transition focus:border-[var(--ai-accent-hover)] "
                 />
-                <div data-selectable-text className="mt-1.5 text-xs text-[#8a7b66]">
+                <div data-selectable-text className="mt-1.5 text-xs text-[var(--ai-text-muted)]">
                   {activeCustomProvider ? (
-                    <>当前使用 <code className="rounded bg-[#ede8d5] px-1 py-0.5">{activeCustomProvider.name}</code>。</>
+                    <>当前使用 <code className="rounded bg-[var(--ai-surface)] px-1 py-0.5">{activeCustomProvider.name}</code>。</>
                   ) : (activeProfile.apiMode ?? DEFAULT_SETTINGS.apiMode) === 'responses' ? (
-                    <>Responses API 需要使用支持 <code className="rounded bg-[#ede8d5] px-1 py-0.5">image_generation</code> 工具的文本模型，例如 <code className="rounded bg-[#ede8d5] px-1 py-0.5">{DEFAULT_RESPONSES_MODEL}</code>。</>
+                    <>Responses API 需要使用支持 <code className="rounded bg-[var(--ai-surface)] px-1 py-0.5">image_generation</code> 工具的文本模型，例如 <code className="rounded bg-[var(--ai-surface)] px-1 py-0.5">{DEFAULT_RESPONSES_MODEL}</code>。</>
                   ) : (
-                    <>Images API 需要使用 GPT Image 模型，例如 <code className="rounded bg-[#ede8d5] px-1 py-0.5">{DEFAULT_IMAGES_MODEL}</code>。</>
+                    <>Images API 需要使用 GPT Image 模型，例如 <code className="rounded bg-[var(--ai-surface)] px-1 py-0.5">{DEFAULT_IMAGES_MODEL}</code>。</>
                   )}
                   {activeProviderIsOpenAICompatible && (
-                    <>支持通过查询参数覆盖：<code className="rounded bg-[#ede8d5] px-1 py-0.5">?model=</code>。</>
+                    <>支持通过查询参数覆盖：<code className="rounded bg-[var(--ai-surface)] px-1 py-0.5">?model=</code>。</>
                   )}
                 </div>
               </label>
@@ -1492,27 +1493,27 @@ export default function SettingsModal() {
               {activeProviderIsOpenAICompatible && (
                 <div className="block">
                   <div className="mb-1.5 flex items-center justify-between">
-                    <span className="block text-sm text-[#725d42]">返回 Base64 图片数据</span>
+                    <span className="block text-sm text-[var(--ai-text)]">返回 Base64 图片数据</span>
                     <button
                       type="button"
                       onClick={() => updateActiveProfile({ responseFormatB64Json: !activeProfile.responseFormatB64Json }, true)}
-                      className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${activeProfile.responseFormatB64Json ? 'bg-[#e6f9f6]0' : 'bg-[#c4b89e] bg-[#d4c9b4]'}`}
+                      className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${activeProfile.responseFormatB64Json ? 'bg-[var(--ai-accent-dim)]0' : 'bg-[var(--ai-border)] bg-[var(--ai-shadow-input)]'}`}
                       role="switch"
                       aria-checked={!!activeProfile.responseFormatB64Json}
                       aria-label="返回 Base64 图片数据"
                     >
-                      <span className={`inline-block h-3 w-3 transform rounded-full bg-white shadow transition-transform ${activeProfile.responseFormatB64Json ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
+                      <span className={`inline-block h-3 w-3 transform rounded-full bg-[var(--ai-card-bg)] shadow transition-transform ${activeProfile.responseFormatB64Json ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
                     </button>
                   </div>
-                  <div data-selectable-text className="text-xs text-[#8a7b66]">
-                    开启后在请求体中追加 <code className="bg-[#ede8d5] px-1 py-0.5 rounded">response_format: b64_json</code>，尝试使接口直接返回 Base64 编码的图片数据而非 URL。
+                  <div data-selectable-text className="text-xs text-[var(--ai-text-muted)]">
+                    开启后在请求体中追加 <code className="bg-[var(--ai-surface)] px-1 py-0.5 rounded">response_format: b64_json</code>，尝试使接口直接返回 Base64 编码的图片数据而非 URL。
                   </div>
                 </div>
               )}
 
               {activeProviderIsOpenAICompatible && (
                 <label className="block">
-                  <span className="mb-1.5 block text-sm text-[#725d42]">请求超时 (秒)</span>
+                  <span className="mb-1.5 block text-sm text-[var(--ai-text)]">请求超时 (秒)</span>
                   <input
                     value={timeoutInput}
                     onChange={(e) => setTimeoutInput(e.target.value)}
@@ -1520,21 +1521,21 @@ export default function SettingsModal() {
                     type="number"
                     min={10}
                     max={600}
-                    className="w-full rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2.5 text-sm text-[#725d42] outline-none transition focus:border-[#3dd4c6] "
+                    className="w-full rounded-xl border border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-3 py-2.5 text-sm text-[var(--ai-text)] outline-none transition focus:border-[var(--ai-accent-hover)] "
                   />
                 </label>
               )}
 
               <div className="block">
                 <div className="mb-1.5 flex items-center gap-2">
-                  <span className="text-sm text-[#725d42]">自定义请求头</span>
+                  <span className="text-sm text-[var(--ai-text)]">自定义请求头</span>
                   <button
                     type="button"
                     onClick={() => {
                       const next = { ...(activeProfile.customHeaders ?? {}), '': '' }
                       updateActiveProfile({ customHeaders: next })
                     }}
-                    className="text-xs text-[#19c8b9] hover:text-[#15b5a7] transition-colors"
+                    className="text-xs text-[var(--ai-accent)] hover:text-[#15b5a7] transition-colors"
                     title="添加请求头"
                   >
                     + 添加
@@ -1556,7 +1557,7 @@ export default function SettingsModal() {
                           onBlur={() => commitActiveProfilePatch({ customHeaders: activeProfile.customHeaders })}
                           type="text"
                           placeholder="Header 名称"
-                          className="flex-1 rounded-lg border border-[#c4b89e] bg-[rgb(247,243,223)] px-2.5 py-2 text-xs text-[#725d42] outline-none transition focus:border-[#3dd4c6]"
+                          className="flex-1 rounded-lg border border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-2.5 py-2 text-xs text-[var(--ai-text)] outline-none transition focus:border-[var(--ai-accent-hover)]"
                         />
                         <input
                           value={value}
@@ -1567,7 +1568,7 @@ export default function SettingsModal() {
                           onBlur={() => commitActiveProfilePatch({ customHeaders: activeProfile.customHeaders })}
                           type="text"
                           placeholder="值"
-                          className="flex-1 rounded-lg border border-[#c4b89e] bg-[rgb(247,243,223)] px-2.5 py-2 text-xs text-[#725d42] outline-none transition focus:border-[#3dd4c6]"
+                          className="flex-1 rounded-lg border border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-2.5 py-2 text-xs text-[var(--ai-text)] outline-none transition focus:border-[var(--ai-accent-hover)]"
                         />
                         <button
                           type="button"
@@ -1587,7 +1588,7 @@ export default function SettingsModal() {
                     ))}
                   </div>
                 )}
-                <div className="mt-1.5 text-xs text-[#8a7b66]">
+                <div className="mt-1.5 text-xs text-[var(--ai-text-muted)]">
                   自定义请求头将覆盖同名浏览器默认头，可用于伪装 User-Agent 等。
                 </div>
               </div>
@@ -1596,19 +1597,19 @@ export default function SettingsModal() {
             
             {activeTab === 'data' && (
               <div className="space-y-4">
-                <div className="rounded-2xl bg-[rgb(247,243,223)]/80 p-4 border border-[#c4b89e]/60   flex items-start gap-3">
-                  <svg className="w-5 h-5 text-[#19c8b9] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="rounded-2xl bg-[var(--ai-card-bg)]/80 p-4 border border-[var(--ai-border)]/60   flex items-start gap-3">
+                  <svg className="w-5 h-5 text-[var(--ai-accent)] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
-                  <div className="text-[13px] leading-relaxed text-[#8a7b66]">
+                  <div className="text-[13px] leading-relaxed text-[var(--ai-text-muted)]">
                     所有的配置、任务记录和生成的图片均仅保存在您的浏览器本地（除非您使用的服务商存储了它们）。如果您需要清理浏览器站点数据、重置浏览器或使用其他设备，请先导出备份。
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-[#d4c9b4] bg-white p-4  space-y-4 ">
+                <div className="rounded-2xl border border-[var(--ai-shadow-input)] bg-[var(--ai-card-bg)] p-4  space-y-4 ">
                   <div className="flex items-center gap-2 mb-1">
-                    <ExportIcon className="w-4 h-4 text-[#725d42]" />
-                    <h4 className="text-sm font-bold text-[#794f27]">导出数据</h4>
+                    <ExportIcon className="w-4 h-4 text-[var(--ai-text)]" />
+                    <h4 className="text-sm font-bold text-[var(--ai-text-header)]">导出数据</h4>
                   </div>
                   <div className="flex flex-wrap gap-x-6 gap-y-3">
                     <Checkbox
@@ -1625,16 +1626,16 @@ export default function SettingsModal() {
                   <button
                     onClick={() => exportData({ exportConfig, exportTasks })}
                     disabled={!exportConfig && !exportTasks}
-                    className="w-full rounded-xl bg-[#ede8d5]/80 px-4 py-2.5 text-sm font-medium text-[#725d42] transition-all hover:bg-[#c4b89e] hover:text-[#794f27] disabled:opacity-50 disabled:hover:bg-[#ede8d5]/80 disabled:hover:text-[#725d42]  flex items-center justify-center gap-2"
+                    className="w-full rounded-xl bg-[var(--ai-surface)]/80 px-4 py-2.5 text-sm font-medium text-[var(--ai-text)] transition-all hover:bg-[var(--ai-border)] hover:text-[var(--ai-text-header)] disabled:opacity-50 disabled:hover:bg-[var(--ai-surface)]/80 disabled:hover:text-[var(--ai-text)]  flex items-center justify-center gap-2"
                   >
                     导出所选数据
                   </button>
                 </div>
 
-                <div className="rounded-2xl border border-[#d4c9b4] bg-white p-4  space-y-4 ">
+                <div className="rounded-2xl border border-[var(--ai-shadow-input)] bg-[var(--ai-card-bg)] p-4  space-y-4 ">
                   <div className="flex items-center gap-2 mb-1">
-                    <ImportIcon className="w-4 h-4 text-[#725d42]" />
-                    <h4 className="text-sm font-bold text-[#794f27]">导入数据</h4>
+                    <ImportIcon className="w-4 h-4 text-[var(--ai-text)]" />
+                    <h4 className="text-sm font-bold text-[var(--ai-text-header)]">导入数据</h4>
                   </div>
                   <div className="flex flex-wrap gap-x-6 gap-y-3">
                     <Checkbox
@@ -1651,7 +1652,7 @@ export default function SettingsModal() {
                   <button
                     onClick={() => importInputRef.current?.click()}
                     disabled={(!importConfig && !importTasks) || isImportingData}
-                    className="w-full rounded-xl bg-[#ede8d5]/80 px-4 py-2.5 text-sm font-medium text-[#725d42] transition-all hover:bg-[#c4b89e] hover:text-[#794f27] disabled:opacity-50 disabled:hover:bg-[#ede8d5]/80 disabled:hover:text-[#725d42]  flex items-center justify-center gap-2"
+                    className="w-full rounded-xl bg-[var(--ai-surface)]/80 px-4 py-2.5 text-sm font-medium text-[var(--ai-text)] transition-all hover:bg-[var(--ai-border)] hover:text-[var(--ai-text-header)] disabled:opacity-50 disabled:hover:bg-[var(--ai-surface)]/80 disabled:hover:text-[var(--ai-text)]  flex items-center justify-center gap-2"
                   >
                     {isImportingData ? (
                       <>
@@ -1674,10 +1675,10 @@ export default function SettingsModal() {
                   />
                 </div>
 
-                <div className="rounded-2xl border border-red-100/50 bg-[#fdf0f0]/30 p-4  space-y-4 ">
+                <div className="rounded-2xl border border-red-100/50 bg-[var(--ai-danger-bg)]/30 p-4  space-y-4 ">
                   <div className="flex items-center gap-2 mb-1">
-                    <TrashIcon className="w-4 h-4 text-[#e05a5a]/90" />
-                    <h4 className="text-sm font-bold text-[#e05a5a]/90">清除数据</h4>
+                    <TrashIcon className="w-4 h-4 text-[var(--ai-error)]/90" />
+                    <h4 className="text-sm font-bold text-[var(--ai-error)]/90">清除数据</h4>
                   </div>
                   <div className="flex flex-wrap gap-x-6 gap-y-3">
                     <Checkbox
@@ -1702,7 +1703,7 @@ export default function SettingsModal() {
                       })
                     }
                     disabled={!clearConfig && !clearTasks}
-                    className="w-full rounded-xl border border-red-200/60 bg-[#fdf0f0]/50 px-4 py-2.5 text-sm font-medium text-[#e05a5a] transition-all hover:bg-[#fdf0f0] hover:border-red-200 hover:text-[#c94444] disabled:opacity-50 disabled:hover:bg-[#fdf0f0]/50 disabled:hover:border-red-200/60 disabled:hover:text-[#e05a5a] "
+                    className="w-full rounded-xl border border-red-200/60 bg-[var(--ai-danger-bg)]/50 px-4 py-2.5 text-sm font-medium text-[var(--ai-error)] transition-all hover:bg-[var(--ai-danger-bg)] hover:border-red-200 hover:text-[#ff2a6d] disabled:opacity-50 disabled:hover:bg-[var(--ai-danger-bg)]/50 disabled:hover:border-red-200/60 disabled:hover:text-[var(--ai-error)] "
                   >
                     清空所选数据
                   </button>
@@ -1716,13 +1717,13 @@ export default function SettingsModal() {
 
         {showCustomProviderImport && createPortal(
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-[rgba(121,79,39,0.15)] animate-overlay-in" onClick={() => {
+            <div className="absolute inset-0 bg-[var(--ai-overlay)] animate-overlay-in" onClick={() => {
               setShowCustomProviderImport(false)
               setEditingCustomProviderId(null)
             }} />
-            <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/50 bg-[rgb(247,243,223)] p-5   animate-modal-in flex flex-col h-[85vh] sm:h-[680px] max-h-[90vh] overflow-hidden">
+            <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/50 bg-[var(--ai-card-bg)] p-5   animate-modal-in flex flex-col h-[85vh] sm:h-[680px] max-h-[90vh] overflow-hidden">
               <div className="mb-5 flex items-center justify-between gap-4 shrink-0">
-                <h3 className="text-base font-bold text-[#794f27]">
+                <h3 className="text-base font-bold text-[var(--ai-text-header)]">
                   {editingCustomProviderId ? '编辑自定义服务商' : '创建自定义服务商'}
                 </h3>
                 <div className="flex items-center gap-3">
@@ -1732,7 +1733,7 @@ export default function SettingsModal() {
                       setShowCustomProviderImport(false)
                       setEditingCustomProviderId(null)
                     }}
-                    className="rounded-full p-1 text-[#9f927d] transition hover:bg-[#ede8d5] hover:text-[#725d42]  "
+                    className="rounded-full p-1 text-[var(--ai-text-secondary)] transition hover:bg-[var(--ai-surface)] hover:text-[var(--ai-text)]  "
                     aria-label="关闭"
                   >
                     <CloseIcon className="h-5 w-5" />
@@ -1741,14 +1742,14 @@ export default function SettingsModal() {
               </div>
 
               <div ref={customProviderScrollBoundaryRef} className="flex-1 flex flex-col min-h-0 px-1 -mx-1 pb-2">
-                <div className="mb-6 shrink-0 rounded-2xl bg-[rgb(247,243,223)]/80 p-4 border border-[#c4b89e]/60  ">
-                  <div className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-[#794f27]">
-                    <svg className="h-4 w-4 text-[#19c8b9]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="mb-6 shrink-0 rounded-2xl bg-[var(--ai-card-bg)]/80 p-4 border border-[var(--ai-border)]/60  ">
+                  <div className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-[var(--ai-text-header)]">
+                    <svg className="h-4 w-4 text-[var(--ai-accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                     AI 一键生成与导入
                   </div>
-                  <div data-selectable-text className="mb-4 text-xs leading-relaxed text-[#8a7b66]">
+                  <div data-selectable-text className="mb-4 text-xs leading-relaxed text-[var(--ai-text-muted)]">
                     复制提示词发给 LLM，可根据 API 文档自动生成完整的配置（包含服务商、模型、URL 等）。复制 LLM 输出的 JSON 后，点击“从剪贴板粘贴并导入”即可一键生效。
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
@@ -1770,7 +1771,7 @@ export default function SettingsModal() {
                         }}
                         onTouchEnd={clearLlmPromptTooltipTimer}
                         onTouchCancel={clearLlmPromptTooltipTimer}
-                        className="flex items-center gap-1.5 rounded-xl bg-[rgb(247,243,223)] px-3 py-2 text-xs font-medium text-[#725d42]  border border-[#c4b89e]/80 transition hover:bg-[#ede8d5] hover:text-[#794f27] "
+                        className="flex items-center gap-1.5 rounded-xl bg-[var(--ai-card-bg)] px-3 py-2 text-xs font-medium text-[var(--ai-text)]  border border-[var(--ai-border)]/80 transition hover:bg-[var(--ai-surface)] hover:text-[var(--ai-text-header)] "
                       >
                         <LinkIcon className="h-3.5 w-3.5" />
                         复制生成提示词
@@ -1783,7 +1784,7 @@ export default function SettingsModal() {
                       type="button"
                       onClick={handleCustomProviderJsonPaste}
                       disabled={isImportingJson}
-                      className="flex items-center gap-1.5 rounded-xl bg-[rgb(247,243,223)] px-3 py-2 text-xs font-medium text-[#725d42]  border border-[#c4b89e]/80 transition hover:bg-[#ede8d5] hover:text-[#794f27] disabled:opacity-50 disabled:cursor-not-allowed "
+                      className="flex items-center gap-1.5 rounded-xl bg-[var(--ai-card-bg)] px-3 py-2 text-xs font-medium text-[var(--ai-text)]  border border-[var(--ai-border)]/80 transition hover:bg-[var(--ai-surface)] hover:text-[var(--ai-text-header)] disabled:opacity-50 disabled:cursor-not-allowed "
                     >
                     {isImportingJson ? (
                       <>
@@ -1802,18 +1803,18 @@ export default function SettingsModal() {
 
               <div className="flex-1 flex flex-col min-h-0">
                 <label className="flex-1 flex flex-col min-h-0">
-                  <span className="mb-1 shrink-0 block text-xs text-[#8a7b66]">手动编辑 (仅接口映射 Manifest)</span>
+                  <span className="mb-1 shrink-0 block text-xs text-[var(--ai-text-muted)]">手动编辑 (仅接口映射 Manifest)</span>
                   <textarea
                     value={customProviderForm.json}
                     onChange={(e) => updateCustomProviderForm({ json: e.target.value })}
                     spellCheck={false}
-                    className="flex-1 min-h-[150px] w-full resize-none rounded-xl border border-2 border-[#c4b89e] bg-[rgb(247,243,223)] px-3 py-2 font-mono text-xs leading-relaxed text-[#725d42] outline-none transition focus:border-[#3dd4c6]  custom-scrollbar"
+                    className="flex-1 min-h-[150px] w-full resize-none rounded-xl border border-2 border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-3 py-2 font-mono text-xs leading-relaxed text-[var(--ai-text)] outline-none transition focus:border-[var(--ai-accent-hover)]  custom-scrollbar"
                   />
                 </label>
               </div>
 
                 {customProviderImportError && (
-                  <div data-selectable-text className="shrink-0 mt-2 rounded-lg bg-[#fdf0f0] px-3 py-2 text-xs text-[#e05a5a] ">
+                  <div data-selectable-text className="shrink-0 mt-2 rounded-lg bg-[var(--ai-danger-bg)] px-3 py-2 text-xs text-[var(--ai-error)] ">
                     {customProviderImportError}
                   </div>
                 )}
@@ -1825,14 +1826,14 @@ export default function SettingsModal() {
                     setShowCustomProviderImport(false)
                     setEditingCustomProviderId(null)
                   }}
-                  className="rounded-xl bg-[#ede8d5] px-4 py-2 text-sm text-[#725d42] transition hover:bg-[#c4b89e] "
+                  className="rounded-xl bg-[var(--ai-surface)] px-4 py-2 text-sm text-[var(--ai-text)] transition hover:bg-[var(--ai-border)] "
                 >
                   取消
                 </button>
                 <button
                   type="button"
                   onClick={saveCustomProvider}
-                  className="rounded-xl bg-[#e6f9f6]0 px-4 py-2 text-sm font-medium text-white transition hover:bg-[#11a89b]"
+                  className="rounded-xl bg-[var(--ai-accent-dim)]0 px-4 py-2 text-sm font-medium text-white transition hover:bg-[var(--ai-accent-active)] cp-clip-btn"
                 >
                   {editingCustomProviderId ? '保存修改' : '创建并使用'}
                 </button>
@@ -1842,7 +1843,7 @@ export default function SettingsModal() {
           , document.body)}
         {profileTouchDragPreview && createPortal(
           <div
-            className="fixed pointer-events-none z-[110] flex items-center justify-between gap-2 rounded-xl bg-[rgb(247,243,223)] px-3 py-2 text-xs text-[#725d42]   backdrop-blur-xl"
+            className="fixed pointer-events-none z-[110] flex items-center justify-between gap-2 rounded-xl bg-[var(--ai-card-bg)] px-3 py-2 text-xs text-[var(--ai-text)]   backdrop-blur-xl"
             style={{
               left: profileTouchDragPreview.x - profileTouchDragPreview.offsetX,
               top: profileTouchDragPreview.y - profileTouchDragPreview.offsetY,
@@ -1851,9 +1852,9 @@ export default function SettingsModal() {
             }}
           >
             <div className="flex min-w-0 flex-1 items-center gap-2 pr-2">
-              <DragHandleIcon className="h-3.5 w-3.5 shrink-0 text-[#9f927d]" />
+              <DragHandleIcon className="h-3.5 w-3.5 shrink-0 text-[var(--ai-text-secondary)]" />
               <span className="min-w-0 truncate">{profileTouchDragPreview.label}</span>
-              <span className="shrink-0 rounded bg-[#ede8d5] px-1.5 py-0.5 text-[10px] text-[#8a7b66]">
+              <span className="shrink-0 rounded bg-[var(--ai-surface)] px-1.5 py-0.5 text-[10px] text-[var(--ai-text-muted)]">
                 {profileTouchDragPreview.providerLabel}
               </span>
             </div>
@@ -1866,46 +1867,46 @@ export default function SettingsModal() {
             className="fixed inset-0 z-[110] flex items-center justify-center p-4"
             onClick={() => setCopyImportUrlProfile(null)}
           >
-            <div className="absolute inset-0 bg-[rgba(121,79,39,0.15)] animate-overlay-in" />
+            <div className="absolute inset-0 bg-[var(--ai-overlay)] animate-overlay-in" />
             <div
-              className="relative bg-[rgb(247,243,223)] border-2 border-[#c4b89e] rounded-[20px] shadow-[0_4px_16px_rgba(107,92,67,0.15)] max-w-sm w-full p-6 z-10  animate-confirm-in"
+              className="relative bg-[var(--ai-card-bg)] border-2 border-[var(--ai-border)] rounded-[20px] shadow-[0_4px_16px_var(--ai-card-shadow)] max-w-sm w-full p-6 z-10  animate-confirm-in"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 type="button"
                 onClick={() => setCopyImportUrlProfile(null)}
-                className="absolute right-4 top-4 shrink-0 rounded-full p-1.5 text-[#9f927d] transition hover:bg-[#ede8d5] hover:text-[#725d42]  "
+                className="absolute right-4 top-4 shrink-0 rounded-full p-1.5 text-[var(--ai-text-secondary)] transition hover:bg-[var(--ai-surface)] hover:text-[var(--ai-text)]  "
                 aria-label="关闭"
               >
                 <CloseIcon className="h-5 w-5" />
               </button>
 
-              <h3 className="mb-3 pr-8 flex items-start gap-2.5 text-base font-bold text-[#794f27] leading-snug">
-                <CopyIcon className="h-5 w-5 shrink-0 text-[#19c8b9] mt-0.5" />
+              <h3 className="mb-3 pr-8 flex items-start gap-2.5 text-base font-bold text-[var(--ai-text-header)] leading-snug">
+                <CopyIcon className="h-5 w-5 shrink-0 text-[var(--ai-accent)] mt-0.5" />
                 <span>复制导入配置「{copyImportUrlProfile.name}」的 URL</span>
               </h3>
-              <div className="text-[13px] text-[#8a7b66] mb-5 leading-relaxed">
+              <div className="text-[13px] text-[var(--ai-text-muted)] mb-5 leading-relaxed">
                 是否包含 API Key？如果选择「不包含」，可额外配置是否使用 New API 变量。
               </div>
 
               {!copyImportUrlOptions.includeApiKey && (
-                <div className="mb-6 rounded-2xl bg-[rgb(247,243,223)]/80 p-4  ">
-                  <div className="text-[13px] font-bold text-[#725d42] mb-3.5">New API 变量配置</div>
+                <div className="mb-6 rounded-2xl bg-[var(--ai-card-bg)]/80 p-4  ">
+                  <div className="text-[13px] font-bold text-[var(--ai-text)] mb-3.5">New API 变量配置</div>
                   <div className="space-y-3">
                     <Checkbox
                       checked={copyImportUrlOptions.useNewApiAddress}
                       onChange={(checked) => updateCopyImportUrlOptions({ useNewApiAddress: checked })}
-                      label={<>使用 <code className="mx-0.5 rounded bg-[#ede8d5] px-1.5 py-0.5 text-[0.85em] font-mono text-[#725d42]">{"{address}"}</code> (不含 /v1)</>}
+                      label={<>使用 <code className="mx-0.5 rounded bg-[var(--ai-surface)] px-1.5 py-0.5 text-[0.85em] font-mono text-[var(--ai-text)]">{"{address}"}</code> (不含 /v1)</>}
                     />
                     <Checkbox
                       checked={copyImportUrlOptions.useNewApiKey}
                       onChange={(checked) => updateCopyImportUrlOptions({ useNewApiKey: checked })}
-                      label={<>使用 <code className="mx-0.5 rounded bg-[#ede8d5] px-1.5 py-0.5 text-[0.85em] font-mono text-[#725d42]">{"{key}"}</code></>}
+                      label={<>使用 <code className="mx-0.5 rounded bg-[var(--ai-surface)] px-1.5 py-0.5 text-[0.85em] font-mono text-[var(--ai-text)]">{"{key}"}</code></>}
                     />
                     <Checkbox
                       checked={copyImportUrlOptions.useNewApiModel}
                       onChange={(checked) => updateCopyImportUrlOptions({ useNewApiModel: checked })}
-                      label={<>使用 <code className="mx-0.5 rounded bg-[#ede8d5] px-1.5 py-0.5 text-[0.85em] font-mono text-[#725d42]">{"{model}"}</code></>}
+                      label={<>使用 <code className="mx-0.5 rounded bg-[var(--ai-surface)] px-1.5 py-0.5 text-[0.85em] font-mono text-[var(--ai-text)]">{"{model}"}</code></>}
                     />
                   </div>
                 </div>
@@ -1917,7 +1918,7 @@ export default function SettingsModal() {
                     const options = { ...copyImportUrlOptions, includeApiKey: false }
                     copyProfileImportUrl(copyImportUrlProfile, options)
                   }}
-                  className="flex-1 py-2 rounded-xl border border-[#c4b89e] text-sm text-[#725d42] hover:bg-[#ede8d5]  transition"
+                  className="flex-1 py-2 rounded-xl border border-[var(--ai-border)] text-sm text-[var(--ai-text)] hover:bg-[var(--ai-surface)]  transition"
                 >
                   不包含
                 </button>
@@ -1926,7 +1927,7 @@ export default function SettingsModal() {
                     const options = { ...copyImportUrlOptions, includeApiKey: true }
                     copyProfileImportUrl(copyImportUrlProfile, options)
                   }}
-                  className="flex-1 py-2 rounded-xl bg-[#e6f9f6]0 text-white text-sm font-medium hover:bg-[#11a89b] transition  shadow-blue-500/20"
+                  className="flex-1 py-2 rounded-xl bg-[var(--ai-accent-dim)]0 text-white text-sm font-medium hover:bg-[var(--ai-accent-active)] transition  shadow-blue-500/20 cp-clip-btn"
                 >
                   包含 API Key
                 </button>

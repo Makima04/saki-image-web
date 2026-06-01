@@ -83,20 +83,24 @@ export default function ViewportTooltip({ visible, children, className = '' }: V
       {effectiveVisible && createPortal(
         <div
           ref={tooltipRef}
-          className={`fixed pointer-events-none rounded-lg bg-[#725d42] px-3 py-2 text-xs font-normal text-[#f8f8f0] shadow-[0_4px_10px_rgba(107,92,67,0.2)] ${className}`}
+          className={`fixed pointer-events-none rounded-lg px-3 py-2 text-xs font-normal shadow-[0_4px_10px_rgba(0,0,0,0.3)] ${className}`}
           style={{
             left: position?.left ?? 0,
             top: position?.top ?? 0,
             visibility: position ? 'visible' : 'hidden',
             zIndex: 120,
+            backgroundColor: 'var(--ai-text-header)',
+            color: 'var(--ai-bg)',
           }}
         >
           {children}
           <div
-            className={`absolute left-0 border-4 border-transparent ${position?.placement === 'bottom' ? 'bottom-full border-b-gray-800' : 'top-full border-t-gray-800'}`}
+            className={`absolute left-0 border-4 border-transparent ${position?.placement === 'bottom' ? 'bottom-full' : 'top-full'}`}
             style={{
               left: position?.arrowLeft ?? 0,
               transform: 'translateX(-50%)',
+              borderBottomColor: position?.placement === 'bottom' ? 'var(--ai-text-header)' : 'transparent',
+              borderTopColor: position?.placement === 'top' ? 'var(--ai-text-header)' : 'transparent',
             }}
           />
         </div>,
