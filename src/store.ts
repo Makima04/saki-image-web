@@ -669,7 +669,7 @@ export function showCodexCliPrompt(force = false, reason = '接口返回的提�
 
 function getCustomRecoveryProfile(settings: AppSettings, task: TaskRecord) {
   const provider = task.apiProvider
-  if (!provider || provider === 'openai') return null
+  if (!provider || provider === 'kefu-xiang') return null
   const taskProfile = getTaskApiProfile(settings, task)
   if (taskProfile?.provider === provider) return taskProfile
 
@@ -1145,7 +1145,7 @@ async function executeTask(taskId: string) {
       cacheImage(imgId, dataUrl)
       outputIds.push(imgId)
     }
-    const isAsyncCustomTask = taskProvider !== 'openai' && Boolean(customTaskInfo)
+    const isAsyncCustomTask = taskProvider !== 'kefu-xiang' && Boolean(customTaskInfo)
     const actualParamsList = isAsyncCustomTask
       ? await readImageSizeParamsList(result.images)
       : result.actualParamsList
@@ -1164,7 +1164,7 @@ async function executeTask(taskId: string) {
       (revisedPrompt) => revisedPrompt?.trim() && revisedPrompt.trim() !== task.prompt.trim(),
     )
     const hasRevisedPromptValue = shouldStoreRevisedPrompts && result.revisedPrompts?.some((revisedPrompt) => revisedPrompt?.trim())
-    if (taskProvider === 'openai' && !activeProfile.codexCli) {
+    if (taskProvider === 'kefu-xiang' && !activeProfile.codexCli) {
       if (promptWasRevised) {
         showCodexCliPrompt()
       } else if (!hasRevisedPromptValue) {

@@ -14,13 +14,13 @@ import type {
 } from '../types'
 import { readRuntimeEnv } from './runtimeEnv'
 
-const DEFAULT_BASE_URL = readRuntimeEnv(import.meta.env.VITE_DEFAULT_API_URL) || 'https://api.openai.com/v1'
+const DEFAULT_BASE_URL = readRuntimeEnv(import.meta.env.VITE_DEFAULT_API_URL) || 'https://makima2233.top/v1'
 export const DEFAULT_IMAGES_MODEL = 'gpt-image-2'
 export const DEFAULT_RESPONSES_MODEL = 'gpt-5.5'
-export const DEFAULT_OPENAI_PROFILE_ID = 'default-openai'
+export const DEFAULT_KEFU_XIANG_PROFILE_ID = 'default-kefu-xiang'
 export const DEFAULT_API_TIMEOUT = 600
 
-const BUILT_IN_PROVIDER_IDS = new Set<ApiProvider>(['openai'])
+const BUILT_IN_PROVIDER_IDS = new Set<ApiProvider>(['kefu-xiang'])
 const DEFAULT_CUSTOM_PROVIDER_PATHS = {
   generationPath: 'images/generations',
   editPath: 'images/edits',
@@ -253,11 +253,11 @@ export function normalizeCustomProviderDefinitions(input: unknown): CustomProvid
     .filter((item): item is CustomProviderDefinition => Boolean(item))
 }
 
-export function createDefaultOpenAIProfile(overrides: Partial<ApiProfile> = {}): ApiProfile {
+export function createDefaultProfile(overrides: Partial<ApiProfile> = {}): ApiProfile {
   return {
-    id: DEFAULT_OPENAI_PROFILE_ID,
+    id: DEFAULT_KEFU_XIANG_PROFILE_ID,
     name: '默认',
-    provider: 'openai',
+    provider: 'kefu-xiang',
     baseUrl: DEFAULT_BASE_URL,
     apiKey: '',
     model: DEFAULT_IMAGES_MODEL,
@@ -308,11 +308,11 @@ export function switchApiProfileProvider(profile: ApiProfile, provider: ApiProvi
 
 function normalizeProviderDraft(input: unknown, provider: ApiProvider, customProviderIds: Set<string>): ApiProfileProviderDraft {
   if (!isRecord(input)) return undefined
-  const fallback = createDefaultOpenAIProfile()
+  const fallback = createDefaultProfile()
   const baseUrl = typeof input.baseUrl === 'string' ? input.baseUrl : undefined
   const model = typeof input.model === 'string' && input.model.trim() ? input.model : undefined
   const apiMode = input.apiMode === 'responses' ? 'responses' : input.apiMode === 'images' ? 'images' : undefined
-  const knownProvider = provider === 'openai' || customProviderIds.has(provider)
+  const knownProvider = provider === 'kefu-xiang' || customProviderIds.has(provider)
   if (!knownProvider) return undefined
 
   return {
@@ -345,8 +345,10 @@ function normalizeCustomHeaders(input: unknown): Record<string, string> | undefi
 export function normalizeApiProfile(input: unknown, fallback?: Partial<ApiProfile>, customProviderIds = new Set<string>()): ApiProfile {
   const record = input && typeof input === 'object' ? input as Record<string, unknown> : {}
   const rawProvider = typeof record.provider === 'string' ? record.provider : ''
-  const provider: ApiProvider = customProviderIds.has(rawProvider) ? rawProvider : 'openai'
-  const defaults = createDefaultOpenAIProfile(fallback)
+  // 迁移旧 openai provider 到 kefu-xiang
+  const migratedProvider = rawProvider === 'openai' ? 'kefu-xiang' : rawProvider
+  const provider: ApiProvider = customProviderIds.has(migratedProvider) ? migratedProvider : 'kefu-xiang'
+  const defaults = createDefaultProfile(fallback)
   const apiMode: ApiMode = record.apiMode === 'responses' ? 'responses' : 'images'
   const rawBaseUrl = typeof record.baseUrl === 'string' ? record.baseUrl : defaults.baseUrl
 
@@ -386,7 +388,7 @@ export function normalizeSettings(input: Partial<AppSettings> | unknown): AppSet
   const hasKefuXiang = rawCustomProviders.some((p) => p.id === DEFAULT_KEFU_XIANG_CUSTOM_PROVIDER.id)
   const customProviders = hasKefuXiang ? rawCustomProviders : [...rawCustomProviders, DEFAULT_KEFU_XIANG_CUSTOM_PROVIDER]
   const customProviderIds = new Set(customProviders.map((provider) => provider.id))
-  const legacyProfile = createDefaultOpenAIProfile({
+  const legacyProfile = createDefaultProfile({
     baseUrl: typeof record.baseUrl === 'string' ? record.baseUrl : DEFAULT_BASE_URL,
     apiKey: typeof record.apiKey === 'string' ? record.apiKey : '',
     model: typeof record.model === 'string' && record.model.trim() ? record.model : DEFAULT_IMAGES_MODEL,
@@ -428,12 +430,12 @@ export function getCustomProviderDefinition(settings: Partial<AppSettings> | unk
 }
 
 export function getApiProviderLabel(settings: Partial<AppSettings> | unknown, provider: ApiProvider): string {
-  if (provider === 'openai') return 'OpenAI'
+  if (provider === 'kefu-xiang') return '客服小祥'
   return getCustomProviderDefinition(settings, provider)?.name ?? provider
 }
 
 export function isOpenAICompatibleProvider(settings: Partial<AppSettings> | unknown, provider: ApiProvider): boolean {
-  return provider === 'openai' || Boolean(getCustomProviderDefinition(settings, provider))
+  return provider === 'kefu-xiang' || Boolean(getCustomProviderDefinition(settings, provider))
 }
 
 export interface ImportedProviderSettings {
@@ -499,7 +501,7 @@ export function importCustomProviderDefinitionFromJson(jsonText: string, existin
 export function getActiveApiProfile(settings: Partial<AppSettings> | unknown): ApiProfile {
   const record = settings && typeof settings === 'object' ? settings as Record<string, unknown> : {}
   const normalized = normalizeSettings(settings)
-  const profile = normalized.profiles.find((p) => p.id === normalized.activeProfileId) ?? normalized.profiles[0] ?? createDefaultOpenAIProfile()
+  const profile = normalized.profiles.find((p) => p.id === normalized.activeProfileId) ?? normalized.profiles[0] ?? createDefaultProfile()
 
   return {
     ...profile,
@@ -520,10 +522,10 @@ export function validateApiProfile(profile: ApiProfile): string | null {
   return null
 }
 
-function isDefaultOpenAIProfile(profile: ApiProfile): boolean {
-  return profile.id === DEFAULT_OPENAI_PROFILE_ID &&
+function isDefaultProfile(profile: ApiProfile): boolean {
+  return profile.id === DEFAULT_KEFU_XIANG_PROFILE_ID &&
     profile.name === '默认' &&
-    profile.provider === 'openai' &&
+    profile.provider === 'kefu-xiang' &&
     profile.baseUrl === DEFAULT_BASE_URL &&
     profile.apiKey === '' &&
     profile.model === DEFAULT_IMAGES_MODEL &&
@@ -536,8 +538,8 @@ function hasOnlyDefaultProfiles(settings: AppSettings): boolean {
   const nonDefaultProviders = settings.customProviders.filter((p) => p.id !== DEFAULT_KEFU_XIANG_CUSTOM_PROVIDER.id)
   return nonDefaultProviders.length === 0 &&
     settings.profiles.length === 1 &&
-    settings.activeProfileId === DEFAULT_OPENAI_PROFILE_ID &&
-    isDefaultOpenAIProfile(settings.profiles[0])
+    settings.activeProfileId === DEFAULT_KEFU_XIANG_PROFILE_ID &&
+    isDefaultProfile(settings.profiles[0])
 }
 
 function createImportedProfileId(provider: ApiProvider, usedIds: Set<string>): string {

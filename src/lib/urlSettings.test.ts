@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  createDefaultOpenAIProfile,
+  createDefaultProfile,
   DEFAULT_IMAGES_MODEL,
   DEFAULT_SETTINGS,
   normalizeSettings,
@@ -8,7 +8,7 @@ import {
 import { buildSettingsFromUrlParams, clearUrlSettingParams, hasUrlSettingParams } from './urlSettings'
 
 describe('URL settings params', () => {
-  it('creates and activates a new OpenAI profile for legacy URL params', () => {
+  it('creates and activates a new 客服小祥 profile for legacy URL params', () => {
     const current = normalizeSettings(DEFAULT_SETTINGS)
     const next = normalizeSettings({
       ...current,
@@ -19,14 +19,14 @@ describe('URL settings params', () => {
     expect(next.activeProfileId).not.toBe(current.activeProfileId)
     expect(next.profiles.find((profile) => profile.id === next.activeProfileId)).toMatchObject({
       name: 'URL 参数配置',
-      provider: 'openai',
+      provider: 'kefu-xiang',
       baseUrl: 'https://api.example.com/v1',
       apiKey: 'test-key',
       model: DEFAULT_IMAGES_MODEL,
     })
   })
 
-  it('uses model from URL params for OpenAI profiles', () => {
+  it('uses model from URL params for 客服小祥 profiles', () => {
     const current = normalizeSettings(DEFAULT_SETTINGS)
     const next = normalizeSettings({
       ...current,
@@ -34,7 +34,7 @@ describe('URL settings params', () => {
     })
 
     expect(next.profiles.find((profile) => profile.id === next.activeProfileId)).toMatchObject({
-      provider: 'openai',
+      provider: 'kefu-xiang',
       baseUrl: 'https://api.example.com/v1',
       apiKey: 'test-key',
       model: 'custom-image-model',
@@ -43,15 +43,15 @@ describe('URL settings params', () => {
   })
 
   it('does not create a duplicate profile for matching legacy URL params', () => {
-    const existingProfile = createDefaultOpenAIProfile({
-      id: 'existing-openai',
-      name: 'Existing OpenAI',
+    const existingProfile = createDefaultProfile({
+      id: 'existing-kefu-xiang',
+      name: 'Existing 客服小祥',
       baseUrl: 'https://api.example.com/v1',
       apiKey: 'test-key',
     })
     const current = normalizeSettings({
       ...DEFAULT_SETTINGS,
-      profiles: [createDefaultOpenAIProfile(), existingProfile],
+      profiles: [createDefaultProfile(), existingProfile],
       activeProfileId: DEFAULT_SETTINGS.activeProfileId,
     })
     const next = normalizeSettings({
@@ -63,8 +63,8 @@ describe('URL settings params', () => {
     expect(next.activeProfileId).toBe(existingProfile.id)
   })
 
-  it('creates an OpenAI profile from legacy params even when another provider is active', () => {
-    const existingProfile = createDefaultOpenAIProfile({ id: 'existing-active', apiKey: 'existing-key' })
+  it('creates a 客服小祥 profile from legacy params even when another provider is active', () => {
+    const existingProfile = createDefaultProfile({ id: 'existing-active', apiKey: 'existing-key' })
     const current = normalizeSettings({
       ...DEFAULT_SETTINGS,
       profiles: [existingProfile],
@@ -72,14 +72,14 @@ describe('URL settings params', () => {
     })
     const next = normalizeSettings({
       ...current,
-      ...buildSettingsFromUrlParams(current, new URLSearchParams('apiUrl=https://api.example.com/v1&apiKey=openai-key')),
+      ...buildSettingsFromUrlParams(current, new URLSearchParams('apiUrl=https://api.example.com/v1&apiKey=kefu-xiang-key')),
     })
 
     expect(next.profiles).toHaveLength(2)
     expect(next.profiles.find((profile) => profile.id === next.activeProfileId)).toMatchObject({
-      provider: 'openai',
+      provider: 'kefu-xiang',
       baseUrl: 'https://api.example.com/v1',
-      apiKey: 'openai-key',
+      apiKey: 'kefu-xiang-key',
     })
   })
 
@@ -139,14 +139,14 @@ describe('URL settings params', () => {
   it('activates the first profile imported from URL settings when current settings are customized', () => {
     const current = normalizeSettings({
       ...DEFAULT_SETTINGS,
-      profiles: [createDefaultOpenAIProfile({
-        id: 'current-openai',
-        name: 'Current OpenAI',
+      profiles: [createDefaultProfile({
+        id: 'current-kefu-xiang',
+        name: 'Current 客服小祥',
         baseUrl: 'https://current.example.com/v1',
         apiKey: 'current-key',
         model: 'current-model',
       })],
-      activeProfileId: 'current-openai',
+      activeProfileId: 'current-kefu-xiang',
     })
     const importedSettings = {
       customProviders: [{
@@ -181,7 +181,7 @@ describe('URL settings params', () => {
     })
     const activeProfile = next.profiles.find((profile) => profile.id === next.activeProfileId)
 
-    expect(next.activeProfileId).not.toBe('current-openai')
+    expect(next.activeProfileId).not.toBe('current-kefu-xiang')
     expect(activeProfile).toMatchObject({
       provider: 'custom-json',
       baseUrl: 'https://api.example.com/v1',

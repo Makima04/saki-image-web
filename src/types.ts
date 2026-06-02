@@ -1,7 +1,7 @@
 // ===== 设置 =====
 
 export type ApiMode = 'images' | 'responses'
-export type BuiltInApiProvider = 'openai'
+export type BuiltInApiProvider = 'kefu-xiang'
 export type ApiProvider = BuiltInApiProvider | string
 export type CustomProviderTemplate = 'http-image'
 

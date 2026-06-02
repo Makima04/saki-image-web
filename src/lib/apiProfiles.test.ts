@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
   DEFAULT_IMAGES_MODEL,
-  DEFAULT_OPENAI_PROFILE_ID,
+  DEFAULT_KEFU_XIANG_PROFILE_ID,
   DEFAULT_SETTINGS,
-  createDefaultOpenAIProfile,
+  createDefaultProfile,
   findEquivalentApiProfile,
   importCustomProviderDefinitionFromJson,
   importCustomProviderSettingsFromJson,
@@ -13,7 +13,7 @@ import {
 } from './apiProfiles'
 
 describe('mergeImportedSettings', () => {
-  it('replaces the default OpenAI profile with legacy imported settings when current settings are untouched', () => {
+  it('replaces the default 客服小祥 profile with legacy imported settings when current settings are untouched', () => {
     const merged = mergeImportedSettings(DEFAULT_SETTINGS, {
       baseUrl: 'https://api.example.com/v1',
       apiKey: 'imported-key',
@@ -24,10 +24,10 @@ describe('mergeImportedSettings', () => {
     })
 
     expect(merged.profiles).toHaveLength(1)
-    expect(merged.activeProfileId).toBe(DEFAULT_OPENAI_PROFILE_ID)
+    expect(merged.activeProfileId).toBe(DEFAULT_KEFU_XIANG_PROFILE_ID)
     expect(merged.profiles[0]).toMatchObject({
-      id: DEFAULT_OPENAI_PROFILE_ID,
-      provider: 'openai',
+      id: DEFAULT_KEFU_XIANG_PROFILE_ID,
+      provider: 'kefu-xiang',
       baseUrl: 'https://api.example.com/v1',
       apiKey: 'imported-key',
       model: 'imported-model',
@@ -41,11 +41,11 @@ describe('mergeImportedSettings', () => {
     const merged = mergeImportedSettings(DEFAULT_SETTINGS, {
       profiles: [
         {
-          id: 'imported-openai',
-          name: 'Imported OpenAI',
-          provider: 'openai',
+          id: 'imported-kefu-xiang',
+          name: 'Imported 客服小祥',
+          provider: 'kefu-xiang',
           baseUrl: 'https://api.example.com/v1',
-          apiKey: 'openai-key',
+          apiKey: 'kefu-xiang-key',
           model: DEFAULT_IMAGES_MODEL,
           timeout: 300,
           apiMode: 'images',
@@ -66,7 +66,7 @@ describe('mergeImportedSettings', () => {
       activeProfileId: 'imported-custom',
     })
 
-    expect(merged.profiles.map((profile) => profile.id)).toEqual(['imported-openai', 'imported-custom'])
+    expect(merged.profiles.map((profile) => profile.id)).toEqual(['imported-kefu-xiang', 'imported-custom'])
     expect(merged.activeProfileId).toBe('imported-custom')
   })
 
@@ -74,34 +74,34 @@ describe('mergeImportedSettings', () => {
     const merged = mergeImportedSettings(DEFAULT_SETTINGS, {
       profiles: [
         {
-          id: 'imported-openai-a',
-          name: 'Imported OpenAI A',
-          provider: 'openai',
+          id: 'imported-kefu-xiang-a',
+          name: 'Imported 客服小祥 A',
+          provider: 'kefu-xiang',
           baseUrl: 'https://api.example.com/v1',
-          apiKey: 'openai-key',
+          apiKey: 'kefu-xiang-key',
           model: DEFAULT_IMAGES_MODEL,
           timeout: 300,
           apiMode: 'images',
           codexCli: false,
         },
         {
-          id: 'imported-openai-b',
-          name: 'Imported OpenAI B',
-          provider: 'openai',
+          id: 'imported-kefu-xiang-b',
+          name: 'Imported 客服小祥 B',
+          provider: 'kefu-xiang',
           baseUrl: 'https://api.example.com/v1/',
-          apiKey: 'openai-key',
+          apiKey: 'kefu-xiang-key',
           model: DEFAULT_IMAGES_MODEL,
           timeout: 600,
           apiMode: 'images',
           codexCli: true,
         },
       ],
-      activeProfileId: 'imported-openai-b',
+      activeProfileId: 'imported-kefu-xiang-b',
     })
 
     expect(merged.profiles).toHaveLength(1)
-    expect(merged.profiles[0].id).toBe('imported-openai-a')
-    expect(merged.activeProfileId).toBe('imported-openai-a')
+    expect(merged.profiles[0].id).toBe('imported-kefu-xiang-a')
+    expect(merged.activeProfileId).toBe('imported-kefu-xiang-a')
   })
 
   it('appends imported legacy settings as a new profile when current settings are customized', () => {
@@ -117,15 +117,15 @@ describe('mergeImportedSettings', () => {
     })
 
     expect(merged.profiles).toHaveLength(2)
-    expect(merged.activeProfileId).toBe(DEFAULT_OPENAI_PROFILE_ID)
+    expect(merged.activeProfileId).toBe(DEFAULT_KEFU_XIANG_PROFILE_ID)
     expect(merged.profiles[0]).toMatchObject({ apiKey: 'current-key', model: 'current-model' })
     expect(merged.profiles[1]).toMatchObject({
-      provider: 'openai',
+      provider: 'kefu-xiang',
       baseUrl: 'https://imported.example.com/v1',
       apiKey: 'imported-key',
       model: 'imported-model',
     })
-    expect(merged.profiles[1].id).not.toBe(DEFAULT_OPENAI_PROFILE_ID)
+    expect(merged.profiles[1].id).not.toBe(DEFAULT_KEFU_XIANG_PROFILE_ID)
   })
 
   it('appends imported profiles as new profiles when current settings are customized', () => {
@@ -137,9 +137,9 @@ describe('mergeImportedSettings', () => {
     const merged = mergeImportedSettings(current, {
       profiles: [
         {
-          id: 'imported-openai',
-          name: 'Imported OpenAI',
-          provider: 'openai',
+          id: 'imported-kefu-xiang',
+          name: 'Imported 客服小祥',
+          provider: 'kefu-xiang',
           baseUrl: 'https://imported.example.com/v1',
           apiKey: 'imported-key',
           model: DEFAULT_IMAGES_MODEL,
@@ -163,9 +163,9 @@ describe('mergeImportedSettings', () => {
     })
 
     expect(merged.profiles).toHaveLength(3)
-    expect(merged.activeProfileId).toBe(DEFAULT_OPENAI_PROFILE_ID)
+    expect(merged.activeProfileId).toBe(DEFAULT_KEFU_XIANG_PROFILE_ID)
     expect(merged.profiles.find((p: any) => p.apiKey === 'current-key')).toMatchObject({ apiKey: 'current-key', model: 'current-model' })
-    expect(merged.profiles.find((p: any) => p.apiKey === 'imported-key')).toMatchObject({ name: 'Imported OpenAI', provider: 'openai', apiKey: 'imported-key' })
+    expect(merged.profiles.find((p: any) => p.apiKey === 'imported-key')).toMatchObject({ name: 'Imported 客服小祥', provider: 'kefu-xiang', apiKey: 'imported-key' })
     expect(merged.profiles.find((p: any) => p.apiKey === 'custom-key')).toMatchObject({ name: 'Imported custom', provider: 'kefu-xiang', apiKey: 'custom-key' })
     expect(new Set(merged.profiles.map((profile) => profile.id)).size).toBe(3)
   })
@@ -179,9 +179,9 @@ describe('mergeImportedSettings', () => {
     const merged = mergeImportedSettings(current, {
       profiles: [
         {
-          id: 'duplicate-openai',
-          name: 'Duplicate OpenAI',
-          provider: 'openai',
+          id: 'duplicate-kefu-xiang',
+          name: 'Duplicate 客服小祥',
+          provider: 'kefu-xiang',
           baseUrl: 'https://current.example.com/v1/',
           apiKey: 'current-key',
           model: 'current-model',
@@ -504,7 +504,7 @@ describe('custom providers', () => {
       template: 'http-image',
       submit: { path: 'images/generations' },
     }))
-    const profile = switchApiProfileProvider(createDefaultOpenAIProfile(), provider.id, provider)
+    const profile = switchApiProfileProvider(createDefaultProfile(), provider.id, provider)
 
     expect(profile.provider).toBe(provider.id)
     expect(profile.baseUrl).toBe(DEFAULT_SETTINGS.baseUrl)

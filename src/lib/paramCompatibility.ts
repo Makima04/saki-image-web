@@ -21,11 +21,11 @@ export function normalizeParamsForSettings(
     n: Math.min(outputImageLimit, Math.max(1, params.n || DEFAULT_PARAMS.n)),
   }
 
-  if (activeProfile.provider === 'openai' && activeProfile.codexCli) {
+  if (activeProfile.provider === 'kefu-xiang' && activeProfile.codexCli) {
     nextParams.quality = DEFAULT_PARAMS.quality
   }
 
-  if (!activeProfile.provider || activeProfile.provider === 'openai') {
+  if (!activeProfile.provider || activeProfile.provider === 'kefu-xiang') {
     // No provider-specific normalization needed
   }
 

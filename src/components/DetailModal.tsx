@@ -186,9 +186,9 @@ export default function DetailModal() {
   const codexCliPromptKey = getCodexCliPromptKey(settings)
   const hasHandledPromptWarning = settings.codexCli || dismissedCodexCliPrompts.includes(codexCliPromptKey)
   const taskProvider = task.apiProvider
-  const isOpenAiTask = (taskProvider ?? 'openai') === 'openai'
+  const isOpenAiTask = (taskProvider ?? 'kefu-xiang') === 'kefu-xiang'
   const showPromptWarning = Boolean(isOpenAiTask && currentOutputImageId && (!currentRevisedPrompt || showRevisedPrompt) && !hasHandledPromptWarning)
-  const taskProviderName = taskProvider === 'fal' ? 'fal.ai' : taskProvider ? 'OpenAI' : '未知'
+  const taskProviderName = taskProvider === 'fal' ? 'fal.ai' : taskProvider ? '客服小祥' : '未知'
   const taskProfileName = task.apiProfileName || '未知'
   const taskModel = task.apiModel || '未知'
   const showSourceInfo = Boolean(task.apiProvider || task.apiProfileName || task.apiModel)

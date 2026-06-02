@@ -1,7 +1,7 @@
 import type { ApiMode, AppSettings } from '../types'
 import { normalizeBaseUrl } from './apiUrl'
 import {
-  createDefaultOpenAIProfile,
+  createDefaultProfile,
   DEFAULT_IMAGES_MODEL,
   DEFAULT_RESPONSES_MODEL,
   findEquivalentApiProfile,
@@ -22,9 +22,9 @@ function getProfileDedupKey(profile: Pick<AppSettings['profiles'][number], 'prov
 }
 
 function createUrlProfileId(usedIds: Set<string>) {
-  let id = `openai-url-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`
+  let id = `kefu-xiang-url-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`
   while (usedIds.has(id)) {
-    id = `openai-url-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`
+    id = `kefu-xiang-url-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`
   }
   return id
 }
@@ -95,7 +95,7 @@ export function buildSettingsFromUrlParams(currentSettings: Partial<AppSettings>
 
   if (hasLegacyOpenAIParams) {
     const profileApiMode = apiMode ?? 'images'
-    const profile = createDefaultOpenAIProfile({
+    const profile = createDefaultProfile({
       id: createUrlProfileId(new Set(settings.profiles.map((item) => item.id))),
       name: 'URL 参数配置',
       apiMode: profileApiMode,

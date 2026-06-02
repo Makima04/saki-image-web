@@ -3,9 +3,9 @@ import { createPortal } from 'react-dom'
 import { normalizeBaseUrl } from '../lib/api'
 import { useStore, exportData, importData, clearData } from '../store'
 import {
-  createDefaultOpenAIProfile,
+  createDefaultProfile,
   DEFAULT_IMAGES_MODEL,
-  DEFAULT_OPENAI_PROFILE_ID,
+  DEFAULT_KEFU_XIANG_PROFILE_ID,
   DEFAULT_RESPONSES_MODEL,
   DEFAULT_SETTINGS,
   findEquivalentApiProfile,
@@ -151,10 +151,10 @@ function customProviderFormToInput(form: CustomProviderForm) {
   return JSON.parse(form.json)
 }
 
-function isPristineNewOpenAIProfile(profile: ApiProfile) {
-  const defaultProfile = createDefaultOpenAIProfile({ id: profile.id, name: '新配置' })
+function isPristineNewProfile(profile: ApiProfile) {
+  const defaultProfile = createDefaultProfile({ id: profile.id, name: '新配置' })
   return profile.name === '新配置' &&
-    profile.provider === 'openai' &&
+    profile.provider === 'kefu-xiang' &&
     profile.baseUrl === DEFAULT_SETTINGS.baseUrl &&
     profile.apiKey === '' &&
     profile.model === DEFAULT_IMAGES_MODEL &&
@@ -323,11 +323,11 @@ export default function SettingsModal() {
   const activeProviderIsOpenAICompatible = isOpenAICompatibleProvider(draft, activeProfile.provider)
   const activeProviderUsesApiUrl = activeProviderIsOpenAICompatible
   const activeCustomProvider = draft.customProviders.find((provider) => provider.id === activeProfile.provider)
-  const defaultProviderOrder = ['openai', ...draft.customProviders.map(p => p.id)]
+  const defaultProviderOrder = ['kefu-xiang', ...draft.customProviders.map(p => p.id)]
   const providerOrder = draft.providerOrder || defaultProviderOrder
 
   const unorderedProviderOptions = [
-    { label: 'OpenAI 兼容接口', value: 'openai', draggable: true },
+    { label: '客服小祥', value: 'kefu-xiang', draggable: true },
     ...draft.customProviders.map((provider) => ({
       label: provider.name,
       value: provider.id,
@@ -458,14 +458,14 @@ export default function SettingsModal() {
       const defaultModel = getDefaultModelForMode(profile.apiMode)
       return {
         ...profile,
-        name: profile.name.trim() || (profile.id === DEFAULT_OPENAI_PROFILE_ID ? '默认' : '新配置'),
+        name: profile.name.trim() || (profile.id === DEFAULT_KEFU_XIANG_PROFILE_ID ? '默认' : '新配置'),
         baseUrl: normalizedBaseUrl,
         model: profile.model.trim() || defaultModel,
         timeout: Number(profile.timeout) || DEFAULT_SETTINGS.timeout,
         codexCli: isOpenAICompatibleProvider(nextDraft, profile.provider) ? profile.codexCli : false,
       }
     })
-    const fallbackProfile = createDefaultOpenAIProfile({ id: newId('openai') })
+    const fallbackProfile = createDefaultProfile({ id: newId('kefu-xiang') })
     const normalizedDraft = normalizeSettings({
       ...nextDraft,
       profiles: normalizedProfiles.length ? normalizedProfiles : [fallbackProfile],
@@ -490,7 +490,7 @@ export default function SettingsModal() {
     url.search = ''
     url.hash = ''
 
-    if (profile.provider === 'openai') {
+    if (profile.provider === 'kefu-xiang') {
       const baseUrl = profile.baseUrl.trim() || DEFAULT_SETTINGS.baseUrl
       url.searchParams.set('apiUrl', options.useNewApiAddress && !options.includeApiKey ? '{address}' : normalizeBaseUrl(baseUrl))
       if (options.includeApiKey && profile.apiKey.trim()) {
@@ -630,7 +630,7 @@ export default function SettingsModal() {
 
   const createNewProfile = () => {
     setReusedTaskApiProfile(null)
-    const profile = createDefaultOpenAIProfile({ id: newId('openai'), name: '新配置' })
+    const profile = createDefaultProfile({ id: newId('kefu-xiang'), name: '新配置' })
     const nextDraft = normalizeSettings({ 
         ...draft, 
         profiles: [...draft.profiles, profile],
@@ -645,7 +645,7 @@ export default function SettingsModal() {
     setDuplicateProfileTooltipVisible(false)
     const profile: ApiProfile = {
       ...activeProfile,
-      id: newId(activeProfile.provider === 'openai' ? 'openai' : 'profile'),
+      id: newId(activeProfile.provider === 'kefu-xiang' ? 'kefu-xiang' : 'profile'),
       name: `${activeProfile.name}（复制）`,
     }
     const nextDraft = normalizeSettings({
@@ -814,7 +814,7 @@ export default function SettingsModal() {
   }
 
   const handleProviderReorder = (sourceValue: string | number, targetValue: string | number, position: 'before' | 'after' | null) => {
-    const currentOrder = draft.providerOrder || ['openai', ...draft.customProviders.map(p => p.id)]
+    const currentOrder = draft.providerOrder || ['kefu-xiang', ...draft.customProviders.map(p => p.id)]
     const sourceIndex = currentOrder.indexOf(String(sourceValue))
     const targetIndex = currentOrder.indexOf(String(targetValue))
     if (sourceIndex < 0 || targetIndex < 0) return
@@ -922,7 +922,7 @@ export default function SettingsModal() {
       ...draft,
       customProviders: draft.customProviders.filter((provider) => provider.id !== providerId),
       profiles: draft.profiles.map((profile) =>
-        profile.provider === providerId ? switchApiProfileProvider(profile, 'openai') : profile,
+        profile.provider === providerId ? switchApiProfileProvider(profile, 'kefu-xiang') : profile,
       ),
     })
     commitSettings(nextDraft)
@@ -951,7 +951,7 @@ export default function SettingsModal() {
         const mergedDraft = mergeImportedSettings(draft, imported)
         const importedProfile = getImportedProfileFromMergedSettings(mergedDraft, previousProfileIds, imported)
         const importedProfileAlreadyExisted = previousProfileIds.has(importedProfile.id)
-        const shouldReplaceActiveProfile = !editingCustomProviderId && isPristineNewOpenAIProfile(activeProfile) && !importedProfileAlreadyExisted
+        const shouldReplaceActiveProfile = !editingCustomProviderId && isPristineNewProfile(activeProfile) && !importedProfileAlreadyExisted
         const switchedToExistingProfile = !shouldReplaceActiveProfile && importedProfileAlreadyExisted
         const nextDraft = shouldReplaceActiveProfile
           ? normalizeSettings({
