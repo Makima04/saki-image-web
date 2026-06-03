@@ -81,7 +81,11 @@ function saveCopyImportUrlOptions(options: CopyImportUrlOptions) {
 }
 
 interface CustomProviderForm {
+  name: string
+  baseUrl: string
+  apiKey: string
   json: string
+  useAdvanced: boolean
 }
 
 const DEFAULT_CUSTOM_PROVIDER_MANIFEST = {
@@ -132,23 +136,38 @@ const DEFAULT_CUSTOM_PROVIDER_MANIFEST = {
 
 function createDefaultCustomProviderForm(): CustomProviderForm {
   return {
+    name: '自定义服务商',
+    baseUrl: '',
+    apiKey: '',
     json: JSON.stringify(DEFAULT_CUSTOM_PROVIDER_MANIFEST, null, 2),
+    useAdvanced: false,
   }
 }
 
-function customProviderToForm(provider: CustomProviderDefinition): CustomProviderForm {
+function customProviderToForm(provider: CustomProviderDefinition, profile?: ApiProfile): CustomProviderForm {
   return {
+    name: provider.name,
+    baseUrl: provider.defaultBaseUrl ?? profile?.baseUrl ?? '',
+    apiKey: profile?.apiKey ?? '',
     json: JSON.stringify({
       name: provider.name,
       submit: provider.submit,
       editSubmit: provider.editSubmit,
       poll: provider.poll,
     }, null, 2),
+    useAdvanced: false,
   }
 }
 
 function customProviderFormToInput(form: CustomProviderForm) {
-  return JSON.parse(form.json)
+  if (form.useAdvanced) {
+    return JSON.parse(form.json)
+  }
+  return {
+    ...DEFAULT_CUSTOM_PROVIDER_MANIFEST,
+    name: form.name,
+    defaultBaseUrl: form.baseUrl.trim() || undefined,
+  }
 }
 
 function isPristineNewProfile(profile: ApiProfile) {
@@ -287,6 +306,7 @@ export default function SettingsModal() {
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [profileMenuMaxHeight, setProfileMenuMaxHeight] = useState(DEFAULT_DROPDOWN_MAX_HEIGHT)
   const [showCustomProviderImport, setShowCustomProviderImport] = useState(false)
+  const [showAdvancedProviderForm, setShowAdvancedProviderForm] = useState(false)
   const [editingCustomProviderId, setEditingCustomProviderId] = useState<string | null>(null)
   const [customProviderForm, setCustomProviderForm] = useState<CustomProviderForm>(createDefaultCustomProviderForm())
   const [customProviderImportError, setCustomProviderImportError] = useState<string | null>(null)
@@ -323,12 +343,12 @@ export default function SettingsModal() {
   const activeProviderIsOpenAICompatible = isOpenAICompatibleProvider(draft, activeProfile.provider)
   const activeProviderUsesApiUrl = activeProviderIsOpenAICompatible
   const activeCustomProvider = draft.customProviders.find((provider) => provider.id === activeProfile.provider)
-  const defaultProviderOrder = ['kefu-xiang', ...draft.customProviders.map(p => p.id)]
+  const defaultProviderOrder = ['kefu-xiang', ...draft.customProviders.filter(p => p.id !== 'kefu-xiang').map(p => p.id)]
   const providerOrder = draft.providerOrder || defaultProviderOrder
 
   const unorderedProviderOptions = [
     { label: '客服小祥', value: 'kefu-xiang', draggable: true },
-    ...draft.customProviders.map((provider) => ({
+    ...draft.customProviders.filter((p) => p.id !== 'kefu-xiang').map((provider) => ({
       label: provider.name,
       value: provider.id,
       draggable: true,
@@ -814,7 +834,7 @@ export default function SettingsModal() {
   }
 
   const handleProviderReorder = (sourceValue: string | number, targetValue: string | number, position: 'before' | 'after' | null) => {
-    const currentOrder = draft.providerOrder || ['kefu-xiang', ...draft.customProviders.map(p => p.id)]
+    const currentOrder = draft.providerOrder || ['kefu-xiang', ...draft.customProviders.filter(p => p.id !== 'kefu-xiang').map(p => p.id)]
     const sourceIndex = currentOrder.indexOf(String(sourceValue))
     const targetIndex = currentOrder.indexOf(String(targetValue))
     if (sourceIndex < 0 || targetIndex < 0) return
@@ -870,7 +890,8 @@ export default function SettingsModal() {
 
   function openEditCustomProvider(provider: CustomProviderDefinition) {
     setEditingCustomProviderId(provider.id)
-    setCustomProviderForm(customProviderToForm(provider))
+    const profile = draft.profiles.find((p) => p.provider === provider.id)
+    setCustomProviderForm(customProviderToForm(provider, profile))
     setShowCustomProviderImport(true)
     setCustomProviderImportError(null)
   }
@@ -878,12 +899,29 @@ export default function SettingsModal() {
   const saveCustomProvider = () => {
     try {
       const customProvider = buildCustomProviderFromForm()
+
+      const duplicateName = draft.customProviders.some(
+        (p) => p.name === customProvider.name && p.id !== editingCustomProviderId,
+      )
+      if (duplicateName || customProvider.name === '客服小祥') {
+        throw new Error('服务商名称已存在，请使用不同的名称')
+      }
+
       if (editingCustomProviderId) {
+        const updatedProfiles = draft.profiles.map((profile) => {
+          if (profile.provider !== editingCustomProviderId) return profile
+          return {
+            ...profile,
+            baseUrl: customProviderForm.baseUrl.trim() || profile.baseUrl,
+            apiKey: customProviderForm.apiKey || profile.apiKey,
+          }
+        })
         const nextDraft = normalizeSettings({
           ...draft,
           customProviders: draft.customProviders.map((provider) =>
             provider.id === editingCustomProviderId ? customProvider : provider,
           ),
+          profiles: updatedProfiles,
         })
         commitSettings(nextDraft)
         setShowCustomProviderImport(false)
@@ -893,7 +931,11 @@ export default function SettingsModal() {
         return
       }
 
-      const nextProfile = switchApiProfileProvider(activeProfile, customProvider.id, customProvider)
+      const nextProfile = {
+        ...switchApiProfileProvider(activeProfile, customProvider.id, customProvider),
+        baseUrl: customProviderForm.baseUrl.trim() || customProvider.defaultBaseUrl || activeProfile.baseUrl,
+        apiKey: customProviderForm.apiKey || activeProfile.apiKey,
+      }
       const nextDraft = normalizeSettings({
         ...draft,
         customProviders: [...draft.customProviders, customProvider],
@@ -1801,9 +1843,57 @@ export default function SettingsModal() {
                 </div>
               </div>
 
-              <div className="flex-1 flex flex-col min-h-0">
+              {/* 简化表单 */}
+              <div className="shrink-0 space-y-3">
+                <label className="block">
+                  <span className="mb-1 block text-xs text-[var(--ai-text-muted)]">服务商名称</span>
+                  <input
+                    value={customProviderForm.name}
+                    onChange={(e) => updateCustomProviderForm({ name: e.target.value })}
+                    type="text"
+                    placeholder="自定义服务商"
+                    className="w-full rounded-xl border border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-3 py-2 text-sm text-[var(--ai-text)] outline-none transition focus:border-[var(--ai-accent-hover)]"
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-1 block text-xs text-[var(--ai-text-muted)]">API 地址</span>
+                  <input
+                    value={customProviderForm.baseUrl}
+                    onChange={(e) => updateCustomProviderForm({ baseUrl: e.target.value })}
+                    type="text"
+                    placeholder="https://api.example.com/v1"
+                    className="w-full rounded-xl border border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-3 py-2 text-sm text-[var(--ai-text)] outline-none transition focus:border-[var(--ai-accent-hover)]"
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-1 block text-xs text-[var(--ai-text-muted)]">API Key</span>
+                  <input
+                    value={customProviderForm.apiKey}
+                    onChange={(e) => updateCustomProviderForm({ apiKey: e.target.value })}
+                    type="password"
+                    placeholder="sk-..."
+                    className="w-full rounded-xl border border-[var(--ai-border)] bg-[var(--ai-card-bg)] px-3 py-2 text-sm text-[var(--ai-text)] outline-none transition focus:border-[var(--ai-accent-hover)]"
+                  />
+                </label>
+              </div>
+
+              {/* 高级模式切换 */}
+              <div className="shrink-0 mt-3 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => updateCustomProviderForm({ useAdvanced: !customProviderForm.useAdvanced })}
+                  className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${customProviderForm.useAdvanced ? 'bg-[var(--ai-accent-dim)]0' : 'bg-[var(--ai-border)]'}`}
+                  role="switch"
+                  aria-checked={customProviderForm.useAdvanced}
+                >
+                  <span className={`inline-block h-3 w-3 transform rounded-full bg-[var(--ai-card-bg)] shadow transition-transform ${customProviderForm.useAdvanced ? 'translate-x-[14px]' : 'translate-x-[2px]'}`} />
+                </button>
+                <span className="text-xs text-[var(--ai-text-muted)]">高级模式 - 手动编辑 JSON Manifest</span>
+              </div>
+
+              {customProviderForm.useAdvanced && (
+              <div className="flex-1 flex flex-col min-h-0 mt-3">
                 <label className="flex-1 flex flex-col min-h-0">
-                  <span className="mb-1 shrink-0 block text-xs text-[var(--ai-text-muted)]">手动编辑 (仅接口映射 Manifest)</span>
                   <textarea
                     value={customProviderForm.json}
                     onChange={(e) => updateCustomProviderForm({ json: e.target.value })}
@@ -1812,6 +1902,7 @@ export default function SettingsModal() {
                   />
                 </label>
               </div>
+              )}
 
                 {customProviderImportError && (
                   <div data-selectable-text className="shrink-0 mt-2 rounded-lg bg-[var(--ai-danger-bg)] px-3 py-2 text-xs text-[var(--ai-error)] ">

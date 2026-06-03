@@ -385,8 +385,8 @@ function validateImportedProfileRecord(input: unknown) {
 export function normalizeSettings(input: Partial<AppSettings> | unknown): AppSettings {
   const record = input && typeof input === 'object' ? input as Record<string, unknown> : {}
   const rawCustomProviders = normalizeCustomProviderDefinitions(record.customProviders)
-  const hasKefuXiang = rawCustomProviders.some((p) => p.id === DEFAULT_KEFU_XIANG_CUSTOM_PROVIDER.id)
-  const customProviders = hasKefuXiang ? rawCustomProviders : [...rawCustomProviders, DEFAULT_KEFU_XIANG_CUSTOM_PROVIDER]
+    .filter((p) => p.id !== DEFAULT_KEFU_XIANG_CUSTOM_PROVIDER.id && p.name !== DEFAULT_KEFU_XIANG_CUSTOM_PROVIDER.name)
+  const customProviders = [...rawCustomProviders, DEFAULT_KEFU_XIANG_CUSTOM_PROVIDER]
   const customProviderIds = new Set(customProviders.map((provider) => provider.id))
   const legacyProfile = createDefaultProfile({
     baseUrl: typeof record.baseUrl === 'string' ? record.baseUrl : DEFAULT_BASE_URL,
